@@ -1,0 +1,66 @@
+image: node:latest # Use a docker image from https://hub.docker.com with latest Node.js already installed
+
+variables:
+  # Configure server/src/mysql-pool.ts
+  MYSQL_HOST: localhost
+  MYSQL_USER: root # Docker commands are run as root
+  MYSQL_PASSWORD: '' # Default root password is empty string
+  MYSQL_DATABASE: todo_test
+
+stages:
+  - build # Jobs placed in build stage will run first
+  - test # Jobs placed in test stage will run after build jobs
+
+install:
+  stage: build
+  script:
+    - cd server
+    - npm install
+    - cd ..
+    - cd client
+    - npm install
+  artifacts: # Keep node_modules folder for the following stages
+    paths:
+      - server/node_modules
+      - client/node_modules
+
+prettier:
+  stage: test # The prettier job will run in parallel with the typescript and test jobs
+  script:
+    - cd server
+    - ./node_modules/.bin/prettier --check src/* test/*
+    - cd ..
+    - cd client
+    - ./node_modules/.bin/prettier --check src/* test/*
+
+typescript:
+  stage: test # The typescript job will run in parallel with the prettier and test jobs
+  script:
+    - cd server
+    - ./node_modules/.bin/tsc --noEmit
+    - cd ..
+    - cd client
+    - ./node_modules/.bin/tsc --noEmit
+
+test:
+  stage: test # The test job will run in parallel with the typescript and prettier jobs
+  script:
+    - apt-get update
+    - apt-get -y upgrade
+    - apt-get -y install default-mysql-server
+    - service mysql start
+    # Workaround from https://github.com/mysqljs/mysql/issues/1507#issuecomment-242885003
+    - echo "UPDATE user SET authentication_string=password(''), plugin='mysql_native_password' WHERE
+      user='root';" | mysql mysql
+    - mysqladmin create $MYSQL_DATABASE
+    # Create database table
+    - echo "CREATE TABLE Tasks (id INT NOT NULL AUTO_INCREMENT, title TEXT NOT NULL, done BOOL
+      DEFAULT false, PRIMARY KEY(id));" | mysql $MYSQL_DATABASE
+
+    - cd server/test
+    - touch config.ts
+    - cd ..
+    - npm test
+    - cd ..
+    - cd client
+    - npm test
