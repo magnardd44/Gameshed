@@ -12,6 +12,7 @@ import {
   Header,
   Container,
   ColumnCentre,
+  SearchResult,
 } from './widgets';
 import axios from 'axios';
 import { HashRouter, Route } from 'react-router-dom';
@@ -70,15 +71,15 @@ class Search extends Component {
   }
 }
 
-class SearchResult extends Component {
+class SearchListings extends Component {
   render() {
     return (
-      <Card title="Game Title">
-        <Row>
-          <Column width={2}>Image</Column>
-          <Column width={8}>Description</Column>
-        </Row>
-      </Card>
+      <Container>
+        Søkeresultater:
+        <SearchResult></SearchResult>
+        <SearchResult></SearchResult>
+        <SearchResult></SearchResult>
+      </Container>
     );
   }
 }
@@ -88,7 +89,7 @@ ReactDOM.render(
     <div>
       <NavHeader />
       <Route exact path="/" component={Search}></Route>
-      <Route exact path="/results" component={SearchResult}></Route>
+      <Route exact path="/results" component={SearchListings}></Route>
     </div>
   </HashRouter>,
   document.getElementById('root')
