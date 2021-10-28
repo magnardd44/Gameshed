@@ -6,7 +6,7 @@ import taskService from './task-service';
  */
 const router = express.Router();
 
-router.get('/tasks', (_request, response) => {
+router.get('/games', (_request, response) => {
   taskService
     .getAll()
     .then((rows) => response.send(rows))
