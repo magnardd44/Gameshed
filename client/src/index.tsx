@@ -16,8 +16,11 @@ import {
 import axios from 'axios';
 import { HashRouter, Route } from 'react-router-dom';
 import { Hash } from 'crypto';
+import { createHashHistory } from 'history';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v2';
+
+const history = createHashHistory();
 
 class NavHeader extends Component {
   render() {
@@ -50,14 +53,7 @@ class Search extends Component {
             <ColumnCentre width={2}>
               <Button.Success
                 onClick={() => {
-                  axios
-                    .post<{ exitStatus: number; stdout: string; stderr: string }>('/run', {
-                      language: 'js',
-                    })
-                    .then((response) => {})
-                    .catch((error: Error) =>
-                      Alert.danger('Could not run app.js: ' + error.message)
-                    );
+                  this.search();
                 }}
               >
                 Søk
@@ -68,6 +64,23 @@ class Search extends Component {
       </>
     );
   }
+  search() {
+    console.log('search');
+    history.push('/results');
+  }
+}
+
+class SearchResult extends Component {
+  render() {
+    return (
+      <Card title="Game Title">
+        <Row>
+          <Column width={2}>Image</Column>
+          <Column width={8}>Description</Column>
+        </Row>
+      </Card>
+    );
+  }
 }
 
 ReactDOM.render(
@@ -75,6 +88,7 @@ ReactDOM.render(
     <div>
       <NavHeader />
       <Route exact path="/" component={Search}></Route>
+      <Route exact path="/results" component={SearchResult}></Route>
     </div>
   </HashRouter>,
   document.getElementById('root')
