@@ -28,9 +28,9 @@ class TaskService {
    *
    * Resolves the newly created task id.
    */
-  create(title: string) {
+  create(title: string, text: string, rating: number) {
     return axios
-      .post<{ id: number }>('/tasks', { title: title })
+      .post<{ id: number }>('/reviews', { review_title: title, text: text, rating: rating })
       .then((response) => response.data.id);
   }
 }
