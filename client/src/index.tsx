@@ -29,31 +29,36 @@ class Start extends Component {
       <>
         <Card title="GameShed">
           <Row>
-            <Column>
-              <Form.Label>Søk:</Form.Label>
+            <Column width={5}>
+              <Form.Label></Form.Label>
               <Form.Textarea
                 value={this.input}
                 onChange={(event) => (this.input = event.currentTarget.value)}
               />
             </Column>
+
+            <Column>
+              <Button.Success
+                onClick={() => {
+                  axios
+                    .post<{ exitStatus: number; stdout: string; stderr: string }>('/run', {
+                      language: 'js',
+                      source: this.input,
+                    })
+                    .then((response) => {
+                      this.errCode = response.data.exitStatus;
+                      this.stdout = response.data.stdout;
+                      this.stderr = response.data.stderr;
+                    })
+                    .catch((error: Error) =>
+                      Alert.danger('Could not run app.js: ' + error.message)
+                    );
+                }}
+              >
+                Søk etter spill
+              </Button.Success>
+            </Column>
           </Row>
-          <Button.Success
-            onClick={() => {
-              axios
-                .post<{ exitStatus: number; stdout: string; stderr: string }>('/run', {
-                  language: 'js',
-                  source: this.input,
-                })
-                .then((response) => {
-                  this.errCode = response.data.exitStatus;
-                  this.stdout = response.data.stdout;
-                  this.stderr = response.data.stderr;
-                })
-                .catch((error: Error) => Alert.danger('Could not run app.js: ' + error.message));
-            }}
-          >
-            Søk etter spill
-          </Button.Success>
         </Card>
       </>
     );
