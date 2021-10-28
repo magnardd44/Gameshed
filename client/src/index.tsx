@@ -1,71 +1,94 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
 import ReactDOM from 'react-dom';
-import { Card, Alert, Row, Form, Column, Button, NavBar } from './widgets';
+import {
+  Card,
+  Alert,
+  Row,
+  Form,
+  Column,
+  Button,
+  NavBar,
+  Header,
+  Container,
+  ColumnCentre,
+} from './widgets';
 import axios from 'axios';
 import { HashRouter, Route } from 'react-router-dom';
 import { Hash } from 'crypto';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 
-class Menu extends Component {
+class NavHeader extends Component {
   render() {
     return (
-      <NavBar brand="GameShed">
-        <NavBar.Link to="/games">Games</NavBar.Link>
-      </NavBar>
+      <div>
+        <NavBar brand="GameShed">
+          <NavBar.Link to="/games">Games</NavBar.Link>
+        </NavBar>
+        <Header></Header>
+      </div>
     );
   }
 }
 
-class Start extends Component {
+class Search extends Component {
   input = '';
-  stdout = '';
-  stderr = '';
-  errCode: number | null = null;
-
   render() {
     return (
       <>
-        <Card title="GameShed">
+        <Container textalign={'centre'}>
           <Row>
-            <Column width={5}>
-              <Form.Label></Form.Label>
-              <Form.Textarea
+            <ColumnCentre width={6} offset={2}>
+              <Form.Input
+                type={this.input}
                 value={this.input}
+                placeholder="Søk etter et spill"
                 onChange={(event) => (this.input = event.currentTarget.value)}
               />
-            </Column>
-
-            <Column>
+            </ColumnCentre>
+            <ColumnCentre width={2}>
               <Button.Success
                 onClick={() => {
                   axios
                     .post<{ exitStatus: number; stdout: string; stderr: string }>('/run', {
                       language: 'js',
-                      source: this.input,
                     })
-                    .then((response) => {
-                      this.errCode = response.data.exitStatus;
-                      this.stdout = response.data.stdout;
-                      this.stderr = response.data.stderr;
-                    })
+                    .then((response) => {})
                     .catch((error: Error) =>
                       Alert.danger('Could not run app.js: ' + error.message)
                     );
                 }}
               >
-                Søk etter spill
+                Søk
               </Button.Success>
-            </Column>
+            </ColumnCentre>
           </Row>
-        </Card>
+        </Container>
       </>
     );
   }
 }
 
+ReactDOM.render(
+  <HashRouter>
+    <div>
+      <NavHeader />
+      <Route exact path="/" component={Search}></Route>
+    </div>
+  </HashRouter>,
+  document.getElementById('root')
+);
+
 /*
+class Start extends Component {
+  input = '';
+  stdout = '';
+  stderr = '';
+  errCode: number | null = null;
+}
+
+
 
   render() {
     return (
@@ -118,13 +141,3 @@ if (root)
   );
  
  */
-
-ReactDOM.render(
-  <HashRouter>
-    <div>
-      <Menu />
-      <Route exact path="/" component={Start}></Route>
-    </div>
-  </HashRouter>,
-  document.getElementById('root')
-);

@@ -4,6 +4,39 @@ import { Component } from 'react-simplified';
 import { NavLink } from 'react-router-dom';
 
 /**
+ * boostrap header
+ */
+export class Header extends Component {
+  render() {
+    return (
+      <div className="container text-center">
+        <div className="jumbotron">
+          <h1>GameShed</h1>
+        </div>
+      </div>
+    );
+  }
+}
+
+/**
+ * container for pages
+ */
+
+export class Container extends Component<{ textalign?: string }> {
+  render() {
+    return (
+      <div
+        className={
+          'container my-5 mx-auto text' + (this.props.textalign ? '-' + this.props.textalign : '')
+        }
+      >
+        {this.props.children}
+      </div>
+    );
+  }
+}
+
+/**
  * Renders an information card using Bootstrap classes.
  *
  * Properties: title
@@ -27,6 +60,23 @@ export class Card extends Component<{ title: ReactNode }> {
 export class Row extends Component {
   render() {
     return <div className="row">{this.props.children}</div>;
+  }
+}
+
+export class ColumnCentre extends Component<{ width?: number; offset?: number }> {
+  render() {
+    return (
+      <div
+        className={
+          ' col' +
+          (this.props.width ? '-' + this.props.width : '') +
+          ' offset' +
+          (this.props.offset ? '-' + this.props.offset : '')
+        }
+      >
+        {this.props.children}
+      </div>
+    );
   }
 }
 
@@ -62,6 +112,7 @@ class ButtonSuccess extends Component<{ small?: boolean; onClick: () => void }> 
                 padding: '5px 5px',
                 fontSize: '16px',
                 lineHeight: '0.7',
+                display: 'inline',
               }
             : {}
         }
