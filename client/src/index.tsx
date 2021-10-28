@@ -15,10 +15,10 @@ class Start extends Component {
   render() {
     return (
       <>
-        <Card title="app.js">
+        <Card title="GameShed">
           <Row>
             <Column>
-              <Form.Label>Input:</Form.Label>
+              <Form.Label>Søk:</Form.Label>
               <Form.Textarea
                 value={this.input}
                 onChange={(event) => (this.input = event.currentTarget.value)}
@@ -40,7 +40,7 @@ class Start extends Component {
                 .catch((error: Error) => Alert.danger('Could not run app.js: ' + error.message));
             }}
           >
-            Run
+            Søk etter spill
           </Button.Success>
         </Card>
         <Card title="Standard output">{this.stdout}</Card>
