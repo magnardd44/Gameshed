@@ -17,6 +17,7 @@ export class AddReview extends Component {
   platform = '';
   text = '';
   rating = 1;
+  showAlert = false;
 
   render() {
     return (
@@ -24,15 +25,15 @@ export class AddReview extends Component {
         <Card title="Skriv anmeldelse">
           <Row>
             <Column width={2}>Spill:</Column>
-            <Column>Gloomhaven</Column>
+            <Column>Hentes fra IGDB</Column>
           </Row>
           <Row>
             <Column width={2}>Sjanger:</Column>
-            <Column>Adventure</Column>
+            <Column>Hentes fra IGDB</Column>
           </Row>
           <Row>
             <Column width={2}>Plattform:</Column>
-            <Column>PC (Microsoft Windows)</Column>
+            <Column>Hentes fra IGDB</Column>
           </Row>
 
           <Row>
@@ -66,14 +67,19 @@ export class AddReview extends Component {
               <Form.Label>Terningkast:</Form.Label>
             </Column>
             <Column>
-              <Form.Input
-                type=""
-                value={this.rating ?? ''}
+              <Form.Select
+                value={this.rating}
                 onChange={(event) => {
-                  //this.rating = event.currentTarget.value;
+                  this.rating = Number(event.currentTarget.value);
                 }}
-                rows={20}
-              />
+              >
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+              </Form.Select>
             </Column>
           </Row>
         </Card>
@@ -81,7 +87,8 @@ export class AddReview extends Component {
           onClick={() => {
             taskService
               .create(this.reviewTitle, this.text, this.rating)
-              .then((id) => history.push('/tasks/' + id))
+              .then(() => alert('Anmeldelsen er lagret'))
+              // .then((id) => history.push('/tasks/' + id))
               .catch((error) => Alert.danger('Error creating task: ' + error.message));
           }}
         >
@@ -92,44 +99,56 @@ export class AddReview extends Component {
   }
 }
 
-// export class TaskDetails extends Component<{ match: { params: { id: number } } }> {
-//   task: Task = { id: 0, title: '', done: false, description: '' };
+export class PublishReview extends Component<{ match: { params: { id: number } } }> {
+  review: any = { id: 0, review_title: '', text: '', rating: 0 };
 
-//   render() {
-//     return (
-//       <>
-//         <Card title="Task">
-//           <Row>
-//             <Column width={2}>Title:</Column>
-//             <Column>{this.task.title}</Column>
-//           </Row>
-//           <Row>
-//             <Column width={2}>Description:</Column>
-//             <Column>{this.task.description}</Column>
-//           </Row>
-//           <Row>
-//             <Column width={2}>Done:</Column>
-//             <Column>
-//               <Form.Checkbox checked={this.task.done} onChange={() => {}} disabled />
-//             </Column>
-//           </Row>
-//         </Card>
-//         <Button.Success
-//           onClick={() => history.push('/tasks/' + this.props.match.params.id + '/edit')}
-//         >
-//           Edit
-//         </Button.Success>
-//       </>
-//     );
-//   }
+  render() {
+    return (
+      <>
+        <Card title="Anmeldelse til publisering">
+          <Row>
+            <Column width={2}>Spill:</Column>
+            <Column>Hentes fra IGDB</Column>
+          </Row>
+          <Row>
+            <Column width={2}>Sjanger:</Column>
+            <Column>Hentes fra IGDB</Column>
+          </Row>
+          <Row>
+            <Column width={2}>Plattform:</Column>
+            <Column>Hentes fra IGDB</Column>
+          </Row>
 
-//   mounted() {
-//     taskService
-//       .get(this.props.match.params.id)
-//       .then((task) => (this.task = task))
-//       .catch((error) => Alert.danger('Error getting task: ' + error.message));
-//   }
-// }
+          <Row>
+            <Column width={2}>
+              <div>Overskrift:</div>
+            </Column>
+          </Row>
+          <Row>
+            <Column width={12}>
+              <div>Anmeldelse:</div>
+            </Column>
+          </Row>
+          <Row>
+            <Column width={12}>
+              <div>Terningkast:</div>
+            </Column>
+          </Row>
+        </Card>
+
+        <Button.Success onClick={() => alert('ikke klar')}>Edit</Button.Success>
+        <Button.Success onClick={() => alert('ikke ferdig')}>Publiser</Button.Success>
+      </>
+    );
+  }
+
+  mounted() {
+    taskService
+      .get(this.props.match.params.id)
+      .then((review) => (this.review = review))
+      .catch((error) => Alert.danger('Error getting review: ' + error.message));
+  }
+}
 
 // /**
 //  * Renders form to edit a specific task.

@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { Card, Alert, Row, Form, Column, Button, NavBar } from './widgets';
 import axios from 'axios';
 import { HashRouter, Route } from 'react-router-dom';
-import { AddReview } from './review-components';
+import { AddReview, PublishReview } from './review-components';
 import { Hash } from 'crypto';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v2';
@@ -128,6 +128,7 @@ ReactDOM.render(
       <Menu />
       <Route exact path="/" component={Start}></Route>
       <Route exact path="/addReview" component={AddReview} />
+      <Route exact path="/publishReview" component={PublishReview} />
     </div>
   </HashRouter>,
   document.getElementById('root')
