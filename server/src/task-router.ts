@@ -6,6 +6,18 @@ import taskService from './task-service';
  */
 const router = express.Router();
 
+//Add new review to database
+router.post('/reviews', (request, response) => {
+  const data = request.body;
+  if (data && data.review_title.length != 0)
+    taskService
+      .create(data.review_title, data.text, data.rating)
+
+      .then((id) => response.send({ id: id }))
+      .catch((error) => response.status(500).send(error));
+  else response.status(400).send('Missing review title');
+});
+
 router.get('/tasks', (_request, response) => {
   taskService
     .getAll()
@@ -23,21 +35,21 @@ router.get('/tasks/:id', (request, response) => {
 
 // Example request body: { title: "Ny oppgave" }
 // Example response body: { id: 4 }
-router.post('/tasks', (request, response) => {
-  const data = request.body;
-  if (data && data.title.length != 0)
-    taskService
-      .create(data.title)
-      .then((id) => response.send({ id: id }))
-      .catch((error) => response.status(500).send(error));
-  else response.status(400).send('Missing task title');
-});
+// router.post('/tasks', (request, response) => {
+//   const data = request.body;
+//   if (data && data.title.length != 0)
+//     taskService
+//       .create(data.title)
+//       .then((id) => response.send({ id: id }))
+//       .catch((error) => response.status(500).send(error));
+//   else response.status(400).send('Missing task title');
+// });
 
-router.delete('/tasks/:id', (request, response) => {
-  taskService
-    .delete(Number(request.params.id))
-    .then((_result) => response.send())
-    .catch((error) => response.status(500).send(error));
-});
+// router.delete('/tasks/:id', (request, response) => {
+//   taskService
+//     .delete(Number(request.params.id))
+//     .then((_result) => response.send())
+//     .catch((error) => response.status(500).send(error));
+// });
 
 export default router;

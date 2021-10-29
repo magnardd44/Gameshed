@@ -16,6 +16,7 @@ import {
 } from './widgets';
 import axios from 'axios';
 import { HashRouter, Route } from 'react-router-dom';
+import { AddReview, PublishReview } from './review-components';
 import { Hash } from 'crypto';
 import { createHashHistory } from 'history';
 
@@ -90,6 +91,8 @@ ReactDOM.render(
       <NavHeader />
       <Route exact path="/" component={Search}></Route>
       <Route exact path="/results" component={SearchListings}></Route>
+      <Route exact path="/addReview" component={AddReview} />
+      <Route exact path="/publishReview" component={PublishReview} />
     </div>
   </HashRouter>,
   document.getElementById('root')
@@ -148,10 +151,12 @@ class Start extends Component {
 const root = document.getElementById('root');
 if (root)
   ReactDOM.render(
-    <>
+    <HashRouter>
       <Alert />
-      <Start />
-    </>,
+
+      <Route exact path="/" component={Start} />
+      
+    </HashRouter>,
     root
   );
  

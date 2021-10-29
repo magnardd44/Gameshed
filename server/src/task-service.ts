@@ -2,11 +2,28 @@ import pool from './mysql-pool';
 
 export type Task = {
   id: number;
-  title: string;
-  done: boolean;
+  review_title: string;
+  
 };
 
 class TaskService {
+
+  /**
+   * Create new review having the given title.
+   *
+   
+   */
+   create(review_title: string, text: string, rating: number ) {
+    return new Promise<number>((resolve, reject) => {
+      pool.query('INSERT INTO reviews SET review_title=?, text=?, rating=?', [review_title, text, rating], 
+      (error, results) => {
+        if (error) return reject(error);
+
+        resolve(Number(results.insertId));
+      });
+    });
+  }
+
   /**
    * Get task with given id.
    */
@@ -33,20 +50,7 @@ class TaskService {
     });
   }
 
-  /**
-   * Create new task having the given title.
-   *
-   * Resolves the newly created task id.
-   */
-  create(title: string) {
-    return new Promise<number>((resolve, reject) => {
-      pool.query('INSERT INTO Tasks SET title=?', [title], (error, results) => {
-        if (error) return reject(error);
 
-        resolve(Number(results.insertId));
-      });
-    });
-  }
 
   /**
    * Delete task with given id.
