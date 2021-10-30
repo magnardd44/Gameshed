@@ -96,6 +96,7 @@ export class Search extends Component {
     gameService.getAll().then((result) => {
       this.input = '';
       this.games = result;
+      console.log(this.games);
     });
   }
 
