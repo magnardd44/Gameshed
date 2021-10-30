@@ -19,6 +19,7 @@ import { HashRouter, Route } from 'react-router-dom';
 import { AddReview, PublishReview } from './review-components';
 import { Hash } from 'crypto';
 import { createHashHistory } from 'history';
+import { gameService, reviewService, Game, Review } from './services';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 
@@ -39,6 +40,10 @@ class NavHeader extends Component {
 
 class Search extends Component {
   input = '';
+
+  games: Game[] = [];
+  filtered: Game[] = [];
+
   render() {
     return (
       <>
@@ -49,8 +54,29 @@ class Search extends Component {
                 type={this.input}
                 value={this.input}
                 placeholder="Søk etter et spill"
-                onChange={(event) => (this.input = event.currentTarget.value)}
+                onChange={(event) => {
+                  this.input = event.currentTarget.value;
+                  this.filtered = this.games.filter((game) =>
+                    game.game_title.toLowerCase().includes(this.input.toLowerCase())
+                  );
+                }}
+                onKeyUp={(event: { key: string }) => {
+                  if (event.key == 'Enter') {
+                    this.search();
+                  }
+                }}
               />
+
+              <Form.Select
+                value={this.input}
+                onChange={(event) => {
+                  this.input = event.currentTarget.value;
+                }}
+              >
+                {this.filtered.map((game) => {
+                  return <option key={game.game_id}>{game.game_title}</option>;
+                })}
+              </Form.Select>
             </ColumnCentre>
             <ColumnCentre width={2}>
               <Button.Success
@@ -66,6 +92,14 @@ class Search extends Component {
       </>
     );
   }
+
+  mounted() {
+    gameService.getAll().then((result) => {
+      this.games = result;
+      this.filtered = result;
+    });
+  }
+
   search() {
     console.log('search');
     history.push('/results');
@@ -88,6 +122,7 @@ class SearchListings extends Component {
 ReactDOM.render(
   <HashRouter>
     <div>
+      <Alert />
       <NavHeader />
       <Route exact path="/" component={Search}></Route>
       <Route exact path="/results" component={SearchListings}></Route>

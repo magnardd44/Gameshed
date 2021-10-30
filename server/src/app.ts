@@ -1,5 +1,5 @@
 import express from 'express';
-import router from './task-router';
+import router from './game-review-router';
 
 /**
  * Express application.

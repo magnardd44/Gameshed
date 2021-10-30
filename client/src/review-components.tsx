@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Component } from 'react-simplified';
 import { Alert, Card, Row, Column, Form, Button } from './widgets';
 import { NavLink } from 'react-router-dom';
-import taskService, { Task } from './task-service';
+import { gameService, reviewService } from './services';
 import { createHashHistory } from 'history';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
@@ -85,7 +85,7 @@ export class AddReview extends Component {
         </Card>
         <Button.Success
           onClick={() => {
-            taskService
+            reviewService
               .create(this.reviewTitle, this.text, this.rating)
               .then(() => alert('Anmeldelsen er lagret'))
               // .then((id) => history.push('/tasks/' + id))
@@ -143,7 +143,7 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
   }
 
   mounted() {
-    taskService
+    reviewService
       .get(this.props.match.params.id)
       .then((review) => (this.review = review))
       .catch((error) => Alert.danger('Error getting review: ' + error.message));
