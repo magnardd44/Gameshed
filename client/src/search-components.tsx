@@ -19,7 +19,7 @@ import { createHashHistory } from 'history';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
 export class Search extends Component {
-  input = '';
+  input: string = '';
 
   games: Game[] = [];
   filtered: Game[] = [];
@@ -47,18 +47,37 @@ export class Search extends Component {
                 }}
               />
 
-              <Form.Select
-                value={this.input}
-                onChange={(event) => {
-                  this.input = event.currentTarget.value;
+              {this.filtered.map((game) => {
+                return (
+                  <div
+                    id={game.game_title}
+                    key={game.game_id}
+                    role="option"
+                    className=" option"
+                    style={{
+                      borderRadius: '5px',
+                      border: '1px solid black',
+                      cursor: 'pointer',
+                      marginTop: '10px',
+                      backgroundColor: 'lightgray',
+                    }}
+                    onClick={(event) => {
+                      this.input = event.currentTarget.id;
+                    }}
+                  >
+                    {game.game_title}
+                  </div>
+                );
+              })}
+            </ColumnCentre>
+            <ColumnCentre width={4}>
+              <Button.Danger
+                onClick={() => {
+                  this.mounted();
                 }}
               >
-                {this.filtered.map((game) => {
-                  return <option key={game.game_id}>{game.game_title}</option>;
-                })}
-              </Form.Select>
-            </ColumnCentre>
-            <ColumnCentre width={2}>
+                Tøm
+              </Button.Danger>
               <Button.Success
                 onClick={() => {
                   this.search();
@@ -75,8 +94,8 @@ export class Search extends Component {
 
   mounted() {
     gameService.getAll().then((result) => {
+      this.input = '';
       this.games = result;
-      this.filtered = result;
     });
   }
 
