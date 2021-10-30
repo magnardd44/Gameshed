@@ -12,11 +12,11 @@ import {
   Header,
   Container,
   ColumnCentre,
-  SearchResult,
 } from './widgets';
 import axios from 'axios';
 import { HashRouter, Route } from 'react-router-dom';
 import { AddReview, PublishReview } from './review-components';
+import { SearchResult } from './search-components';
 import { Hash } from 'crypto';
 import { createHashHistory } from 'history';
 
@@ -97,67 +97,3 @@ ReactDOM.render(
   </HashRouter>,
   document.getElementById('root')
 );
-
-/*
-class Start extends Component {
-  input = '';
-  stdout = '';
-  stderr = '';
-  errCode: number | null = null;
-}
-
-
-
-  render() {
-    return (
-      <>
-        <Card title="GameShed">
-          <Row>
-            <Column>
-              <Form.Label>Søk:</Form.Label>
-              <Form.Textarea
-                value={this.input}
-                onChange={(event) => (this.input = event.currentTarget.value)}
-              />
-            </Column>
-          </Row>
-          <Button.Success
-            onClick={() => {
-              axios
-                .post<{ exitStatus: number; stdout: string; stderr: string }>('/run', {
-                  language: 'js',
-                  source: this.input,
-                })
-                .then((response) => {
-                  this.errCode = response.data.exitStatus;
-                  this.stdout = response.data.stdout;
-                  this.stderr = response.data.stderr;
-                })
-                .catch((error: Error) => Alert.danger('Could not run app.js: ' + error.message));
-            }}
-          >
-            Søk etter spill
-          </Button.Success>
-        </Card>
-        <Card title="Standard output">{this.stdout}</Card>
-        <Card title="Standard error">{this.stderr}</Card>
-        <Card title="Errorcode">{this.errCode}</Card>
-      </>
-    );
-  }
-}
-
-
-const root = document.getElementById('root');
-if (root)
-  ReactDOM.render(
-    <HashRouter>
-      <Alert />
-
-      <Route exact path="/" component={Start} />
-      
-    </HashRouter>,
-    root
-  );
- 
- */
