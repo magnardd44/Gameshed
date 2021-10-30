@@ -36,18 +36,32 @@ export class Container extends Component<{ textalign?: string }> {
   }
 }
 
-export class SearchResult extends Component {
+export class ThumbNail extends Component<{ small?: boolean; img: string }> {
   render() {
     return (
-      <Card title="Game Title">
-        <Row>
-          <Column width={2}>Image</Column>
-          <Column width={8}>Description</Column>
-        </Row>
-      </Card>
+      <img
+        className="img-thumbnail"
+        src={this.props.img}
+        style={
+          this.props.small
+            ? {
+                height: '16px',
+                display: 'inline',
+                padding: '0px',
+              }
+            : {}
+        }
+      />
     );
   }
 }
+
+export class Linebreak extends Component {
+  render() {
+    return <br />;
+  }
+}
+
 /**
  * Renders an information card using Bootstrap classes.
  *
