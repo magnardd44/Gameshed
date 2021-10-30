@@ -16,7 +16,7 @@ import {
 import axios from 'axios';
 import { HashRouter, Route } from 'react-router-dom';
 import { AddReview, PublishReview } from './review-components';
-import { SearchResult } from './search-components';
+import { Search, SearchResult, SearchListings } from './search-components';
 import { Hash } from 'crypto';
 import { createHashHistory } from 'history';
 
@@ -33,54 +33,6 @@ class NavHeader extends Component {
         </NavBar>
         <Header></Header>
       </div>
-    );
-  }
-}
-
-class Search extends Component {
-  input = '';
-  render() {
-    return (
-      <>
-        <Container textalign={'centre'}>
-          <Row>
-            <ColumnCentre width={6} offset={2}>
-              <Form.Input
-                type={this.input}
-                value={this.input}
-                placeholder="Søk etter et spill"
-                onChange={(event) => (this.input = event.currentTarget.value)}
-              />
-            </ColumnCentre>
-            <ColumnCentre width={2}>
-              <Button.Success
-                onClick={() => {
-                  this.search();
-                }}
-              >
-                Søk
-              </Button.Success>
-            </ColumnCentre>
-          </Row>
-        </Container>
-      </>
-    );
-  }
-  search() {
-    console.log('search');
-    history.push('/results');
-  }
-}
-
-class SearchListings extends Component {
-  render() {
-    return (
-      <Container>
-        Søkeresultater:
-        <SearchResult></SearchResult>
-        <SearchResult></SearchResult>
-        <SearchResult></SearchResult>
-      </Container>
     );
   }
 }

@@ -56,6 +56,12 @@ export class ThumbNail extends Component<{ small?: boolean; img: string }> {
   }
 }
 
+export class Linebreak extends Component {
+  render() {
+    return <br />;
+  }
+}
+
 /**
  * Renders an information card using Bootstrap classes.
  *
