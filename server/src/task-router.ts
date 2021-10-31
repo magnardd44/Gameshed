@@ -1,5 +1,6 @@
 import express from 'express';
 import taskService from './task-service';
+import reviewService from './review-service';
 
 /**
  * Express router containing task methods.
@@ -10,7 +11,7 @@ const router = express.Router();
 router.post('/reviews', (request, response) => {
   const data = request.body;
   if (data && data.review_title.length != 0)
-    taskService
+    reviewService
       .create(data.review_title, data.text, data.rating)
 
       .then((id) => response.send({ id: id }))
@@ -18,18 +19,21 @@ router.post('/reviews', (request, response) => {
   else response.status(400).send('Missing review title');
 });
 
-router.get('/tasks', (_request, response) => {
-  taskService
+router.get('/reviews', (_request, response) => {
+  reviewService
     .getAll()
     .then((rows) => response.send(rows))
     .catch((error) => response.status(500).send(error));
 });
 
-router.get('/tasks/:id', (request, response) => {
+//Fetch individual review after it has been added and saved
+router.get('/reviews/:id', (request, response) => {
   const id = Number(request.params.id);
-  taskService
+  reviewService
     .get(id)
-    .then((task) => (task ? response.send(task) : response.status(404).send('Task not found')))
+    .then((review) =>
+      review ? response.send(review) : response.status(404).send('Review not found')
+    )
     .catch((error) => response.status(500).send(error));
 });
 

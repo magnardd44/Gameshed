@@ -92,7 +92,7 @@ ReactDOM.render(
       <Route exact path="/" component={Search}></Route>
       <Route exact path="/results" component={SearchListings}></Route>
       <Route exact path="/addReview" component={AddReview} />
-      <Route exact path="/publishReview" component={PublishReview} />
+      <Route exact path="/publishReview/:id" component={PublishReview} />
     </div>
   </HashRouter>,
   document.getElementById('root')

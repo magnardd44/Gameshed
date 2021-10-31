@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Component } from 'react-simplified';
 import { Alert, Card, Row, Column, Form, Button } from './widgets';
 import { NavLink } from 'react-router-dom';
-import taskService, { Task } from './task-service';
+import reviewService, { Review } from './review-service';
 import { createHashHistory } from 'history';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
@@ -83,12 +83,16 @@ export class AddReview extends Component {
             </Column>
           </Row>
         </Card>
+
         <Button.Success
           onClick={() => {
-            taskService
+            reviewService
               .create(this.reviewTitle, this.text, this.rating)
-              .then(() => alert('Anmeldelsen er lagret'))
-              // .then((id) => history.push('/tasks/' + id))
+
+              .then((id) => {
+                alert('Anmeldelsen er lagret');
+                history.push('/publishReview/' + id);
+              })
               .catch((error) => Alert.danger('Error creating task: ' + error.message));
           }}
         >
@@ -100,7 +104,7 @@ export class AddReview extends Component {
 }
 
 export class PublishReview extends Component<{ match: { params: { id: number } } }> {
-  review: any = { id: 0, review_title: '', text: '', rating: 0 };
+  review: any = { id: 0, title: '', text: '', rating: 0 };
 
   render() {
     return (
@@ -120,30 +124,41 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
           </Row>
 
           <Row>
-            <Column width={2}>
-              <div>Overskrift:</div>
+            <Column width={12}>
+              <div>
+                <b>{this.review.title}</b>
+              </div>
             </Column>
           </Row>
           <Row>
             <Column width={12}>
-              <div>Anmeldelse:</div>
+              <div>{this.review.text}</div>
             </Column>
           </Row>
           <Row>
             <Column width={12}>
-              <div>Terningkast:</div>
+              <div>Terningkast: {this.review.rating}</div>
+            </Column>
+          </Row>
+          <Row>
+            <Column>
+              <Button.Success onClick={() => alert('ikke klar')}>Rediger</Button.Success>
+            </Column>
+            <Column>
+              <Button.Success onClick={() => alert('ikke ferdig')}>Publiser</Button.Success>
+            </Column>
+
+            <Column>
+              <Button.Danger onClick={() => alert('ikke ferdig')}>Slett</Button.Danger>
             </Column>
           </Row>
         </Card>
-
-        <Button.Success onClick={() => alert('ikke klar')}>Edit</Button.Success>
-        <Button.Success onClick={() => alert('ikke ferdig')}>Publiser</Button.Success>
       </>
     );
   }
 
   mounted() {
-    taskService
+    reviewService
       .get(this.props.match.params.id)
       .then((review) => (this.review = review))
       .catch((error) => Alert.danger('Error getting review: ' + error.message));
