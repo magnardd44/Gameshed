@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Component } from 'react-simplified';
+import { Component, sharedComponentData } from 'react-simplified';
 import {
   Alert,
   Card,
@@ -15,8 +15,13 @@ import {
 import { NavLink } from 'react-router-dom';
 import { gameService, reviewService, Game, Review } from './services';
 import { createHashHistory } from 'history';
+import axios from 'axios';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
+
+let shared = sharedComponentData({ 
+	games: [],
+});
 
 export class Search extends Component {
   input: string = '';
@@ -105,6 +110,14 @@ export class Search extends Component {
 
   search() {
     console.log('search');
+	shared.games = []; //Opprensking så ikkje gamle resultat forstyrrer.
+	axios
+      .post('search', { game: this.input })
+	  .then((response) => {
+			  shared.games = response.data
+			  console.log(response.data);
+			  })
+	  .catch(err=>console.log(err));
     history.push('/results');
   }
 }
@@ -117,6 +130,9 @@ export class SearchListings extends Component {
         <SearchResult></SearchResult>
         <SearchResult></SearchResult>
         <SearchResult></SearchResult>
+		{shared.games.map((game, index)=>(
+				<IGDBResult game={game} key={index}></IGDBResult>
+		))}
       </Container>
     );
   }
@@ -164,5 +180,34 @@ export class SearchResult extends Component {
       this.game = result[0];
       console.log(this.game);
     });
+  }
+}
+
+export class IGDBResult extends Component <{ game: any }>{
+  render() {
+    return (
+      <Card title={this.props.game.name}>
+        <h6 className="card-subtitle mb-2 text-muted">
+          Terningkast:
+          <ThumbNail small img="https://cdn-icons-png.flaticon.com/512/220/220725.png"></ThumbNail>
+        </h6>
+        <Row>
+          <Column width={2}>
+            <ThumbNail img={
+				this.props.game.cover ? "https:" + this.props.game.cover.url : ''
+			}></ThumbNail>
+          </Column>
+          <Column width={8}>
+            {this.props.game.summary ? this.props.game.summary : 'Ingen beskrivelse'}
+            <Linebreak></Linebreak>
+          </Column>
+          <Column width={2}>
+            {' '}
+            <Button.Success onClick={() => 0}>Les mer</Button.Success>
+          </Column>
+        </Row>
+        <Linebreak></Linebreak>
+      </Card>
+    );
   }
 }
