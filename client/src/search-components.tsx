@@ -95,6 +95,7 @@ export class Search extends Component {
   }
 
   mounted() {
+    /** */
     gameService.getAll().then((result) => {
       this.input = '';
       this.games = result;
@@ -122,13 +123,21 @@ export class SearchListings extends Component {
 }
 
 export class SearchResult extends Component {
+  game: Game = {
+    game_id: 0,
+    game_title: '',
+    genre: [],
+    genre_id: 0,
+    platform: [],
+    game_description: '',
+  };
   description =
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco...';
   render() {
     return (
-      <Card title="Game Title">
+      <Card title={this.game.game_title}>
         <h6 className="card-subtitle mb-2 text-muted">
-          Terningkast:{' '}
+          Terningkast:
           <ThumbNail small img="https://cdn-icons-png.flaticon.com/512/220/220725.png"></ThumbNail>
         </h6>
         <Row>
@@ -136,14 +145,24 @@ export class SearchResult extends Component {
             <ThumbNail img="https://cdn-icons-png.flaticon.com/512/686/686589.png"></ThumbNail>
           </Column>
           <Column width={8}>
-            Description: {this.description}
+            {this.game.game_description}
             <Linebreak></Linebreak>
           </Column>
           <Column width={2}>
+            {' '}
             <Button.Success onClick={() => history.push('/games/1')}>Les mer</Button.Success>
           </Column>
         </Row>
+        <Linebreak></Linebreak>
       </Card>
     );
+  }
+  /** return axios
+   */
+  mounted() {
+    gameService.getAll().then((result) => {
+      this.game = result[0];
+      console.log(this.game);
+    });
   }
 }

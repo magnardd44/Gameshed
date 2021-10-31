@@ -20,6 +20,7 @@ import { Search, SearchResult, SearchListings } from './search-components';
 import { Hash } from 'crypto';
 import { createHashHistory } from 'history';
 import { gameService, reviewService, Game, Review } from './services';
+import { GameCard } from './game-component';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 
@@ -45,7 +46,7 @@ ReactDOM.render(
       <NavHeader />
       <Route exact path="/" component={Search}></Route>
       <Route exact path="/results" component={SearchListings}></Route>
-      <Route exact path="/games/1" component={SearchResult}></Route>
+      <Route exact path="/games/1" component={GameCard}></Route>
       <Route exact path="/addReview" component={AddReview} />
       <Route exact path="/publishReview" component={PublishReview} />
     </div>
