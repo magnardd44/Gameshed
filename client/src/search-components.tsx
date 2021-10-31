@@ -48,26 +48,28 @@ export class Search extends Component {
               />
 
               {this.filtered.map((game) => {
-                return (
-                  <div
-                    id={game.game_title}
-                    key={game.game_id}
-                    role="option"
-                    className=" option"
-                    style={{
-                      borderRadius: '5px',
-                      border: '1px solid black',
-                      cursor: 'pointer',
-                      marginTop: '10px',
-                      backgroundColor: 'lightgray',
-                    }}
-                    onClick={(event) => {
-                      this.input = event.currentTarget.id;
-                    }}
-                  >
-                    {game.game_title}
-                  </div>
-                );
+                if (this.input != '') {
+                  return (
+                    <div
+                      id={game.game_title}
+                      key={game.game_id}
+                      role="option"
+                      className=" option"
+                      style={{
+                        borderRadius: '5px',
+                        border: '1px solid black',
+                        cursor: 'pointer',
+                        marginTop: '10px',
+                        backgroundColor: 'lightgray',
+                      }}
+                      onClick={(event) => {
+                        this.input = event.currentTarget.id;
+                      }}
+                    >
+                      {game.game_title}
+                    </div>
+                  );
+                }
               })}
             </ColumnCentre>
             <ColumnCentre width={4}>
