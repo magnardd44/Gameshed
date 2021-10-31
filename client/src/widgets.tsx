@@ -114,7 +114,7 @@ export class ColumnCentre extends Component<{ width?: number; offset?: number }>
 export class Column extends Component<{ width?: number; right?: boolean }> {
   render() {
     return (
-      <div className={'col' + (this.props.width ? '-' + this.props.width : '')}>
+      <div className={'col-sm' + (this.props.width ? '-' + this.props.width : '')}>
         <div className={'float-' + (this.props.right ? 'end' : 'start')}>{this.props.children}</div>
       </div>
     );
