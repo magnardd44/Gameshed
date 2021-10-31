@@ -29,7 +29,7 @@ class NavHeader extends Component {
   render() {
     return (
       <div>
-        <NavBar brand="GameShed">
+        <NavBar brand="GS">
           <NavBar.Link to="/games">Games</NavBar.Link>
         </NavBar>
         <Header></Header>
@@ -45,6 +45,7 @@ ReactDOM.render(
       <NavHeader />
       <Route exact path="/" component={Search}></Route>
       <Route exact path="/results" component={SearchListings}></Route>
+      <Route exact path="/games/1" component={SearchResult}></Route>
       <Route exact path="/addReview" component={AddReview} />
       <Route exact path="/publishReview" component={PublishReview} />
     </div>
