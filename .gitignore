@@ -3,3 +3,4 @@ config.ts
 bundle.js
 bundle.js.map
 coverage
+server/config copy.ts

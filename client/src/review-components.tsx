@@ -104,7 +104,7 @@ export class AddReview extends Component {
 }
 
 export class PublishReview extends Component<{ match: { params: { id: number } } }> {
-  review: any = { id: 0, title: '', text: '', rating: 0 };
+  review: any = { id: 0, review_title: '', text: '', rating: 0 };
 
   render() {
     return (
@@ -126,7 +126,7 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
           <Row>
             <Column width={12}>
               <div>
-                <b>{this.review.title}</b>
+                <b>{this.review.review_title}</b>
               </div>
             </Column>
           </Row>

@@ -112,6 +112,8 @@ class ReviewService {
 
   /**
    * Create new review having the given title.
+   *
+   
    */
   create(review_title: string, text: string, rating: number) {
     return new Promise<number>((resolve, reject) => {
@@ -128,11 +130,11 @@ class ReviewService {
   }
 
   /**
-   * Get task with given id.
+   * Get review based on ID
    */
   get(id: number) {
     return new Promise<Review | undefined>((resolve, reject) => {
-      pool.query('SELECT * FROM reviews WHERE id = ?', [id], (error, results) => {
+      pool.query('SELECT * FROM reviews WHERE review_id = ?', [id], (error, results) => {
         if (error) return reject(error);
 
         resolve(results[0]);
@@ -141,7 +143,7 @@ class ReviewService {
   }
 
   /**
-   * Get all reviews.
+   * Get all tasks.
    */
   getAll() {
     return new Promise<Review[]>((resolve, reject) => {
@@ -154,11 +156,11 @@ class ReviewService {
   }
 
   /**
-   * Delete review with given id.
+   * Delete task with given id.
    */
   delete(id: number) {
     return new Promise<void>((resolve, reject) => {
-      pool.query('DELETE FROM reviews WHERE id = ?', [id], (error, results) => {
+      pool.query('DELETE FROM Reviews WHERE review_id = ?', [id], (error, results) => {
         if (error) return reject(error);
 
         resolve();
