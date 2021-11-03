@@ -13,7 +13,7 @@ import {
   Linebreak,
 } from './widgets';
 import { NavLink } from 'react-router-dom';
-import { gameService, reviewService, Game, Review } from './services';
+import { gameService, reviewService, Game, Review } from './services/services';
 import { createHashHistory } from 'history';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
