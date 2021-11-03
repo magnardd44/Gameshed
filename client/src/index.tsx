@@ -16,7 +16,7 @@ import {
 import axios from 'axios';
 import { HashRouter, Route } from 'react-router-dom';
 import { AddReview, PublishReview } from './review-components';
-import { Search, SearchResult, SearchListings } from './search-components';
+import { Search, SearchListings } from './search-components';
 import { Hash } from 'crypto';
 import { createHashHistory } from 'history';
 import { gameService, reviewService, Game, Review } from './services';
@@ -46,7 +46,7 @@ ReactDOM.render(
       <NavHeader />
       <Route exact path="/" component={Search}></Route>
       <Route exact path="/results" component={SearchListings}></Route>
-      <Route exact path="/games/1" component={GameCard}></Route>
+      <Route exact path="/games/:id" component={GameCard}></Route>
       <Route exact path="/addReview" component={AddReview} />
       <Route exact path="/publishReview/:id" component={PublishReview} />
     </div>
