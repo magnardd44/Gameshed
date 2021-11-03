@@ -14,8 +14,8 @@ searchRouter.post('/', (request, response) => {
 });
 
 // Debug
-searchRouter.get('/get', (request, response) => {
-	searchService.get_token()
+searchRouter.get('/get/:id', (request, response) => {
+	searchService.get(request.params.id)
 	.then(res=>response.send(res))
 	.catch(err=>response.status(500).send(err))
 });

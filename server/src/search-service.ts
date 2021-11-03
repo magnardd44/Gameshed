@@ -52,6 +52,27 @@ class SearchService {
 			console.error(err);
 		});
 	}
+
+	async get(external_id: string) {
+		await this.get_token();
+		return await axios({
+			url: "https://api.igdb.com/v4/games",
+			method: 'POST',
+			headers: {
+				'Accept': 'application/json',
+				'Client-ID': process.env.IGDB_CLIENT_ID,
+				'Authorization': this.token.token_type + ' ' + this.token.access_token
+			},
+			data: 'fields *; where id=' + external_id + ';'
+			//data: 'fields name,summary,cover.url,aggregated_rating; where id=' + external_id + ';'
+			})
+		.then(response => {
+			return response.data;
+		})
+		.catch(err => {
+			console.error(err);
+		});
+	}
 }
 
 const searchService = new SearchService();
