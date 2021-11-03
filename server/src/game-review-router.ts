@@ -1,6 +1,6 @@
 import express from 'express';
-import { gameService, reviewService } from './services';
-
+import { gameService } from './services';
+import { reviewService } from './review-service';
 /**
  * Express router containing task methods.
  */
@@ -48,9 +48,10 @@ router.post('/reviews', (request, response) => {
   else response.status(400).send('Missing review title');
 });
 
-router.get('/reviews', (_request, response) => {
+//Show published reviews
+router.get('/publishedReviews', (_request, response) => {
   reviewService
-    .getAll()
+    .getPublished()
     .then((rows) => response.send(rows))
     .catch((error) => response.status(500).send(error));
 });
@@ -66,6 +67,34 @@ router.get('/reviews/:id', (request, response) => {
     .catch((error) => response.status(500).send(error));
 });
 
+//Edit review
+router.patch('/reviews/:id', (request, response) => {
+  const data = request.body;
+  if ((data && data.title, data.text, data.rating != undefined))
+    reviewService
+      .edit(Number(request.params.id), data.title, data.text, data.rating)
+      .then((id) => response.send({ id: id }))
+      .catch((error) => response.status(500).send(error));
+  else response.status(400).send('');
+});
+
+//Set review status to published
+router.patch('/reviews/:id/publish', (request, response) => {
+  reviewService
+    .publish(Number(request.params.id), true)
+    .then((id) => response.send({ id: id }))
+    .catch((error) => response.status(500).send(error));
+});
+
+//Delete review
+
+router.delete('/reviews/:id', (request, response) => {
+  reviewService
+    .delete(Number(request.params.id))
+    .then((_result) => response.send())
+    .catch((error) => response.status(500).send(error));
+});
+
 // Example request body: { title: "Ny oppgave" }
 // Example response body: { id: 4 }
 // router.post('/tasks', (request, response) => {
@@ -76,13 +105,6 @@ router.get('/reviews/:id', (request, response) => {
 //       .then((id) => response.send({ id: id }))
 //       .catch((error) => response.status(500).send(error));
 //   else response.status(400).send('Missing task title');
-// });
-
-// router.delete('/tasks/:id', (request, response) => {
-//   taskService
-//     .delete(Number(request.params.id))
-//     .then((_result) => response.send())
-//     .catch((error) => response.status(500).send(error));
 // });
 
 export default router;

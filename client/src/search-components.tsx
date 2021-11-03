@@ -13,14 +13,14 @@ import {
   Linebreak,
 } from './widgets';
 import { NavLink } from 'react-router-dom';
-import { gameService, reviewService, Game, Review } from './services';
+import { gameService, reviewService, Game, Review } from './services/services';
 import { createHashHistory } from 'history';
 import axios from 'axios';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
-let shared = sharedComponentData({ 
-	games: [],
+let shared = sharedComponentData({
+  games: [],
 });
 
 export class Search extends Component {
@@ -110,14 +110,14 @@ export class Search extends Component {
 
   search() {
     console.log('search');
-	shared.games = []; //Opprensking så ikkje gamle resultat forstyrrer.
-	axios
+    shared.games = []; //Opprensking så ikkje gamle resultat forstyrrer.
+    axios
       .post('search', { game: this.input })
-	  .then((response) => {
-			  shared.games = response.data
-			  console.log(response.data);
-			  })
-	  .catch(err=>console.log(err));
+      .then((response) => {
+        shared.games = response.data;
+        console.log(response.data);
+      })
+      .catch((err) => console.log(err));
     history.push('/results');
   }
 }
@@ -130,9 +130,9 @@ export class SearchListings extends Component {
         <SearchResult></SearchResult>
         <SearchResult></SearchResult>
         <SearchResult></SearchResult>
-		{shared.games.map((game, index)=>(
-				<IGDBResult game={game} key={index}></IGDBResult>
-		))}
+        {shared.games.map((game, index) => (
+          <IGDBResult game={game} key={index}></IGDBResult>
+        ))}
       </Container>
     );
   }
@@ -183,7 +183,7 @@ export class SearchResult extends Component {
   }
 }
 
-export class IGDBResult extends Component <{ game: any }>{
+export class IGDBResult extends Component<{ game: any }> {
   render() {
     return (
       <Card title={this.props.game.name}>
@@ -193,9 +193,9 @@ export class IGDBResult extends Component <{ game: any }>{
         </h6>
         <Row>
           <Column width={2}>
-            <ThumbNail img={
-				this.props.game.cover ? "https:" + this.props.game.cover.url : ''
-			}></ThumbNail>
+            <ThumbNail
+              img={this.props.game.cover ? 'https:' + this.props.game.cover.url : ''}
+            ></ThumbNail>
           </Column>
           <Column width={8}>
             {this.props.game.summary ? this.props.game.summary : 'Ingen beskrivelse'}
