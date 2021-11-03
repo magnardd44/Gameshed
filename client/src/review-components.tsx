@@ -1,6 +1,17 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Alert, Card, Row, Column, Form, Button } from './widgets';
+import {
+  Container,
+  FormContainer,
+  FormGroup,
+  Alert,
+  Card,
+  Row,
+  Column,
+  Form,
+  Button,
+  ColumnCentre,
+} from './widgets';
 import { NavLink } from 'react-router-dom';
 import { gameService, reviewService } from './services';
 import { createHashHistory } from 'history';
@@ -21,7 +32,7 @@ export class AddReview extends Component {
 
   render() {
     return (
-      <>
+      <Container>
         <Card title="Skriv anmeldelse">
           <Row>
             <Column width={2}>Spill:</Column>
@@ -35,38 +46,28 @@ export class AddReview extends Component {
             <Column width={2}>Plattform:</Column>
             <Column>Hentes fra IGDB</Column>
           </Row>
-
-          <Row>
-            <Column width={2}>
+          <FormContainer>
+            <FormGroup>
               <Form.Label>Overskrift:</Form.Label>
-            </Column>
-            <Column>
               <Form.Input
                 type="text"
                 value={this.reviewTitle}
                 onChange={(event) => (this.reviewTitle = event.currentTarget.value)}
               />
-            </Column>
-          </Row>
-          <Row>
-            <Column width={2}>
+            </FormGroup>
+            <FormGroup>
               <Form.Label>Anmeldelse:</Form.Label>
-            </Column>
-            <Column>
               <Form.Textarea
                 value={this.text ?? ''}
                 onChange={(event) => {
                   this.text = event.currentTarget.value;
                 }}
-                rows={20}
+                rows={10}
+                cols={10}
               />
-            </Column>
-          </Row>
-          <Row>
-            <Column width={2}>
+            </FormGroup>
+            <FormGroup>
               <Form.Label>Terningkast:</Form.Label>
-            </Column>
-            <Column>
               <Form.Select
                 value={this.rating}
                 onChange={(event) => {
@@ -80,8 +81,8 @@ export class AddReview extends Component {
                 <option value="5">5</option>
                 <option value="6">6</option>
               </Form.Select>
-            </Column>
-          </Row>
+            </FormGroup>
+          </FormContainer>
         </Card>
 
         <Button.Success
@@ -98,7 +99,7 @@ export class AddReview extends Component {
         >
           Lagre
         </Button.Success>
-      </>
+      </Container>
     );
   }
 }

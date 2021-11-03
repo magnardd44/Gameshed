@@ -29,7 +29,7 @@ export class GameCard extends Component {
   };
   render() {
     return (
-      <div>
+      <Container>
         <Card title={this.game.game_title}>
           <h6 className="card-subtitle mb-2 text-muted">
             Terningkast:
@@ -58,8 +58,15 @@ export class GameCard extends Component {
           </Row>
         </Card>
         <Linebreak></Linebreak>
-        <Button.Success onClick={() => this.addReview()}>Anmeld dette spillet</Button.Success>
-      </div>
+        <Row>
+          <Column>
+            <Button.Success onClick={() => this.addReview()}>Anmeld dette spillet</Button.Success>
+          </Column>
+          <Column right={true}>
+            <Button.Danger onClick={() => history.push('/')}>Tilbake til søk</Button.Danger>
+          </Column>
+        </Row>
+      </Container>
     );
   }
 
