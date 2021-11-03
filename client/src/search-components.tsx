@@ -19,8 +19,8 @@ import axios from 'axios';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
-let shared = sharedComponentData({ 
-	games: [],
+let shared = sharedComponentData({
+  games: [],
 });
 
 export class Search extends Component {
@@ -110,14 +110,14 @@ export class Search extends Component {
 
   search() {
     console.log('search');
-	shared.games = []; //Opprensking så ikkje gamle resultat forstyrrer.
-	axios
+    shared.games = []; //Opprensking så ikkje gamle resultat forstyrrer.
+    axios
       .post('search', { game: this.input })
-	  .then((response) => {
-			  shared.games = response.data
-			  console.log(response.data);
-			  })
-	  .catch(err=>console.log(err));
+      .then((response) => {
+        shared.games = response.data;
+        console.log(response.data);
+      })
+      .catch((err) => console.log(err));
     history.push('/results');
   }
 }
@@ -128,11 +128,9 @@ export class SearchListings extends Component {
       <Container>
         Søkeresultater:
         <SearchResult></SearchResult>
-        <SearchResult></SearchResult>
-        <SearchResult></SearchResult>
-		{shared.games.map((game, index)=>(
-				<IGDBResult game={game} key={index}></IGDBResult>
-		))}
+        {shared.games.map((game, index) => (
+          <IGDBResult game={game} key={index}></IGDBResult>
+        ))}
       </Container>
     );
   }
@@ -147,8 +145,6 @@ export class SearchResult extends Component {
     platform: [],
     game_description: '',
   };
-  description =
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco...';
   render() {
     return (
       <Card title={this.game.game_title}>
@@ -166,24 +162,24 @@ export class SearchResult extends Component {
           </Column>
           <Column width={2}>
             {' '}
-            <Button.Success onClick={() => history.push('/games/1')}>Les mer</Button.Success>
+            <Button.Success onClick={() => history.push('/games/' + this.game.game_id)}>
+              Les mer
+            </Button.Success>
           </Column>
         </Row>
         <Linebreak></Linebreak>
       </Card>
     );
   }
-  /** return axios
-   */
   mounted() {
-    gameService.getAll().then((result) => {
-      this.game = result[0];
+    gameService.get(this.game.game_id).then((result) => {
+      this.game = result;
       console.log(this.game);
     });
   }
 }
 
-export class IGDBResult extends Component <{ game: any }>{
+export class IGDBResult extends Component<{ game: any }> {
   render() {
     return (
       <Card title={this.props.game.name}>
@@ -193,9 +189,9 @@ export class IGDBResult extends Component <{ game: any }>{
         </h6>
         <Row>
           <Column width={2}>
-            <ThumbNail img={
-				this.props.game.cover ? "https:" + this.props.game.cover.url : ''
-			}></ThumbNail>
+            <ThumbNail
+              img={this.props.game.cover ? 'https:' + this.props.game.cover.url : ''}
+            ></ThumbNail>
           </Column>
           <Column width={8}>
             {this.props.game.summary ? this.props.game.summary : 'Ingen beskrivelse'}
@@ -203,7 +199,9 @@ export class IGDBResult extends Component <{ game: any }>{
           </Column>
           <Column width={2}>
             {' '}
-            <Button.Success onClick={() => 0}>Les mer</Button.Success>
+            <Button.Success onClick={() => history.push('/games/' + this.props.game.name)}>
+              Les mer
+            </Button.Success>
           </Column>
         </Row>
         <Linebreak></Linebreak>
