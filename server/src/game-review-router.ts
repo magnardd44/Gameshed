@@ -1,6 +1,7 @@
 import express from 'express';
 import { gameService } from './services';
 import { reviewService } from './review-service';
+
 /**
  * Express router containing task methods.
  */
@@ -94,6 +95,18 @@ router.delete('/reviews/:id', (request, response) => {
     .then((_result) => response.send())
     .catch((error) => response.status(500).send(error));
 });
+
+// //Add new user to database
+// router.post('/users', (request, response) => {
+//   const data = request.body;
+//   if (data && data.nickname.length != 0)
+//     userService
+//       .create(data.nickname, data.bio)
+
+//       .then((id) => response.send({ id: id }))
+//       .catch((error) => response.status(500).send(error));
+//   else response.status(400).send('Missing user nickname');
+// });
 
 // Example request body: { title: "Ny oppgave" }
 // Example response body: { id: 4 }

@@ -5,23 +5,47 @@ import { NavLink } from 'react-router-dom';
 import { Review, reviewService } from './services/review-service';
 
 import { createHashHistory } from 'history';
+import { Game, gameService } from './services/services';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
 export class PublishedReviews extends Component {
   reviews: Review[] = [];
+  games: Game[] = [];
+  game: Game = {
+    game_id: 0,
+    game_title: '',
+    genre: [],
+    genre_id: 0,
+    platform: [],
+    game_description: '',
+  };
 
   render() {
     return (
       <>
         <Card title="Publiserte anmeldelser">
-          {this.reviews.map((review) => (
+          <Row>
+            <Column>
+              <b>Spill</b>
+            </Column>
+            <Column>
+              <b>Anmeldelse</b>
+            </Column>
+            <Column>
+              <b>Terningkast</b>
+            </Column>
+          </Row>
+          {this.reviews.map((review, index) => (
             <Row key={review.review_id}>
+              <Column>{review.game_title}</Column>
+
               <Column>
                 <NavLink to={'/publishedReviews/' + review.review_id}>
                   {review.review_title}
                 </NavLink>
               </Column>
+              <Column>{review.rating}</Column>
             </Row>
           ))}
         </Card>
@@ -137,6 +161,7 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
   review: Review = {
     review_id: 0,
     review_title: '',
+    game_title: '',
     text: '',
     rating: 0,
     published: false,
@@ -308,3 +333,4 @@ export class EditReview extends Component<{ match: { params: { id: number } } }>
       .catch((error) => Alert.danger('Error getting review: ' + error.message));
   }
 }
+

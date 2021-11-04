@@ -6,6 +6,7 @@ axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 export type Review = {
   review_id: number;
   game_id: string;
+  game_title: string;
   review_title: string;
   text: string;
   user_id: number;
@@ -17,6 +18,7 @@ class ReviewService {
   review: Review = {
     review_id: 0,
     game_id: '',
+    game_title: '',
     review_title: '',
     text: '',
     user_id: 0,

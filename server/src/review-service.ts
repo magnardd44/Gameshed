@@ -3,6 +3,7 @@ import pool from './mysql-pool';
 export type Review = {
   review_id: number;
   game_id: string;
+  game_title: string;
   review_title: string;
   text: string;
   user_id: number;
@@ -14,6 +15,7 @@ class ReviewService {
   review: Review = {
     review_id: 0,
     game_id: '',
+    game_title: '',
     review_title: '',
     text: '',
     user_id: 0,
@@ -89,11 +91,14 @@ class ReviewService {
    */
   getPublished() {
     return new Promise<Review[]>((resolve, reject) => {
-      pool.query('SELECT * FROM reviews WHERE published =1', (error, results) => {
-        if (error) return reject(error);
+      pool.query(
+        'SELECT game_title, review_title, rating FROM games g INNER JOIN reviews r ON g.game_id = r.game_id WHERE published = 1 ORDER BY game_title, review_title;',
+        (error, results) => {
+          if (error) return reject(error);
 
-        resolve(results);
-      });
+          resolve(results);
+        }
+      );
     });
   }
 
