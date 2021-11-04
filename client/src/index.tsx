@@ -21,6 +21,7 @@ import { Hash } from 'crypto';
 import { createHashHistory } from 'history';
 import { gameService, Game } from './services/services';
 import { GameCard } from './game-component';
+import { User } from './user-components';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 
@@ -32,6 +33,7 @@ class NavHeader extends Component {
       <div>
         <NavBar brand="GS">
           <NavBar.Link to="/games">Games</NavBar.Link>
+		  <User/>
         </NavBar>
         <Header></Header>
       </div>
