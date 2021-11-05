@@ -23,11 +23,11 @@ class GameService {
   /**
    * Create new game having the given title.
    */
-  create(title: string, genre: string, platform: string[], description: string) {
+  create(title: string, description: string) {
     return new Promise<number>((resolve, reject) => {
       pool.query(
-        'INSERT INTO games SET game_title=?, genre=?, platform=?, game_description',
-        [title, genre, platform, description],
+        'INSERT INTO games SET game_title=?, game_description=?',
+        [title, description],
         (error, results) => {
           if (error) return reject(error);
 
