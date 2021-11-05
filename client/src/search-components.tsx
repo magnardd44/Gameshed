@@ -11,6 +11,8 @@ import {
   Container,
   ColumnCentre,
   Linebreak,
+  FormContainer,
+  FormGroup,
 } from './widgets';
 import { NavLink } from 'react-router-dom';
 import { gameService, Game } from './services/game-services';
@@ -128,7 +130,27 @@ export class SearchListings extends Component {
     return (
       <>
         <Container>
-          Søkeresultater:
+          Filtrer dine søkeresultater:
+          <FormContainer>
+            <FormGroup>
+              <Form.Label>Sjanger: </Form.Label>
+              <Form.Select value={'Adventure'} onChange={() => console.log('sjanger')}>
+                <option value="1">Adventure</option>
+              </Form.Select>
+
+              <Form.Label>Platform: </Form.Label>
+              <Form.Select value={'Adventure'} onChange={() => console.log('sjanger')}>
+                <option value="1">Playstation</option>
+              </Form.Select>
+
+              <Form.Label>År: </Form.Label>
+              <Form.Select value={'Adventure'} onChange={() => console.log('sjanger')}>
+                <option value="1">2020</option>
+              </Form.Select>
+            </FormGroup>
+          </FormContainer>
+        </Container>
+        <Container>
           <SearchResult></SearchResult>
           {shared.games.map((game, index) => (
             <IGDBResult game={game} key={index}></IGDBResult>
@@ -210,7 +232,7 @@ export class IGDBResult extends Component<{ game: any }> {
           </Column>
           <Column width={2}>
             {' '}
-            <Button.Success onClick={() => history.push('/games/' + this.props.game.name)}>
+            <Button.Success onClick={() => history.push('/games/' + this.props.game.id)}>
               Les mer
             </Button.Success>
           </Column>
