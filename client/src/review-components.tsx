@@ -1,18 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import {
-  Container,
-  FormContainer,
-  FormGroup,
-  Alert,
-  Card,
-  Row,
-  Column,
-  Form,
-  Button,
-  ColumnCentre,
-  Linebreak,
-} from './widgets';
+import { Alert, Card, Row, Column, Form, Button, ThumbNail } from './widgets';
 import { NavLink } from 'react-router-dom';
 import { Review, reviewService } from './services/review-service';
 
@@ -20,6 +8,38 @@ import { createHashHistory } from 'history';
 import { Game, gameService } from './services/game-services';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
+
+export class GenreReviews extends Component {
+  reviews: Review[] = [];
+  games: Game[] = [];
+  game: Game = {
+    game_id: 0,
+    game_title: '',
+    genre: [],
+    genre_id: 0,
+    platform: [],
+    game_description: '',
+  };
+
+  render() {
+    return (
+      <>
+        <Row>
+          <Column>
+            <Card title="Adventure"></Card>
+          </Column>
+        </Row>
+      </>
+    );
+  }
+
+  mounted() {
+    reviewService
+      .getPublisedReviews()
+      .then((reviews) => (this.reviews = reviews))
+      .catch((error) => Alert.danger('Error getting reviews: ' + error.message));
+  }
+}
 
 export class PublishedReviews extends Component {
   reviews: Review[] = [];
@@ -61,6 +81,25 @@ export class PublishedReviews extends Component {
             </Row>
           ))}
         </Card>
+        <Row>
+          <h3>Velg anmeldelse basert på sjanger</h3>
+          <Column width={2}>
+            <Card title="Eventyr">
+              <ThumbNail img="images/console.png"></ThumbNail>
+            </Card>
+          </Column>
+          <Column width={2}>
+            <Card title="Indie">
+              <ThumbNail img="images/console.png"></ThumbNail>
+            </Card>
+          </Column>
+          <Column width={2}>
+            <Card title="Strategi">
+              <ThumbNail img="images/console.png"></ThumbNail>
+            </Card>
+          </Column>
+        </Row>
+        <Row></Row>
       </>
     );
   }
