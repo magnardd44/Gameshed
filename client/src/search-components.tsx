@@ -155,7 +155,7 @@ export class SearchListings extends Component {
           </FormContainer>
         </Container>
         <Container>
-          <SearchResult></SearchResult>
+          <SearchResult key={0}></SearchResult>
           {shared.games.map((game, index) => (
             <IGDBResult game={game} key={index}></IGDBResult>
           ))}
@@ -174,7 +174,6 @@ export class SearchListings extends Component {
   mounted() {
     genreService.getAll().then((results) => {
       this.genres = results;
-      console.log(this.genres);
     });
   }
 }
@@ -247,6 +246,9 @@ export class IGDBResult extends Component<{ game: any }> {
             </Button.Success>
           </Column>
         </Row>
+        <Row>Sjanger: {this.props.game.genres}</Row>
+        <Row>Platform: {this.props.game.platforms}</Row>
+        <Row>År: </Row>
         <Linebreak></Linebreak>
       </Card>
     );
