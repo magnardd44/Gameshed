@@ -126,13 +126,23 @@ export class Search extends Component {
 export class SearchListings extends Component {
   render() {
     return (
-      <Container>
-        Søkeresultater:
-        <SearchResult></SearchResult>
-        {shared.games.map((game, index) => (
-          <IGDBResult game={game} key={index}></IGDBResult>
-        ))}
-      </Container>
+      <>
+        <Container>
+          Søkeresultater:
+          <SearchResult></SearchResult>
+          {shared.games.map((game, index) => (
+            <IGDBResult game={game} key={index}></IGDBResult>
+          ))}
+        </Container>
+
+        <Container>
+          Fant du ikke det du lette etter?
+          <Linebreak></Linebreak>
+          <Button.Success onClick={() => history.push('/addGame')}>
+            Legg til nytt spill
+          </Button.Success>
+        </Container>
+      </>
     );
   }
 }
