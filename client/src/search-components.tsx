@@ -234,6 +234,7 @@ export class SearchListings extends Component {
 export class SearchResult extends Component {
   game: Game = {
     game_id: 0,
+	igdb_id: 0,
     game_title: '',
     genre: 0,
     genre_id: 0,
@@ -257,7 +258,7 @@ export class SearchResult extends Component {
           </Column>
           <Column width={2}>
             {' '}
-            <Button.Success onClick={() => history.push('/games/' + this.game.game_id)}>
+            <Button.Success onClick={() => history.push('/games/' + this.game.game_id + '/' + this.game.igdb_id)}>
               Les mer
             </Button.Success>
           </Column>
@@ -294,7 +295,7 @@ export class IGDBResult extends Component<{ game: any }> {
           </Column>
           <Column width={2}>
             {' '}
-            <Button.Success onClick={() => history.push('/games/' + this.props.game.id)}>
+            <Button.Success onClick={() => history.push('/games/0/' + this.props.game.id)}>
               Les mer
             </Button.Success>
           </Column>

@@ -48,7 +48,7 @@ ReactDOM.render(
       <NavHeader />
       <Route exact path="/" component={Search}></Route>
       <Route exact path="/results" component={SearchListings}></Route>
-      <Route exact path="/games/:id" component={GameCard}></Route>
+      <Route exact path="/games/:db_id/:igdb_id" component={GameCard}></Route>
       <Route exact path="/addGame" component={AddGame}></Route>
       <Route exact path="/addReview" component={AddReview} />
       <Route exact path="/publishReview/:id" component={PublishReview} />

@@ -5,6 +5,7 @@ axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 
 export type Game = {
   game_id: number;
+  igdb_id: number;
   game_title: string;
   genre: number;
   genre_id: number;
@@ -15,6 +16,7 @@ export type Game = {
 class GameService {
   game: Game = {
     game_id: 0,
+	igdb_id: 0,
     game_title: '',
     genre: 0,
     genre_id: 0,
