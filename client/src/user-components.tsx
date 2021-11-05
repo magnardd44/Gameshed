@@ -1,32 +1,12 @@
 import * as React from 'react';
-import { Component, sharedComponentData } from 'react-simplified';
+import { Component } from 'react-simplified';
 import {
   Form,
   Button,
 } from './widgets';
+import userService from './services/user-service'
 
-class UserService {
-	name: String = 'Anonym';
-	id: number = 0;
-	token: String = '';
-	logged: boolean = false;
-
-	login(name: String, password: String) {
-		this.name = name;
-		this.logged = true;
-		this.id = 1;
-	}
-
-	logout() {
-		this.name = 'Anonym';
-		this.logged = false;
-		this.id = 0;
-	}
-}
-
-let user = sharedComponentData(new UserService());
-
-export class User extends Component {
+export class UserNav extends Component {
 	input: string = '';
 	password: string = '';
 
@@ -36,14 +16,27 @@ export class User extends Component {
 	  		  <Form.Input
 				  type='text'
 				  value={this.input}
-				  placeholder='Anonym'
-				  disabled={user.logged}
+				  placeholder='Epost'
+				  disabled={userService.token}
 				  onChange={(event) => { 
 				  this.input = event.currentTarget.value;
 				  }}
 	  		  />
-	  		  {user.id == 0 
-			  ? // If not logged in
+	  		  {userService.token 
+			  ? // If user logged in
+				  <>
+					  <Button.Success onClick={()=>{
+						  userService.logout();
+						  this.input = '';
+						  this.password = '';
+					  }}>Logout</Button.Success>
+					  <Button.Danger onClick={()=>{
+						  userService.delete();
+						  // this.input = '';
+						  // this.password = '';
+					  }}>Slett meg</Button.Danger>
+				  </>
+			  : // else user not logged
 				  <>
 				  <Form.Input
 					  type='text'
@@ -53,17 +46,15 @@ export class User extends Component {
 					  this.password = event.currentTarget.value;
 					  }}
 				  />
-	  			  <Button.Light onClick={()=>{
-	  				  user.login(this.input, this.password);
+	  			  <Button.Success onClick={()=>{
+	  				  userService.login(this.input, this.password);
 	  				  this.password = '';
-	  			  }}>Login</Button.Light>
+	  			  }}>Login</Button.Success>
+	  			  <Button.Success onClick={()=>{
+					  userService.register(this.input, this.password)
+	  				  this.password = '';
+				  } }>Registrer</Button.Success>
 				  </> 
-			  : // else logged in
-	  			  <Button.Light onClick={()=>{
-	  				  user.logout();
-	  				  this.input = '';
-	  				  this.password = '';
-	  			  }}>Logout</Button.Light>
 	  		  }
 	    </>)
 	}
