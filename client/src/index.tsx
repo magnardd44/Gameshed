@@ -19,8 +19,8 @@ import { AddReview, EditReview, PublishedReviews, PublishReview } from './review
 import { Search, SearchListings } from './search-components';
 import { Hash } from 'crypto';
 import { createHashHistory } from 'history';
-import { gameService, Game } from './services/services';
-import { GameCard } from './game-component';
+import { gameService, Game } from './services/game-services';
+import { GameCard, AddGame } from './game-component';
 import { UserNav } from './user-components';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v2';
@@ -33,7 +33,7 @@ class NavHeader extends Component {
       <div>
         <NavBar brand="GS">
           <NavBar.Link to="/games">Games</NavBar.Link>
-		  <UserNav/>
+          <UserNav />
         </NavBar>
         <Header></Header>
       </div>
