@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 import { Review, reviewService } from './services/review-service';
 
 import { createHashHistory } from 'history';
-import { Game, gameService } from './services/services';
+import { Game, gameService } from './services/game-services';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
@@ -15,9 +15,9 @@ export class PublishedReviews extends Component {
   game: Game = {
     game_id: 0,
     game_title: '',
-    genre: [],
+    genre: 0,
     genre_id: 0,
-    platform: [],
+    platform: 0,
     game_description: '',
   };
 
@@ -268,6 +268,7 @@ export class EditReview extends Component<{ match: { params: { id: number } } }>
     game_id: '',
     user_id: 0,
     published: false,
+    game_title: '',
   };
 
   render() {
@@ -333,4 +334,3 @@ export class EditReview extends Component<{ match: { params: { id: number } } }>
       .catch((error) => Alert.danger('Error getting review: ' + error.message));
   }
 }
-

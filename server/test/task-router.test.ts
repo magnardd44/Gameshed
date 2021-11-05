@@ -1,7 +1,7 @@
 import axios from 'axios';
 import pool from '../src/mysql-pool';
 import app from '../src/app';
-import taskService, { Task } from '../src/services';
+import gameService, { Game } from '../src/game-services';
 
 const testTasks: Task[] = [
   { id: 1, title: 'Les leksjon', done: false },

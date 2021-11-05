@@ -13,7 +13,7 @@ import {
   Linebreak,
 } from './widgets';
 import { NavLink } from 'react-router-dom';
-import { gameService, Game } from './services/services';
+import { gameService, Game } from './services/game-services';
 
 import { createHashHistory } from 'history';
 import axios from 'axios';
@@ -141,9 +141,9 @@ export class SearchResult extends Component {
   game: Game = {
     game_id: 0,
     game_title: '',
-    genre: [],
+    genre: 0,
     genre_id: 0,
-    platform: [],
+    platform: 0,
     game_description: '',
   };
   render() {
