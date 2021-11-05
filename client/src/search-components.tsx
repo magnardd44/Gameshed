@@ -20,9 +20,20 @@ import axios from 'axios';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
-let shared = sharedComponentData({
-  games: [],
-});
+type gameType = {
+  id: number;
+  name: string;
+};
+
+class SharedGame {
+  game: gameType = {
+    id: 0,
+    name: '',
+  };
+  games: gameType[] = [];
+}
+
+let shared = sharedComponentData(new SharedGame());
 
 export class Search extends Component {
   input: string = '';
@@ -42,6 +53,15 @@ export class Search extends Component {
                 placeholder="Søk etter et spill"
                 onChange={(event) => {
                   this.input = event.currentTarget.value;
+
+                  if (this.input && this.input.length >= 3) {
+                    setTimeout(() => {
+                      this.IGDB_update();
+                    }, 2000);
+                  } else {
+                    shared.games = [];
+                  }
+
                   this.filtered = this.games.filter((game) =>
                     game.game_title.toLowerCase().includes(this.input.toLowerCase())
                   );
@@ -52,7 +72,6 @@ export class Search extends Component {
                   }
                 }}
               />
-
               {this.filtered.map((game) => {
                 if (this.input != '') {
                   return (
@@ -73,6 +92,30 @@ export class Search extends Component {
                       }}
                     >
                       {game.game_title}
+                    </div>
+                  );
+                }
+              })}
+
+              {shared.games.map((game) => {
+                if (this.input != '') {
+                  return (
+                    <div
+                      key={game.id}
+                      role="option"
+                      className=" option"
+                      style={{
+                        borderRadius: '5px',
+                        border: '1px solid black',
+                        cursor: 'pointer',
+                        marginTop: '10px',
+                        backgroundColor: 'lightgray',
+                      }}
+                      onClick={(event) => {
+                        this.input = event.currentTarget.innerHTML;
+                      }}
+                    >
+                      {game.name}
                     </div>
                   );
                 }
@@ -116,10 +159,20 @@ export class Search extends Component {
       .post('search', { game: this.input })
       .then((response) => {
         shared.games = response.data;
-        console.log(response.data);
       })
       .catch((err) => console.log(err));
     history.push('/results');
+  }
+
+  IGDB_update() {
+    console.log('IGDB search ');
+    shared.games = [];
+    axios
+      .post('search', { game: this.input })
+      .then((response) => {
+        shared.games = response.data;
+      })
+      .catch((err) => console.log(err));
   }
 }
 
