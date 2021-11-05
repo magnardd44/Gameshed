@@ -11,6 +11,7 @@ import {
   Form,
   Button,
   ColumnCentre,
+  Linebreak,
 } from './widgets';
 import { NavLink } from 'react-router-dom';
 import { gameService, reviewService } from './services';
@@ -84,7 +85,7 @@ export class AddReview extends Component {
             </FormGroup>
           </FormContainer>
         </Card>
-
+        <Linebreak></Linebreak>
         <Button.Success
           onClick={() => {
             reviewService

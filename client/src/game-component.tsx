@@ -60,10 +60,10 @@ export class GameCard extends Component {
         <Linebreak></Linebreak>
         <Row>
           <Column>
-            <Button.Success onClick={() => this.addReview()}>Anmeld dette spillet</Button.Success>
+            <Button.Danger onClick={() => history.push('/')}>Tilbake til søk</Button.Danger>
           </Column>
           <Column right={true}>
-            <Button.Danger onClick={() => history.push('/')}>Tilbake til søk</Button.Danger>
+            <Button.Success onClick={() => this.addReview()}>Anmeld dette spillet</Button.Success>
           </Column>
         </Row>
       </Container>
