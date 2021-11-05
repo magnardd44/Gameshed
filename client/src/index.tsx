@@ -15,7 +15,13 @@ import {
 } from './widgets';
 import axios from 'axios';
 import { HashRouter, Route } from 'react-router-dom';
-import { AddReview, EditReview, PublishedReviews, PublishReview } from './review-components';
+import {
+  AddReview,
+  EditReview,
+  PublishedReviews,
+  PublishReview,
+  GenreReviews,
+} from './review-components';
 import { Search, SearchListings } from './search-components';
 import { Hash } from 'crypto';
 import { createHashHistory } from 'history';
@@ -33,7 +39,7 @@ class NavHeader extends Component {
       <div>
         <NavBar brand="GS">
           <NavBar.Link to="/games">Games</NavBar.Link>
-		  <User/>
+          <User />
         </NavBar>
         <Header></Header>
       </div>
@@ -53,6 +59,7 @@ ReactDOM.render(
       <Route exact path="/publishReview/:id" component={PublishReview} />
       <Route exact path="/publishedReviews" component={PublishedReviews} />
       <Route exact path="/editReview/:id" component={EditReview} />
+      <Route exact path="/genreReviews" component={GenreReviews} />
     </div>
   </HashRouter>,
   document.getElementById('root')

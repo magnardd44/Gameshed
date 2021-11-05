@@ -9,38 +9,6 @@ import { Game, gameService } from './services/services';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
-export class GenreReviews extends Component {
-  reviews: Review[] = [];
-  games: Game[] = [];
-  game: Game = {
-    game_id: 0,
-    game_title: '',
-    genre: [],
-    genre_id: 0,
-    platform: [],
-    game_description: '',
-  };
-
-  render() {
-    return (
-      <>
-        <Row>
-          <Column>
-            <Card title="Adventure"></Card>
-          </Column>
-        </Row>
-      </>
-    );
-  }
-
-  mounted() {
-    reviewService
-      .getPublisedReviews()
-      .then((reviews) => (this.reviews = reviews))
-      .catch((error) => Alert.danger('Error getting reviews: ' + error.message));
-  }
-}
-
 export class PublishedReviews extends Component {
   reviews: Review[] = [];
   games: Game[] = [];
@@ -56,7 +24,7 @@ export class PublishedReviews extends Component {
   render() {
     return (
       <>
-        <Card title="Publiserte anmeldelser">
+        <Card title=" Alle publiserte anmeldelser">
           <Row>
             <Column>
               <b>Spill</b>
@@ -81,25 +49,118 @@ export class PublishedReviews extends Component {
             </Row>
           ))}
         </Card>
+      </>
+    );
+  }
+
+  mounted() {
+    reviewService
+      .getPublisedReviews()
+      .then((reviews) => (this.reviews = reviews))
+      .catch((error) => Alert.danger('Error getting reviews: ' + error.message));
+  }
+}
+
+export class GenreReviews extends Component {
+  reviews: Review[] = [];
+  games: Game[] = [];
+  game: Game = {
+    game_id: 0,
+    game_title: '',
+    genre: [],
+    genre_id: 0,
+    platform: [],
+    game_description: '',
+  };
+  review: Review = {
+    review_id: 0,
+    game_id: '',
+    game_title: '',
+    review_title: '',
+    text: '',
+    user_id: 0,
+    rating: 0,
+    published: false,
+    genre_id: 0,
+  };
+
+  render() {
+    return (
+      <>
         <Row>
-          <h3>Velg anmeldelse basert på sjanger</h3>
-          <Column width={2}>
+          <h5>Finn anmeldelser basert på sjanger</h5>
+          <Column width={1}>
             <Card title="Eventyr">
               <ThumbNail img="images/console.png"></ThumbNail>
             </Card>
           </Column>
-          <Column width={2}>
+          <Column width={1}>
             <Card title="Indie">
               <ThumbNail img="images/console.png"></ThumbNail>
             </Card>
           </Column>
-          <Column width={2}>
+          <Column width={1}>
             <Card title="Strategi">
               <ThumbNail img="images/console.png"></ThumbNail>
             </Card>
           </Column>
+          <Column width={1}>
+            <Card title="Pek-og-klikk">
+              <ThumbNail img="images/console.png"></ThumbNail>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Slåssing">
+              <ThumbNail img="images/console.png"></ThumbNail>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Skyting">
+              <ThumbNail img="images/console.png"></ThumbNail>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Musikk">
+              <ThumbNail img="images/console.png"></ThumbNail>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Plattform">
+              <ThumbNail img="images/console.png"></ThumbNail>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Hjernetrim">
+              <ThumbNail img="images/console.png"></ThumbNail>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Bilkjøring">
+              <ThumbNail img="images/console.png"></ThumbNail>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Simulator">
+              <ThumbNail img="images/console.png"></ThumbNail>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Sport">
+              <ThumbNail img="images/console.png"></ThumbNail>
+            </Card>
+          </Column>
         </Row>
-        <Row></Row>
+        {this.reviews.map((review, index) => (
+          <Row key={review.review_id}>
+            <Column>{review.game_title}</Column>
+            <Column>
+              <NavLink to={'/genreReviews/' + this.review.review_id}>
+                {this.review.review_title}
+              </NavLink>
+            </Column>
+            <Column>{this.review.rating}</Column>
+          </Row>
+        ))}
       </>
     );
   }
@@ -218,6 +279,7 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
     published: false,
     game_id: '',
     user_id: 0,
+    genre_id: 0,
   };
 
   render() {
@@ -319,6 +381,8 @@ export class EditReview extends Component<{ match: { params: { id: number } } }>
     game_id: '',
     user_id: 0,
     published: false,
+    game_title: '',
+    genre_id: 0,
   };
 
   render() {

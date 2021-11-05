@@ -57,6 +57,15 @@ router.get('/publishedReviews', (_request, response) => {
     .catch((error) => response.status(500).send(error));
 });
 
+//Show published reviews based on genre
+router.get('/genreReviews', (_request, response) => {
+  reviewService
+    .getGenre()
+    .then((rows) => response.send(rows))
+    .catch((error) => response.status(500).send(error));
+});
+
+
 //Fetch individual review after it has been added and saved
 router.get('/reviews/:id', (request, response) => {
   const id = Number(request.params.id);

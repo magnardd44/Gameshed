@@ -9,6 +9,7 @@ export type Review = {
   user_id: number;
   rating: number;
   published: boolean;
+  genre_id: number;
 };
 
 class ReviewService {
@@ -21,6 +22,7 @@ class ReviewService {
     user_id: 0,
     rating: 0,
     published: false,
+    genre_id: 0,
   };
   reviews: Review[] = [];
 
@@ -92,7 +94,29 @@ class ReviewService {
   getPublished() {
     return new Promise<Review[]>((resolve, reject) => {
       pool.query(
-        'SELECT game_title, review_title, rating FROM games g INNER JOIN reviews r ON g.game_id = r.game_id WHERE published = 1 ORDER BY game_title, review_title;',
+        `SELECT game_title, review_title, rating 
+        FROM games g INNER JOIN reviews r ON g.game_id = r.game_id 
+        WHERE published = 1 ORDER BY game_title, review_title;`,
+        (error, results) => {
+          if (error) return reject(error);
+
+          resolve(results);
+        }
+      );
+    });
+  }
+
+  //Get published reviews based on genre
+
+  getGenre() {
+    return new Promise<Review[]>((resolve, reject) => {
+      pool.query(
+        `SELECT ge.genre_id, ge.genre_name, g.game_title, r.review_title FROM reviews r
+        INNER JOIN games g ON g.game_id = r.game_id
+        INNER JOIN mapping_genre mg ON mg.game_id = g.game_id
+        INNER JOIN genres ge ON mg.genre_id = ge.genre_id
+        WHERE ge.genre_id = ?`,
+        [1],
         (error, results) => {
           if (error) return reject(error);
 

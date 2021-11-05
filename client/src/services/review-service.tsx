@@ -12,6 +12,7 @@ export type Review = {
   user_id: number;
   rating: number;
   published: boolean;
+  genre_id: number;
 };
 
 class ReviewService {
@@ -24,6 +25,7 @@ class ReviewService {
     user_id: 0,
     rating: 0,
     published: false,
+    genre_id: 0,
   };
   reviews: Review[] = [];
 
@@ -40,6 +42,13 @@ class ReviewService {
   getPublisedReviews() {
     return axios.get<Review[]>('/publishedReviews').then((response) => response.data);
   }
+
+   /**
+   * Get reviews based on genre
+   */
+    getGenre() {
+      return axios.get<Review[]>('/genreReviews').then((response) => response.data);
+    }
 
   /**
    * Create new review   *
