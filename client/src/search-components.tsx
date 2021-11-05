@@ -16,9 +16,10 @@ import {
 } from './widgets';
 import { NavLink } from 'react-router-dom';
 import { gameService, Game } from './services/game-services';
-
+import { Genre } from './services/genre-service';
 import { createHashHistory } from 'history';
 import axios from 'axios';
+import { genreService } from './services/genre-service';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
@@ -126,6 +127,7 @@ export class Search extends Component {
 }
 
 export class SearchListings extends Component {
+  genres: Genre[] = [];
   render() {
     return (
       <>
@@ -135,7 +137,9 @@ export class SearchListings extends Component {
             <FormGroup>
               <Form.Label>Sjanger: </Form.Label>
               <Form.Select value={'Adventure'} onChange={() => console.log('sjanger')}>
-                <option value="1">Adventure</option>
+                {this.genres.map((genre) => (
+                  <option>{genre.genre_name}</option>
+                ))}
               </Form.Select>
 
               <Form.Label>Platform: </Form.Label>
@@ -166,6 +170,12 @@ export class SearchListings extends Component {
         </Container>
       </>
     );
+  }
+  mounted() {
+    genreService.getAll().then((results) => {
+      this.genres = results;
+      console.log(this.genres);
+    });
   }
 }
 
