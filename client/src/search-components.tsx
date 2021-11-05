@@ -11,12 +11,15 @@ import {
   Container,
   ColumnCentre,
   Linebreak,
+  FormContainer,
+  FormGroup,
 } from './widgets';
 import { NavLink } from 'react-router-dom';
 import { gameService, Game } from './services/game-services';
-
+import { Genre } from './services/genre-service';
 import { createHashHistory } from 'history';
 import axios from 'axios';
+import { genreService } from './services/genre-service';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
@@ -177,12 +180,35 @@ export class Search extends Component {
 }
 
 export class SearchListings extends Component {
+  genres: Genre[] = [];
   render() {
     return (
       <>
         <Container>
-          Søkeresultater:
-          <SearchResult></SearchResult>
+          Filtrer dine søkeresultater:
+          <FormContainer>
+            <FormGroup>
+              <Form.Label>Sjanger: </Form.Label>
+              <Form.Select value={'Adventure'} onChange={() => console.log('sjanger')}>
+                {this.genres.map((genre) => (
+                  <option>{genre.genre_name}</option>
+                ))}
+              </Form.Select>
+
+              <Form.Label>Platform: </Form.Label>
+              <Form.Select value={'Adventure'} onChange={() => console.log('sjanger')}>
+                <option value="1">Playstation</option>
+              </Form.Select>
+
+              <Form.Label>År: </Form.Label>
+              <Form.Select value={'Adventure'} onChange={() => console.log('sjanger')}>
+                <option value="1">2020</option>
+              </Form.Select>
+            </FormGroup>
+          </FormContainer>
+        </Container>
+        <Container>
+          <SearchResult key={0}></SearchResult>
           {shared.games.map((game, index) => (
             <IGDBResult game={game} key={index}></IGDBResult>
           ))}
@@ -197,6 +223,11 @@ export class SearchListings extends Component {
         </Container>
       </>
     );
+  }
+  mounted() {
+    genreService.getAll().then((results) => {
+      this.genres = results;
+    });
   }
 }
 
@@ -263,11 +294,14 @@ export class IGDBResult extends Component<{ game: any }> {
           </Column>
           <Column width={2}>
             {' '}
-            <Button.Success onClick={() => history.push('/games/' + this.props.game.name)}>
+            <Button.Success onClick={() => history.push('/games/' + this.props.game.id)}>
               Les mer
             </Button.Success>
           </Column>
         </Row>
+        <Row>Sjanger: {this.props.game.genres}</Row>
+        <Row>Platform: {this.props.game.platforms}</Row>
+        <Row>År: </Row>
         <Linebreak></Linebreak>
       </Card>
     );

@@ -48,7 +48,8 @@ class SearchService {
         'Client-ID': process.env.IGDB_CLIENT_ID,
         Authorization: this.token.token_type + ' ' + this.token.access_token,
       },
-      data: 'search "' + game + '"; fields name,summary,cover.url,aggregated_rating;',
+      data:
+        'search "' + game + '"; fields name,summary,cover.url,aggregated_rating,genres,platforms;',
     })
       .then((response) => {
         return response.data;
