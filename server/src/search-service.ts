@@ -63,8 +63,8 @@ class SearchService {
 				'Client-ID': process.env.IGDB_CLIENT_ID,
 				'Authorization': this.token.token_type + ' ' + this.token.access_token
 			},
-			data: 'fields *; where id=' + external_id + ';'
-			//data: 'fields name,summary,cover.url,aggregated_rating; where id=' + external_id + ';'
+			//data: 'fields *; where id=' + external_id + ';'
+			data: 'fields name,summary,cover.url,genres.name,platforms.name,aggregated_rating; where id=' + external_id + ';'
 			})
 		.then(response => {
 			return response.data;

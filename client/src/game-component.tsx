@@ -18,12 +18,14 @@ import { Genre, genreService } from './services/genre-service';
 import { createHashHistory } from 'history';
 import { platform } from 'os';
 import { Platform, platformService } from './services/platform-service';
+import axios from 'axios';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
 export class GameCard extends Component {
   game: Game = {
     game_id: 0,
+	igdb_id: 0,
     game_title: '',
     genre: 0,
     genre_id: 0,
@@ -74,10 +76,24 @@ export class GameCard extends Component {
   }
 
   mounted() {
-    gameService.get(this.game.game_id).then((result) => {
-      this.game = result;
-      console.log(this.game);
-    });
+	  this.game.game_id = this.props.match.params.db_id;
+	  if(this.game.game_id > 0) {
+		  gameService.get(this.game.game_id).then((result) => {
+				  this.game = result;
+				  console.log(this.game);
+				  });
+	  }
+
+	  this.game.igdb_id = (this.props.match.params.igdb_id);
+	  if(this.game.igdb_id > 0) {
+		  axios
+			  .get('search/get/' + this.game.igdb_id)
+			  .then((response) => {
+				console.log(response.data);
+				console.log(response.data[0].platforms);
+					  })
+		  .catch((err) => console.log(err));
+	  }
   }
   addReview() {
     history.push('/addReview');
@@ -100,6 +116,7 @@ export class AddGame extends Component {
 
   game: Game = {
     game_id: 0,
+	igdb_id: 0,
     game_title: '',
     genre: 0,
     genre_id: 0,
