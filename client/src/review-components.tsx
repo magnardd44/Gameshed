@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 import { Review, reviewService } from './services/review-service';
 
 import { createHashHistory } from 'history';
-import { Game, gameService } from './services/services';
+import { Game, gameService } from './services/game-services';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
@@ -67,10 +67,11 @@ export class GenreReviews extends Component {
   game: Game = {
     game_id: 0,
     game_title: '',
-    genre: [],
+    genre: 0,
     genre_id: 0,
-    platform: [],
+    platform: 0,
     game_description: '',
+    igdb_id: 0,
   };
   review: Review = {
     review_id: 0,
@@ -187,7 +188,7 @@ export class AddReview extends Component {
 
   render() {
     return (
-      <>
+      <Container>
         <Card title="Skriv anmeldelse">
           <Row>
             <Column width={2}>Spill:</Column>
@@ -201,38 +202,28 @@ export class AddReview extends Component {
             <Column width={2}>Plattform:</Column>
             <Column>Hentes fra IGDB</Column>
           </Row>
-
-          <Row>
-            <Column width={2}>
+          <FormContainer>
+            <FormGroup>
               <Form.Label>Overskrift:</Form.Label>
-            </Column>
-            <Column>
               <Form.Input
                 type="text"
                 value={this.reviewTitle}
                 onChange={(event) => (this.reviewTitle = event.currentTarget.value)}
               />
-            </Column>
-          </Row>
-          <Row>
-            <Column width={2}>
+            </FormGroup>
+            <FormGroup>
               <Form.Label>Anmeldelse:</Form.Label>
-            </Column>
-            <Column>
               <Form.Textarea
                 value={this.text ?? ''}
                 onChange={(event) => {
                   this.text = event.currentTarget.value;
                 }}
-                rows={20}
+                rows={10}
+                cols={10}
               />
-            </Column>
-          </Row>
-          <Row>
-            <Column width={2}>
+            </FormGroup>
+            <FormGroup>
               <Form.Label>Terningkast:</Form.Label>
-            </Column>
-            <Column>
               <Form.Select
                 value={this.rating}
                 onChange={(event) => {
@@ -246,10 +237,10 @@ export class AddReview extends Component {
                 <option value="5">5</option>
                 <option value="6">6</option>
               </Form.Select>
-            </Column>
-          </Row>
+            </FormGroup>
+          </FormContainer>
         </Card>
-
+        <Linebreak></Linebreak>
         <Button.Success
           onClick={() => {
             reviewService
@@ -264,7 +255,7 @@ export class AddReview extends Component {
         >
           Lagre
         </Button.Success>
-      </>
+      </Container>
     );
   }
 }
@@ -382,7 +373,6 @@ export class EditReview extends Component<{ match: { params: { id: number } } }>
     user_id: 0,
     published: false,
     game_title: '',
-    genre_id: 0,
   };
 
   render() {

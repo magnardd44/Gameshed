@@ -36,6 +36,18 @@ export class Container extends Component<{ textalign?: string }> {
   }
 }
 
+export class FormContainer extends Component {
+  render() {
+    return <form>{this.props.children}</form>;
+  }
+}
+
+export class FormGroup extends Component {
+  render() {
+    return <div className="form-group">{this.props.children}</div>;
+  }
+}
+
 export class ThumbNail extends Component<{ small?: boolean; img: string }> {
   render() {
     return (
@@ -259,7 +271,7 @@ export class NavBar extends Component<{ brand: ReactNode }> {
  */
 class FormLabel extends Component {
   render() {
-    return <label className="col-form-label">{this.props.children}</label>;
+    return <label className="col-form-label mx-2">{this.props.children}</label>;
   }
 }
 

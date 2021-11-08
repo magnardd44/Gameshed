@@ -25,9 +25,9 @@ import {
 import { Search, SearchListings } from './search-components';
 import { Hash } from 'crypto';
 import { createHashHistory } from 'history';
-import { gameService, Game } from './services/services';
-import { GameCard } from './game-component';
-import { User } from './user-components';
+import { gameService, Game } from './services/game-services';
+import { GameCard, AddGame } from './game-component';
+import { UserNav } from './user-components';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 
@@ -39,7 +39,7 @@ class NavHeader extends Component {
       <div>
         <NavBar brand="GS">
           <NavBar.Link to="/games">Games</NavBar.Link>
-          <User />
+          <UserNav />
         </NavBar>
         <Header></Header>
       </div>
@@ -54,7 +54,8 @@ ReactDOM.render(
       <NavHeader />
       <Route exact path="/" component={Search}></Route>
       <Route exact path="/results" component={SearchListings}></Route>
-      <Route exact path="/games/:id" component={GameCard}></Route>
+      <Route exact path="/games/:db_id/:igdb_id" component={GameCard}></Route>
+      <Route exact path="/addGame" component={AddGame}></Route>
       <Route exact path="/addReview" component={AddReview} />
       <Route exact path="/publishReview/:id" component={PublishReview} />
       <Route exact path="/publishedReviews" component={PublishedReviews} />

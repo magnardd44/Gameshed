@@ -1,70 +1,77 @@
 import * as React from 'react';
-import { Component, sharedComponentData } from 'react-simplified';
-import {
-  Form,
-  Button,
-} from './widgets';
+import { Component } from 'react-simplified';
+import { Form, Button } from './widgets';
+import userService from './services/user-service';
 
-class UserService {
-	name: String = 'Anonym';
-	id: number = 0;
-	token: String = '';
-	logged: boolean = false;
+export class UserNav extends Component {
+  input: string = '';
+  password: string = '';
 
-	login(name: String, password: String) {
-		this.name = name;
-		this.logged = true;
-		this.id = 1;
-	}
-
-	logout() {
-		this.name = 'Anonym';
-		this.logged = false;
-		this.id = 0;
-	}
-}
-
-let user = sharedComponentData(new UserService());
-
-export class User extends Component {
-	input: string = '';
-	password: string = '';
-
-	render() {
-	    return (<>
-	  		  <Form.Label>Brukernamn:</Form.Label>
-	  		  <Form.Input
-				  type='text'
-				  value={this.input}
-				  placeholder='Anonym'
-				  disabled={user.logged}
-				  onChange={(event) => { 
-				  this.input = event.currentTarget.value;
-				  }}
-	  		  />
-	  		  {user.id == 0 
-			  ? // If not logged in
-				  <>
-				  <Form.Input
-					  type='text'
-					  value={this.password}
-					  placeholder='Passord'
-					  onChange={(event) => { 
-					  this.password = event.currentTarget.value;
-					  }}
-				  />
-	  			  <Button.Light onClick={()=>{
-	  				  user.login(this.input, this.password);
-	  				  this.password = '';
-	  			  }}>Login</Button.Light>
-				  </> 
-			  : // else logged in
-	  			  <Button.Light onClick={()=>{
-	  				  user.logout();
-	  				  this.input = '';
-	  				  this.password = '';
-	  			  }}>Logout</Button.Light>
-	  		  }
-	    </>)
-	}
+  render() {
+    return (
+      <>
+        <Form.Label>Brukernamn:</Form.Label>
+        <Form.Input
+          type="text"
+          value={this.input}
+          placeholder="Epost"
+          disabled={userService.token}
+          onChange={(event) => {
+            this.input = event.currentTarget.value;
+          }}
+        />
+        {userService.token ? (
+          // If user logged in
+          <>
+            <Button.Success
+              onClick={() => {
+                userService.logout();
+                this.input = '';
+                this.password = '';
+              }}
+            >
+              Logout
+            </Button.Success>
+            <Button.Danger
+              onClick={() => {
+                userService.delete();
+                // this.input = '';
+                // this.password = '';
+              }}
+            >
+              Slett meg
+            </Button.Danger>
+          </>
+        ) : (
+          // else user not logged
+          <>
+            <Form.Input
+              type="text"
+              value={this.password}
+              placeholder="Passord"
+              onChange={(event) => {
+                this.password = event.currentTarget.value;
+              }}
+            />
+            <Button.Success
+              onClick={() => {
+                userService.login(this.input, this.password);
+                this.password = '';
+              }}
+            >
+              Login
+            </Button.Success>
+            <Button.Success
+              onClick={() => {
+                userService.register(this.input, this.password);
+                this.password = '';
+              }}
+            >
+              Registrer
+            </Button.Success>
+          </>
+        )}
+      </>
+    );
+  }
 }

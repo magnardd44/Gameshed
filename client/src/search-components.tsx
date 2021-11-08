@@ -11,18 +11,32 @@ import {
   Container,
   ColumnCentre,
   Linebreak,
+  FormContainer,
+  FormGroup,
 } from './widgets';
 import { NavLink } from 'react-router-dom';
-import { gameService, Game } from './services/services';
-
+import { gameService, Game } from './services/game-services';
+import { Genre } from './services/genre-service';
 import { createHashHistory } from 'history';
 import axios from 'axios';
+import { genreService } from './services/genre-service';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
-let shared = sharedComponentData({
-  games: [],
-});
+type gameType = {
+  id: number;
+  name: string;
+};
+
+class SharedGame {
+  game: gameType = {
+    id: 0,
+    name: '',
+  };
+  games: gameType[] = [];
+}
+
+let shared = sharedComponentData(new SharedGame());
 
 export class Search extends Component {
   input: string = '';
@@ -42,6 +56,15 @@ export class Search extends Component {
                 placeholder="Søk etter et spill"
                 onChange={(event) => {
                   this.input = event.currentTarget.value;
+
+                  if (this.input && this.input.length >= 3) {
+                    setTimeout(() => {
+                      this.IGDB_update();
+                    }, 2000);
+                  } else {
+                    shared.games = [];
+                  }
+
                   this.filtered = this.games.filter((game) =>
                     game.game_title.toLowerCase().includes(this.input.toLowerCase())
                   );
@@ -52,7 +75,6 @@ export class Search extends Component {
                   }
                 }}
               />
-
               {this.filtered.map((game) => {
                 if (this.input != '') {
                   return (
@@ -73,6 +95,30 @@ export class Search extends Component {
                       }}
                     >
                       {game.game_title}
+                    </div>
+                  );
+                }
+              })}
+
+              {shared.games.map((game) => {
+                if (this.input != '') {
+                  return (
+                    <div
+                      key={game.id}
+                      role="option"
+                      className=" option"
+                      style={{
+                        borderRadius: '5px',
+                        border: '1px solid black',
+                        cursor: 'pointer',
+                        marginTop: '10px',
+                        backgroundColor: 'lightgray',
+                      }}
+                      onClick={(event) => {
+                        this.input = event.currentTarget.innerHTML;
+                      }}
+                    >
+                      {game.name}
                     </div>
                   );
                 }
@@ -116,34 +162,83 @@ export class Search extends Component {
       .post('search', { game: this.input })
       .then((response) => {
         shared.games = response.data;
-        console.log(response.data);
       })
       .catch((err) => console.log(err));
     history.push('/results');
   }
+
+  IGDB_update() {
+    console.log('IGDB search ');
+    shared.games = [];
+    axios
+      .post('search', { game: this.input })
+      .then((response) => {
+        shared.games = response.data;
+      })
+      .catch((err) => console.log(err));
+  }
 }
 
 export class SearchListings extends Component {
+  genres: Genre[] = [];
   render() {
     return (
-      <Container>
-        Søkeresultater:
-        <SearchResult></SearchResult>
-        {shared.games.map((game, index) => (
-          <IGDBResult game={game} key={index}></IGDBResult>
-        ))}
-      </Container>
+      <>
+        <Container>
+          Filtrer dine søkeresultater:
+          <FormContainer>
+            <FormGroup>
+              <Form.Label>Sjanger: </Form.Label>
+              <Form.Select value={'Adventure'} onChange={() => console.log('sjanger')}>
+                {this.genres.map((genre) => (
+                  <option>{genre.genre_name}</option>
+                ))}
+              </Form.Select>
+
+              <Form.Label>Platform: </Form.Label>
+              <Form.Select value={'Adventure'} onChange={() => console.log('sjanger')}>
+                <option value="1">Playstation</option>
+              </Form.Select>
+
+              <Form.Label>År: </Form.Label>
+              <Form.Select value={'Adventure'} onChange={() => console.log('sjanger')}>
+                <option value="1">2020</option>
+              </Form.Select>
+            </FormGroup>
+          </FormContainer>
+        </Container>
+        <Container>
+          <SearchResult key={0}></SearchResult>
+          {shared.games.map((game, index) => (
+            <IGDBResult game={game} key={index}></IGDBResult>
+          ))}
+        </Container>
+
+        <Container>
+          Fant du ikke det du lette etter?
+          <Linebreak></Linebreak>
+          <Button.Success onClick={() => history.push('/addGame')}>
+            Legg til nytt spill
+          </Button.Success>
+        </Container>
+      </>
     );
+  }
+  mounted() {
+    genreService.getAll().then((results) => {
+      this.genres = results;
+    });
   }
 }
 
 export class SearchResult extends Component {
   game: Game = {
     game_id: 0,
+	igdb_id: 0,
     game_title: '',
-    genre: [],
+    genre: 0,
     genre_id: 0,
-    platform: [],
+    platform: 0,
     game_description: '',
   };
   render() {
@@ -163,7 +258,7 @@ export class SearchResult extends Component {
           </Column>
           <Column width={2}>
             {' '}
-            <Button.Success onClick={() => history.push('/games/' + this.game.game_id)}>
+            <Button.Success onClick={() => history.push('/games/' + this.game.game_id + '/' + this.game.igdb_id)}>
               Les mer
             </Button.Success>
           </Column>
@@ -200,11 +295,14 @@ export class IGDBResult extends Component<{ game: any }> {
           </Column>
           <Column width={2}>
             {' '}
-            <Button.Success onClick={() => history.push('/games/' + this.props.game.name)}>
+            <Button.Success onClick={() => history.push('/games/0/' + this.props.game.id)}>
               Les mer
             </Button.Success>
           </Column>
         </Row>
+        <Row>Sjanger: {this.props.game.genres}</Row>
+        <Row>Platform: {this.props.game.platforms}</Row>
+        <Row>År: </Row>
         <Linebreak></Linebreak>
       </Card>
     );

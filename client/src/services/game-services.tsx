@@ -5,20 +5,22 @@ axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 
 export type Game = {
   game_id: number;
+  igdb_id: number;
   game_title: string;
-  genre: string[];
+  genre: number;
   genre_id: number;
-  platform: string[];
+  platform: number;
   game_description: string;
 };
 
 class GameService {
   game: Game = {
     game_id: 0,
+	igdb_id: 0,
     game_title: '',
-    genre: [],
+    genre: 0,
     genre_id: 0,
-    platform: [],
+    platform: 0,
     game_description: '',
   };
   games: Game[] = [];
@@ -38,16 +40,14 @@ class GameService {
   }
 
   /**
-   * Create new task having the given title.
+   * Create new game having the given title.
    *
-   * Resolves the newly created task id.
+   * Resolves the newly created game id.
    */
-  create(title: string, genre: string, platform: number, description: string) {
+  create(title: string, description: string) {
     return axios
       .post<{ id: number }>('/games', {
         game_title: title,
-        genre: genre,
-        platform: platform,
         game_description: description,
       })
       .then((response) => response.data.id);
