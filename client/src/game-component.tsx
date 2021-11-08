@@ -14,6 +14,7 @@ import {
 } from './widgets';
 import { NavLink } from 'react-router-dom';
 import { gameService, Game } from './services/game-services';
+import { gameService2, Game2 } from './services/game-services';
 import { Genre, genreService } from './services/genre-service';
 import { createHashHistory } from 'history';
 import { platform } from 'os';
@@ -24,17 +25,19 @@ import axios from 'axios';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
 export class GameCard extends Component<{ match: { params: { igdb_id: number; db_id: number } } }> {
-  game: Game = {
-    game_id: 0,
-    igdb_id: 0,
-    game_title: '',
-    genre: 0,
-    genres: [],
-    genre_id: 0,
-    platform: 0,
-    platforms: [],
-    game_description: '',
-  };
+//  game: Game = {
+//    game_id: 0,
+//    igdb_id: 0,
+//    game_title: '',
+//    genre: 0,
+//    genres: [],
+//    genre_id: 0,
+//    platform: 0,
+//    platforms: [],
+//    game_description: '',
+//  };
+game: Game2 = gameService2.emptyGame();
+
   render() {
     return (
       <Container>
@@ -48,7 +51,7 @@ export class GameCard extends Component<{ match: { params: { igdb_id: number; db
           </h6>
           <Row>
             <Column width={2}>
-              <ThumbNail img="https://cdn-icons-png.flaticon.com/512/686/686589.png"></ThumbNail>
+              <ThumbNail img={this.game.igdb?.cover_url || "https://cdn-icons-png.flaticon.com/512/686/686589.png"}></ThumbNail>
             </Column>
             <Column width={6}>
               {this.game.game_description}
@@ -58,16 +61,26 @@ export class GameCard extends Component<{ match: { params: { igdb_id: number; db
           </Row>
           <Linebreak></Linebreak>
           <Row>
-            <Column>
-              Sjanger:{' '}
-              {this.game.genres.map((genre) => {
-                <>{genre}</>;
-              })}
-            </Column>
+            <Column> Sjanger:{' '} {this.game.genre.map((genre) => { <>{genre}</>; })} </Column>
+            <Column>Sjanger: {this.game.genre.reduce((p, c)=>p == '' ? c : p + ', ' + c, '')}</Column>
           </Row>
           <Linebreak></Linebreak>
           <Row>
-            <Column>Platform: {this.game.platform}</Column>
+            <Column>Plattformer: {this.game.platform.reduce((p, c)=>p == '' ? c : p + ', ' + c, '')}</Column>
+          </Row>
+          <Row>
+            <Column>Årstall: {this.game.igdb ? (new Date(this.game.igdb?.release_date * 1000)).getFullYear() + 1900:''}</Column>
+          </Row>
+          <Row>
+            <Column>Rating (1-6): {this.game.igdb ? Math.ceil(this.game.igdb?.aggregated_rating * 6 / 100):''}</Column>
+          </Row>
+          <Row>
+            <Column>Lignende spill: {this.game.igdb?.similar_games.reduce((p, c)=>p == '' ? c : p + ', ' + c, '')}</Column>
+          </Row>
+          <Row>
+		  {this.game.igdb?.screenshots_url.map((url,index)=>{
+			return (<ThumbNail img={url} key={index}/>)
+		  })}
           </Row>
         </Card>
         <Linebreak></Linebreak>
@@ -84,24 +97,44 @@ export class GameCard extends Component<{ match: { params: { igdb_id: number; db
   }
 
   mounted() {
-    this.game.game_id = this.props.match.params.db_id;
-    if (this.game.game_id > 0) {
-      gameService.get(this.game.game_id).then((result) => {
-        this.game = result;
-        console.log(this.game);
-      });
-    }
+//    this.game.game_id = this.props.match.params.db_id;
+//    if (this.game.game_id > 0) {
+//      gameService.get(this.game.game_id).then((result) => {
+//        this.game = result;
+//        console.log(this.game);
+//      });
+//    }
+//
+//    this.game.igdb_id = this.props.match.params.igdb_id;
+//    if (this.game.igdb_id > 0) {
+//      axios
+//        .get('search/get/' + this.game.igdb_id)
+//        .then((response) => {
+//          console.log(response.data);
+//          console.log(response.data[0].platforms);
+//        })
+//        .catch((err) => console.log(err));
+//    }
+	  let game_id = this.props.match.params.db_id;
+	  let igdb_id = this.props.match.params.igdb_id;
 
-    this.game.igdb_id = this.props.match.params.igdb_id;
-    if (this.game.igdb_id > 0) {
-      axios
-        .get('search/get/' + this.game.igdb_id)
-        .then((response) => {
-          console.log(response.data);
-          console.log(response.data[0].platforms);
-        })
-        .catch((err) => console.log(err));
-    }
+	  if(game_id > 0) {
+		  gameService.get(game_id).then((result) => {
+					this.game.game_id = result.game_id;
+					this.game.igdb_id = result.game_id;
+					this.game.game_title = result.game_title;
+					this.game.genre = [result.genre.toString()];
+					this.game.platform = [result.platform.toString()];
+					this.game.game_description = result.game_description;
+					this.game.igdb = null;
+				  });
+	  }
+	  else if(igdb_id > 0) {
+		  gameService2.get_igdb(igdb_id).then((result) => {
+					  this.game = result;
+					  console.log(this.game);
+				  }).catch();
+	  }
   }
   addReview() {
     history.push('/addReview');
