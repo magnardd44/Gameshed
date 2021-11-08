@@ -75,7 +75,9 @@ game: Game2 = gameService2.emptyGame();
             <Column>Rating (1-6): {this.game.igdb ? Math.ceil(this.game.igdb?.aggregated_rating * 6 / 100):''}</Column>
           </Row>
           <Row>
-            <Column>Lignende spill: {this.game.igdb?.similar_games.reduce((p, c)=>p == '' ? c : p + ', ' + c, '')}</Column>
+            <Column>Lignende spill: {this.game.igdb?.similar_games.map((e)=>{
+				return (<a href={"http://localhost:3000/#/games/0/" + e.id}>{e.name}, </a>)
+			})}</Column>
           </Row>
           <Row>
 		  {this.game.igdb?.screenshots_url.map((url,index)=>{

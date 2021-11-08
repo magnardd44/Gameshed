@@ -72,8 +72,13 @@ export type extraIGDB = {
 	cover_url: '';
 	aggregated_rating: number;
 	screenshots_url: string[];
-	similar_games: string[];
+	similar_games: id_name_link[];
 	release_date: number;
+}
+
+export type id_name_link = {
+	id: number;
+	name: string;
 }
 
 class GameService2 {
