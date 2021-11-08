@@ -13,6 +13,7 @@ export type Review = {
   rating: number;
   published: boolean;
   genre_id: number;
+  relevant: boolean;
 };
 
 class ReviewService {
@@ -26,8 +27,16 @@ class ReviewService {
     rating: 0,
     published: false,
     genre_id: 0,
+    relevant: false,
   };
   reviews: Review[] = [];
+
+  /**
+   * Get review with given id.
+   */
+  getComplete(review_id: number, published: boolean) {
+    return axios.get<Review>('/reviews/' + review_id).then((response) => response.data);
+  }
 
   /**
    * Get review with given id.
@@ -43,12 +52,12 @@ class ReviewService {
     return axios.get<Review[]>('/publishedReviews').then((response) => response.data);
   }
 
-   /**
+  /**
    * Get reviews based on genre
    */
-    getGenre() {
-      return axios.get<Review[]>('/genreReviews').then((response) => response.data);
-    }
+  getGenre(genre_id: number) {
+    return axios.get<Review[]>('/genreReviews/' + genre_id).then((response) => response.data);
+  }
 
   /**
    * Create new review   *
@@ -65,6 +74,12 @@ class ReviewService {
     return axios
       .patch<Review>('/reviews/' + id + '/publish')
       .then((response) => response.data.review_id);
+  }
+  //Add like to review
+  like(id: number, relevant: boolean) {
+    return axios
+      .patch<Review>('/reviews/' + id, { relevant: relevant })
+      .then((response) => response.data);
   }
 
   //Edit review before publishing

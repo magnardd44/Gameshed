@@ -1,6 +1,18 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Alert, Card, Row, Column, Form, Button, ThumbNail } from './widgets';
+import {
+  Alert,
+  Card,
+  Row,
+  Column,
+  Form,
+  Button,
+  ThumbNail,
+  Container,
+  FormContainer,
+  FormGroup,
+  Linebreak,
+} from './widgets';
 import { NavLink } from 'react-router-dom';
 import { Review, reviewService } from './services/review-service';
 
@@ -12,14 +24,14 @@ const history = createHashHistory(); // Use history.push(...) to programmaticall
 export class PublishedReviews extends Component {
   reviews: Review[] = [];
   games: Game[] = [];
-  game: Game = {
-    game_id: 0,
-    game_title: '',
-    genre: [],
-    genre_id: 0,
-    platform: [],
-    game_description: '',
-  };
+  // game: Game = {
+  //   game_id: 0,
+  //   game_title: '',
+  //   genre: [],
+  //   genre_id: 0,
+  //   platform: [],
+  //   game_description: '',
+  // };
 
   render() {
     return (
@@ -83,7 +95,18 @@ export class GenreReviews extends Component {
     rating: 0,
     published: false,
     genre_id: 0,
+    relevant: false,
   };
+
+  genreCall(id: number) {
+    reviewService
+      .getGenre(id)
+      .then((data) => {
+        console.log(data);
+        this.reviews = data;
+      })
+      .catch((error) => Alert.danger('Error retrieving reviews: ' + error.message));
+  }
 
   render() {
     return (
@@ -92,74 +115,139 @@ export class GenreReviews extends Component {
           <h5>Finn anmeldelser basert på sjanger</h5>
           <Column width={1}>
             <Card title="Eventyr">
-              <ThumbNail img="images/console.png"></ThumbNail>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Indie">
-              <ThumbNail img="images/console.png"></ThumbNail>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Strategi">
-              <ThumbNail img="images/console.png"></ThumbNail>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Pek-og-klikk">
-              <ThumbNail img="images/console.png"></ThumbNail>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Slåssing">
-              <ThumbNail img="images/console.png"></ThumbNail>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Skyting">
-              <ThumbNail img="images/console.png"></ThumbNail>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Musikk">
-              <ThumbNail img="images/console.png"></ThumbNail>
+              <Button.Success onClick={() => this.genreCall(1)}>Eventyr</Button.Success>
             </Card>
           </Column>
           <Column width={1}>
             <Card title="Plattform">
-              <ThumbNail img="images/console.png"></ThumbNail>
+              <Button.Success onClick={() => this.genreCall(2)}>Plattform</Button.Success>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Indie">
+              <Button.Success onClick={() => this.genreCall(3)}>Indie</Button.Success>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Strategi">
+              <Button.Success onClick={() => this.genreCall(4)}>Strategi</Button.Success>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Kort og brett">
+              <Button.Success onClick={() => this.genreCall(5)}>Platform</Button.Success>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Pek og klikk">
+              <Button.Success onClick={() => this.genreCall(6)}>Pek og klikk</Button.Success>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Kampspill">
+              <Button.Success onClick={() => this.genreCall(7)}>Kampspill</Button.Success>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Skyting">
+              <Button.Success onClick={() => this.genreCall(8)}>Skyting</Button.Success>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Musikk">
+              <Button.Success onClick={() => this.genreCall(9)}>Musikk</Button.Success>
             </Card>
           </Column>
           <Column width={1}>
             <Card title="Hjernetrim">
-              <ThumbNail img="images/console.png"></ThumbNail>
+              <Button.Success onClick={() => this.genreCall(10)}>Skyting</Button.Success>
             </Card>
           </Column>
           <Column width={1}>
-            <Card title="Bilkjøring">
-              <ThumbNail img="images/console.png"></ThumbNail>
+            <Card title="Bilspill">
+              <Button.Success onClick={() => this.genreCall(11)}>Bilspill</Button.Success>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Sanntidsstrategi">
+              <Button.Success onClick={() => this.genreCall(12)}>RTS</Button.Success>
+            </Card>
+          </Column>
+        </Row>
+        <Row>
+          <Column width={1}>
+            <Card title="Rollespill">
+              <Button.Success onClick={() => this.genreCall(13)}>Rollespill</Button.Success>
             </Card>
           </Column>
           <Column width={1}>
             <Card title="Simulator">
-              <ThumbNail img="images/console.png"></ThumbNail>
+              <Button.Success onClick={() => this.genreCall(14)}>Simulator</Button.Success>
             </Card>
           </Column>
           <Column width={1}>
             <Card title="Sport">
-              <ThumbNail img="images/console.png"></ThumbNail>
+              <Button.Success onClick={() => this.genreCall(15)}>Sport</Button.Success>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Turbasert strategi">
+              <Button.Success onClick={() => this.genreCall(16)}>Turbasert strategi</Button.Success>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Taktisk">
+              <Button.Success onClick={() => this.genreCall(17)}>Taktisk</Button.Success>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Spørrespill">
+              <Button.Success onClick={() => this.genreCall(18)}>Spørrespill</Button.Success>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Nærkamp">
+              <Button.Success onClick={() => this.genreCall(19)}>Nærkamp</Button.Success>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Flipperspill">
+              <Button.Success onClick={() => this.genreCall(20)}>Flipperspill</Button.Success>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Arkadespill">
+              <Button.Success onClick={() => this.genreCall(21)}>Arkadespill</Button.Success>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Visual Novel">
+              <Button.Success onClick={() => this.genreCall(22)}>Visual Novel</Button.Success>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="MOBA">
+              <Button.Success onClick={() => this.genreCall(23)}>MOBA</Button.Success>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Sandkassespill">
+              <Button.Success onClick={() => this.genreCall(24)}>Sandkassespill</Button.Success>
             </Card>
           </Column>
         </Row>
+        <Row>
+          <Column>Spill</Column>
+          <Column>Anmeldelse</Column>
+          <Column>Terningkast</Column>
+        </Row>
         {this.reviews.map((review, index) => (
-          <Row key={review.review_id}>
+          <Row key={index}>
             <Column>{review.game_title}</Column>
             <Column>
-              <NavLink to={'/genreReviews/' + this.review.review_id}>
-                {this.review.review_title}
-              </NavLink>
+              <NavLink to={'/publishedReviews/' + review.review_id}>{review.review_title}</NavLink>
             </Column>
-            <Column>{this.review.rating}</Column>
+            <Column>{review.rating}</Column>
           </Row>
         ))}
       </>
@@ -271,6 +359,7 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
     game_id: '',
     user_id: 0,
     genre_id: 0,
+    relevant: false,
   };
 
   render() {
@@ -360,6 +449,79 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
   }
 }
 
+export class CompleteReview extends Component<{ match: { params: { id: number } } }> {
+  review: Review = {
+    review_id: 0,
+    review_title: '',
+    game_title: '',
+    text: '',
+    rating: 0,
+    published: false,
+    game_id: '',
+    user_id: 0,
+    genre_id: 0,
+    relevant: false,
+  };
+
+  render() {
+    return (
+      <>
+        <Card title="Anmeldelse">
+          <Row>
+            <Column width={2}>Spill:</Column>
+            <Column>Hentes fra IGDB</Column>
+          </Row>
+          <Row>
+            <Column width={2}>Sjanger:</Column>
+            <Column>Hentes fra IGDB</Column>
+          </Row>
+          <Row>
+            <Column width={2}>Plattform:</Column>
+            <Column>Hentes fra IGDB</Column>
+          </Row>
+
+          <Row>
+            <Column width={12}>
+              <div>
+                <b>{this.review.review_title}</b>
+              </div>
+            </Column>
+          </Row>
+          <Row>
+            <Column width={12}>
+              <div>{this.review.text}</div>
+            </Column>
+          </Row>
+          <Row>
+            <Column width={12}>
+              <div>Terningkast: {this.review.rating}</div>
+            </Column>
+          </Row>
+          <Row>
+            <Column></Column>
+            <Column>
+              <Button.Success
+                onClick={() => {
+                  this.review.relevant = true;
+                }}
+              >
+                Like
+              </Button.Success>
+            </Column>
+          </Row>
+        </Card>
+      </>
+    );
+  }
+
+  mounted() {
+    reviewService
+      .get(this.props.match.params.id)
+      .then((review) => (this.review = review))
+      .catch((error) => Alert.danger('Error getting review: ' + error.message));
+  }
+}
+
 // /**
 //  * Renders form to edit an existing review
 //  */
@@ -373,6 +535,8 @@ export class EditReview extends Component<{ match: { params: { id: number } } }>
     user_id: 0,
     published: false,
     game_title: '',
+    genre_id: 0,
+    relevant: false,
   };
 
   render() {

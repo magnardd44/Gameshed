@@ -74,7 +74,7 @@ router.post('/reviews', (request, response) => {
 });
 
 //Show published reviews
-router.get('/publishedReviews', (_request, response) => {
+router.get('/publishedReviews', (request, response) => {
   reviewService
     .getPublished()
     .then((rows) => response.send(rows))
@@ -82,17 +82,17 @@ router.get('/publishedReviews', (_request, response) => {
 });
 
 //Show published reviews based on genre
-router.get('/genreReviews', (_request, response) => {
+router.get('/genreReviews/:genre_id', (request, response) => {
+  const genre_id = Number(request.params.genre_id);
   reviewService
-    .getGenre()
+    .getGenre(genre_id)
     .then((rows) => response.send(rows))
     .catch((error) => response.status(500).send(error));
 });
 
-
 //Fetch individual review after it has been added and saved
-router.get('/reviews/:id', (request, response) => {
-  const id = Number(request.params.id);
+router.get('/reviews/:review_id', (request, response) => {
+  const id = Number(request.params.review_id);
   reviewService
     .get(id)
     .then((review) =>
@@ -116,6 +116,14 @@ router.patch('/reviews/:id', (request, response) => {
 router.patch('/reviews/:id/publish', (request, response) => {
   reviewService
     .publish(Number(request.params.id), true)
+    .then((id) => response.send({ id: id }))
+    .catch((error) => response.status(500).send(error));
+});
+
+//Add like to review
+router.patch('/reviews/:id/relevant', (request, response) => {
+  reviewService
+    .like(Number(request.params.id), true)
     .then((id) => response.send({ id: id }))
     .catch((error) => response.status(500).send(error));
 });

@@ -10,6 +10,7 @@ export type Review = {
   rating: number;
   published: boolean;
   genre_id: number;
+  relevant: boolean;
 };
 
 class ReviewService {
@@ -23,6 +24,7 @@ class ReviewService {
     rating: 0,
     published: false,
     genre_id: 0,
+    relevant: false,
   };
   reviews: Review[] = [];
 
@@ -61,15 +63,19 @@ class ReviewService {
   }
 
   /**
-   * Get review based on ID
+   * Get complete review based on ID
    */
-  get(id: number) {
+  get(review_id: number) {
     return new Promise<Review | undefined>((resolve, reject) => {
-      pool.query('SELECT * FROM reviews WHERE review_id = ?', [id], (error, results) => {
-        if (error) return reject(error);
+      pool.query(
+        'SELECT * FROM reviews WHERE PUBLISHED=1 AND review_id = ?',
+        [review_id],
+        (error, results) => {
+          if (error) return reject(error);
 
-        resolve(results[0]);
-      });
+          resolve(results[0]);
+        }
+      );
     });
   }
 
@@ -88,13 +94,28 @@ class ReviewService {
     });
   }
 
+  //add like to a review
+  like(id: number, relevant: boolean) {
+    return new Promise<number>((resolve, reject) => {
+      pool.query(
+        'UPDATE reviews SET RELEVANT=? WHERE review_id=?',
+        [relevant, id],
+        (error, results) => {
+          if (error) return reject(error);
+
+          resolve(id);
+        }
+      );
+    });
+  }
+
   /**
    * Get published reviews
    */
   getPublished() {
     return new Promise<Review[]>((resolve, reject) => {
       pool.query(
-        `SELECT game_title, review_title, rating 
+        `SELECT game_title, review_id, review_title, rating 
         FROM games g INNER JOIN reviews r ON g.game_id = r.game_id 
         WHERE published = 1 ORDER BY game_title, review_title;`,
         (error, results) => {
@@ -108,15 +129,15 @@ class ReviewService {
 
   //Get published reviews based on genre
 
-  getGenre() {
+  getGenre(genre_id: number) {
     return new Promise<Review[]>((resolve, reject) => {
       pool.query(
-        `SELECT ge.genre_id, ge.genre_name, g.game_title, r.review_title FROM reviews r
+        `SELECT ge.genre_id, ge.genre_name, g.game_title, r.review_id, r.review_title, r.rating FROM reviews r
         INNER JOIN games g ON g.game_id = r.game_id
         INNER JOIN mapping_genre mg ON mg.game_id = g.game_id
         INNER JOIN genres ge ON mg.genre_id = ge.genre_id
-        WHERE ge.genre_id = ?`,
-        [1],
+        WHERE published= 1 AND ge.genre_id = ?`,
+        [genre_id],
         (error, results) => {
           if (error) return reject(error);
 
