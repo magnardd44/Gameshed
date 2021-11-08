@@ -31,7 +31,7 @@ router.get('/games/:id', (request, response) => {
 //Add new game to database
 router.post('/games', (request, response) => {
   const data = request.body;
-  if (data && data.game_title.length != 0)
+  if (data && data.game_title.length != 0 && data.game_description.length != 0)
     gameService
       .create(data.game_title, data.game_description)
       .then((id) => response.send({ id: id }))
