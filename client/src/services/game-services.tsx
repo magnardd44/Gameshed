@@ -8,19 +8,23 @@ export type Game = {
   igdb_id: number;
   game_title: string;
   genre: number;
+  genres: number[];
   genre_id: number;
   platform: number;
+  platforms: number[];
   game_description: string;
 };
 
 class GameService {
   game: Game = {
     game_id: 0,
-	igdb_id: 0,
+    igdb_id: 0,
     game_title: '',
     genre: 0,
+    genres: [],
     genre_id: 0,
     platform: 0,
+    platforms: [],
     game_description: '',
   };
   games: Game[] = [];

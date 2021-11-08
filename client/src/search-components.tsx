@@ -92,6 +92,7 @@ export class Search extends Component {
                       }}
                       onClick={(event) => {
                         this.input = event.currentTarget.id;
+                        this.search();
                       }}
                     >
                       {game.game_title}
@@ -116,6 +117,7 @@ export class Search extends Component {
                       }}
                       onClick={(event) => {
                         this.input = event.currentTarget.innerHTML;
+                        this.search();
                       }}
                     >
                       {game.name}
@@ -125,13 +127,6 @@ export class Search extends Component {
               })}
             </ColumnCentre>
             <ColumnCentre width={4}>
-              <Button.Danger
-                onClick={() => {
-                  this.mounted();
-                }}
-              >
-                Tøm
-              </Button.Danger>
               <Button.Success
                 onClick={() => {
                   this.search();
@@ -234,11 +229,13 @@ export class SearchListings extends Component {
 export class SearchResult extends Component {
   game: Game = {
     game_id: 0,
-	igdb_id: 0,
+    igdb_id: 0,
     game_title: '',
     genre: 0,
+    genres: [],
     genre_id: 0,
     platform: 0,
+    platforms: [],
     game_description: '',
   };
   render() {
@@ -258,7 +255,9 @@ export class SearchResult extends Component {
           </Column>
           <Column width={2}>
             {' '}
-            <Button.Success onClick={() => history.push('/games/' + this.game.game_id + '/' + this.game.igdb_id)}>
+            <Button.Success
+              onClick={() => history.push('/games/' + this.game.game_id + '/' + this.game.igdb_id)}
+            >
               Les mer
             </Button.Success>
           </Column>
