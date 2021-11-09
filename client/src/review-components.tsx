@@ -13,7 +13,7 @@ import {
   FormGroup,
   Linebreak,
 } from './widgets';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { Review, reviewService } from './services/review-service';
 
 import { createHashHistory } from 'history';
@@ -217,6 +217,7 @@ export class GenreReviews extends Component {
     published: false,
     genre_id: 0,
     relevant: false,
+    platform_id: 0,
   };
 
   genreCall(id: number) {
@@ -468,6 +469,10 @@ export class AddReview extends Component {
       </Container>
     );
   }
+  mounted() {
+    console.log('Hello');
+    console.log(location);
+  }
 }
 
 export class PublishReview extends Component<{ match: { params: { id: number } } }> {
@@ -482,6 +487,7 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
     user_id: 0,
     genre_id: 0,
     relevant: false,
+    platform_id: 0,
   };
 
   render() {
@@ -583,6 +589,7 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
     user_id: 0,
     genre_id: 0,
     relevant: false,
+    platform_id: 0,
   };
   counter: number = 0;
   render() {
@@ -661,6 +668,7 @@ export class EditReview extends Component<{ match: { params: { id: number } } }>
     game_title: '',
     genre_id: 0,
     relevant: false,
+    platform_id: 0,
   };
 
   render() {
