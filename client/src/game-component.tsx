@@ -291,8 +291,8 @@ export class AddGame extends Component {
                   } else if (
                     this.game.game_title === '' ||
                     this.game.game_description === '' ||
-                    this.game.genres.length === 0 ||
-                    this.game.platforms.length === 0
+                    this.genreEl.map((el) => el === undefined) ||
+                    this.platformEl.map((el) => el === undefined)
                   ) {
                     Alert.danger('Alle feltene må være fylt ut!');
                   } else {
