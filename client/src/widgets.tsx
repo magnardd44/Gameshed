@@ -92,6 +92,28 @@ export class Card extends Component<{ title: ReactNode }> {
   }
 }
 
+export class CategoryCard extends Component<{ title: ReactNode; img: string }> {
+  render() {
+    return (
+      <div className="card border-success">
+        <div className="card-body">
+          <img
+            className="card-img-top d-block mx-auto my-2 w-50"
+            src={this.props.img}
+            alt="Card image cap"
+          />
+          <h5 className="card-title">
+            <a href="" className="text-success">
+              {this.props.title}
+            </a>
+          </h5>
+          <div className="card-text">Adventure</div>
+        </div>
+      </div>
+    );
+  }
+}
+
 /**
  * Renders a row using Bootstrap classes.
  */
@@ -101,15 +123,21 @@ export class Row extends Component {
   }
 }
 
-export class ColumnCentre extends Component<{ width?: number; offset?: number }> {
+export class ColumnCentre extends Component<{
+  width?: number;
+  offset?: number;
+  smwidth?: number;
+  mdwidth?: number;
+}> {
   render() {
     return (
       <div
         className={
-          ' col' +
+          'col' +
           (this.props.width ? '-' + this.props.width : '') +
-          ' offset' +
-          (this.props.offset ? '-' + this.props.offset : '')
+          (this.props.smwidth ? ' col-sm-' + this.props.smwidth : '') +
+          (this.props.mdwidth ? ' col-md-' + this.props.mdwidth : '') +
+          (this.props.offset ? ' offset-' + this.props.offset : '')
         }
       >
         {this.props.children}
