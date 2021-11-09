@@ -58,7 +58,7 @@ ReactDOM.render(
       <Route exact path="/results" component={SearchListings}></Route>
       <Route exact path="/games/:db_id/:igdb_id" component={GameCard}></Route>
       <Route exact path="/addGame" component={AddGame}></Route>
-      <Route exact path="/addReview" component={AddReview} />
+      <Route exact path="/addReview/:db_id/:igdb_id" component={AddReview} />
       <Route exact path="/publishReview/:id" component={PublishReview} />
       <Route exact path="/publishedReviews" component={PublishedReviews} />
       <Route exact path="/publishedReviews/:id" component={CompleteReview} />

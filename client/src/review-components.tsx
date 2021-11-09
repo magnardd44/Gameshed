@@ -18,6 +18,7 @@ import { Review, reviewService } from './services/review-service';
 
 import { createHashHistory } from 'history';
 import { Game, gameService } from './services/game-services';
+import axios from 'axios';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
@@ -387,7 +388,9 @@ export class GenreReviews extends Component {
 /**
  * Renders form to create new task.
  */
-export class AddReview extends Component {
+export class AddReview extends Component<{
+  match: { params: { igdb_id: number; db_id: number } };
+}> {
   reviewTitle = '';
   gameTitle = '';
   genre = '';
@@ -396,6 +399,19 @@ export class AddReview extends Component {
   rating = 1;
   showAlert = false;
   name = '';
+  genreStrings: Array<string> = [];
+
+  game: Game = {
+    game_id: 0,
+    igdb_id: 0,
+    game_title: '',
+    genre: 0,
+    genres: [],
+    genre_id: 0,
+    platform: 0,
+    platforms: [],
+    game_description: '',
+  };
 
   render() {
     return (
@@ -403,15 +419,15 @@ export class AddReview extends Component {
         <Card title="Skriv anmeldelse">
           <Row>
             <Column width={2}>Spill:</Column>
-            <Column>{this.name}</Column>
+            <Column>{this.game.game_title}</Column>
           </Row>
           <Row>
             <Column width={2}>Sjanger:</Column>
-            <Column>Hentes fra IGDB</Column>
+            <Column>{this.genreStrings.join(',')}</Column>
           </Row>
           <Row>
             <Column width={2}>Plattform:</Column>
-            <Column>Hentes fra IGDB</Column>
+            <Column>{this.game.platforms}</Column>
           </Row>
           <FormContainer>
             <FormGroup>
@@ -453,7 +469,13 @@ export class AddReview extends Component {
         </Card>
         <Linebreak></Linebreak>
         <Button.Success
-          onClick={() => {
+          onClick={async () => {
+            if (this.game.game_id == 0) {
+              const newGameId = await gameService.create(
+                this.game.game_title,
+                this.game.game_description
+              );
+            }
             reviewService
               .create(this.reviewTitle, this.text, this.rating)
 
@@ -470,8 +492,27 @@ export class AddReview extends Component {
     );
   }
   mounted() {
-    console.log('Hello');
-    console.log(location);
+    this.game.game_id = this.props.match.params.db_id;
+    if (this.game.game_id > 0) {
+      gameService.get(this.game.game_id).then((result) => {
+        this.game = result;
+        console.log(this.game);
+      });
+    }
+
+    this.game.igdb_id = this.props.match.params.igdb_id;
+    if (this.game.igdb_id > 0) {
+      axios
+        .get('search/get/' + this.game.igdb_id)
+        .then((response) => {
+          this.game.game_title = response.data[0].name;
+          this.game.game_description = response.data[0].summary;
+          this.genreStrings = response.data[0].genres.map((t: any) => t.name);
+          console.log(response.data[0]);
+          console.log(response.data[0].platforms);
+        })
+        .catch((err) => console.log(err));
+    }
   }
 }
 

@@ -104,7 +104,7 @@ export class GameCard extends Component<{ match: { params: { igdb_id: number; db
     }
   }
   addReview() {
-    history.push('/addReview', { game: this.game });
+    history.push(`/addReview/${this.game.game_id}/${this.game.igdb_id}`);
   }
 }
 
