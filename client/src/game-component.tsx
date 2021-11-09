@@ -281,10 +281,8 @@ export class AddGame extends Component {
                       (el) => el.game_title.toLowerCase() === this.game.game_title.toLowerCase()
                     ) != undefined
                   ) {
-                    console.log('Finnes');
                     Alert.danger('Spillet finnes allerede i databasen!');
                   } else if (this.game.genres.length != genresCheck.length) {
-                    console.log('Alert!');
                     Alert.danger('Sjangerne må være ulike!');
                   } else if (this.game.platforms.length != platformsCheck.length) {
                     Alert.danger('Platformene må være ulike!');
