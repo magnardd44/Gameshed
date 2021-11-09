@@ -10,6 +10,7 @@ export type Review = {
   rating: number;
   published: boolean;
   genre_id: number;
+  platform_id: number;
   relevant: boolean;
 };
 
@@ -24,6 +25,7 @@ class ReviewService {
     rating: 0,
     published: false,
     genre_id: 0,
+    platform_id: 0,
     relevant: false,
   };
   reviews: Review[] = [];
@@ -138,6 +140,27 @@ class ReviewService {
         INNER JOIN genres ge ON mg.genre_id = ge.genre_id
         WHERE published= 1 AND ge.genre_id = ?`,
         [genre_id],
+        (error, results) => {
+          if (error) return reject(error);
+
+          resolve(results);
+        }
+      );
+    });
+  }
+
+  //Get published reviews based on genre
+
+  getPlatform(platform_id: number) {
+    return new Promise<Review[]>((resolve, reject) => {
+      pool.query(
+        `SELECT p.platform_id, p.platform_name, g.game_title, r.review_id, r.review_title, r.rating
+        FROM reviews r
+        INNER JOIN games g ON g.game_id = r.game_id
+        INNER JOIN mapping_platform mp ON mp.game_id = g.game_id
+        INNER JOIN platforms p ON mp.platform_id = p.platform_id
+        WHERE published=1 AND p.platform_id = 186`,
+        [platform_id],
         (error, results) => {
           if (error) return reject(error);
 

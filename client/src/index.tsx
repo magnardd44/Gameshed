@@ -22,6 +22,7 @@ import {
   PublishReview,
   GenreReviews,
   CompleteReview,
+  PlatformReviews,
 } from './review-components';
 import { Search, SearchListings } from './search-components';
 import { Hash } from 'crypto';
@@ -63,6 +64,7 @@ ReactDOM.render(
       <Route exact path="/publishedReviews/:id" component={CompleteReview} />
       <Route exact path="/editReview/:id" component={EditReview} />
       <Route exact path="/genreReviews" component={GenreReviews} />
+      <Route exact path="/platformReviews" component={PlatformReviews} />
     </div>
   </HashRouter>,
   document.getElementById('root')

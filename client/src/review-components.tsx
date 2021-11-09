@@ -73,6 +73,125 @@ export class PublishedReviews extends Component {
   }
 }
 
+export class PlatformReviews extends Component {
+  reviews: Review[] = [];
+  games: Game[] = [];
+  game: Game = {
+    game_id: 0,
+    game_title: '',
+    genre: 0,
+    genre_id: 0,
+    platform: 0,
+    game_description: '',
+    igdb_id: 0,
+    genres: [],
+    platforms: [],
+  };
+  review: Review = {
+    review_id: 0,
+    game_id: '',
+    game_title: '',
+    review_title: '',
+    text: '',
+    user_id: 0,
+    rating: 0,
+    published: false,
+    genre_id: 0,
+    relevant: false,
+    platform_id: 0,
+  };
+
+  platformCall(id: number) {
+    reviewService
+      .getPlatform(id)
+      .then((data) => {
+        console.log(data);
+        this.reviews = data;
+      })
+      .catch((error) => Alert.danger('Error retrieving reviews: ' + error.message));
+  }
+
+  render() {
+    return (
+      <>
+        <Row>
+          <h5>Finn anmeldelser basert på plattform</h5>
+          <Column width={1}>
+            <Card title="Play Station 4">
+              <Button.Success onClick={() => this.platformCall(145)}>Open</Button.Success>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Play Station 5">
+              <Button.Success onClick={() => this.platformCall(146)}>Open</Button.Success>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Indie">
+              <Button.Success onClick={() => this.platformCall(3)}>Open</Button.Success>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Strategi">
+              <Button.Success onClick={() => this.platformCall(4)}>Open</Button.Success>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Kort og brett">
+              <Button.Success onClick={() => this.platformCall(5)}>Open</Button.Success>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Pek og klikk">
+              <Button.Success onClick={() => this.platformCall(6)}>Open</Button.Success>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Kampspill">
+              <Button.Success onClick={() => this.platformCall(7)}>Open</Button.Success>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Skyting">
+              <Button.Success onClick={() => this.platformCall(8)}>Open</Button.Success>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Musikk">
+              <Button.Success onClick={() => this.platformCall(9)}>Open</Button.Success>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Hjernetrim">
+              <Button.Success onClick={() => this.platformCall(10)}>Open</Button.Success>
+            </Card>
+          </Column>
+        </Row>
+        <Row>
+          <Column>Spill</Column>
+          <Column>Anmeldelse</Column>
+          <Column>Terningkast</Column>
+        </Row>
+        {this.reviews.map((review, index) => (
+          <Row key={index}>
+            <Column>{review.game_title}</Column>
+            <Column>
+              <NavLink to={'/publishedReviews/' + review.review_id}>{review.review_title}</NavLink>
+            </Column>
+            <Column>{review.rating}</Column>
+          </Row>
+        ))}
+      </>
+    );
+  }
+
+  mounted() {
+    reviewService
+      .getPublisedReviews()
+      .then((reviews) => (this.reviews = reviews))
+      .catch((error) => Alert.danger('Error getting reviews: ' + error.message));
+  }
+}
 export class GenreReviews extends Component {
   reviews: Review[] = [];
   games: Game[] = [];
@@ -84,6 +203,8 @@ export class GenreReviews extends Component {
     platform: 0,
     game_description: '',
     igdb_id: 0,
+    genres: [],
+    platforms: [],
   };
   review: Review = {
     review_id: 0,
@@ -273,6 +394,7 @@ export class AddReview extends Component {
   text = '';
   rating = 1;
   showAlert = false;
+  name = '';
 
   render() {
     return (
@@ -280,7 +402,7 @@ export class AddReview extends Component {
         <Card title="Skriv anmeldelse">
           <Row>
             <Column width={2}>Spill:</Column>
-            <Column>Hentes fra IGDB</Column>
+            <Column>{this.name}</Column>
           </Row>
           <Row>
             <Column width={2}>Sjanger:</Column>
@@ -462,7 +584,7 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
     genre_id: 0,
     relevant: false,
   };
-
+  counter: number = 0;
   render() {
     return (
       <>
@@ -503,11 +625,13 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
               <Button.Success
                 onClick={() => {
                   this.review.relevant = true;
+                  this.counter == 0 ? 1 : 0;
                 }}
               >
                 Like
               </Button.Success>
             </Column>
+            <Column>{this.counter}</Column>
           </Row>
         </Card>
       </>

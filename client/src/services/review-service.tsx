@@ -3,6 +3,20 @@ import { sharedComponentData } from 'react-simplified';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 
+export type Oauth_token = {
+  access_token: string;
+  expire_time: number;
+  token_type: string;
+};
+
+class SearchService {
+  token: Oauth_token = {
+    access_token: '',
+    expire_time: 0,
+    token_type: '',
+  };
+}
+
 export type Review = {
   review_id: number;
   game_id: string;
@@ -13,6 +27,7 @@ export type Review = {
   rating: number;
   published: boolean;
   genre_id: number;
+  platform_id: number;
   relevant: boolean;
 };
 
@@ -27,6 +42,7 @@ class ReviewService {
     rating: 0,
     published: false,
     genre_id: 0,
+    platform_id: 0,
     relevant: false,
   };
   reviews: Review[] = [];
@@ -57,6 +73,11 @@ class ReviewService {
    */
   getGenre(genre_id: number) {
     return axios.get<Review[]>('/genreReviews/' + genre_id).then((response) => response.data);
+  }
+
+  //Get reviews based on platform
+  getPlatform(platform_id: number) {
+    return axios.get<Review[]>('/genreReviews/' + platform_id).then((response) => response.data);
   }
 
   /**
