@@ -19,7 +19,7 @@ class SearchService {
 
 export type Review = {
   review_id: number;
-  game_id: string;
+  game_id: number;
   game_title: string;
   review_title: string;
   text: string;
@@ -34,7 +34,7 @@ export type Review = {
 class ReviewService {
   review: Review = {
     review_id: 0,
-    game_id: '',
+    game_id: 0,
     game_title: '',
     review_title: '',
     text: '',
@@ -84,7 +84,7 @@ class ReviewService {
 
   //Get reviews based on platform
   getPlatform(platform_id: number) {
-    return axios.get<Review[]>('/genreReviews/' + platform_id).then((response) => response.data);
+    return axios.get<Review[]>('/platformReviews/' + platform_id).then((response) => response.data);
   }
 
   /**

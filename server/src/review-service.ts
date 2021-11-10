@@ -122,7 +122,7 @@ class ReviewService {
         (error, results) => {
           if (error) return reject(error);
 
-          resolve(Number(results.insertId))
+          resolve(Number(results.insertId));
         }
       );
     });
@@ -166,7 +166,7 @@ class ReviewService {
     });
   }
 
-  //Get published reviews based on genre
+  //Get published reviews based on platform
 
   getPlatform(platform_id: number) {
     return new Promise<Review[]>((resolve, reject) => {
@@ -176,7 +176,7 @@ class ReviewService {
         INNER JOIN games g ON g.game_id = r.game_id
         INNER JOIN mapping_platform mp ON mp.game_id = g.game_id
         INNER JOIN platforms p ON mp.platform_id = p.platform_id
-        WHERE published=1 AND p.platform_id = 186`,
+        WHERE published=1 AND p.platform_id = ?`,
         [platform_id],
         (error, results) => {
           if (error) return reject(error);
@@ -200,4 +200,6 @@ class ReviewService {
     });
   }
 }
+///Join review and game table
+
 export const reviewService = new ReviewService();
