@@ -71,7 +71,7 @@ class GameService {
    */
   delete(id: number) {
     return new Promise<void>((resolve, reject) => {
-      pool.query('DELETE FROM games WHERE id = ?', [id], (error, results) => {
+      pool.query('DELETE FROM games WHERE game_id = ?', [id], (error, results) => {
         if (error) return reject(error);
 
         resolve();

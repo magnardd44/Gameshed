@@ -30,17 +30,18 @@ import { createHashHistory } from 'history';
 import { gameService, Game } from './services/game-services';
 import { GameCard, AddGame } from './game-component';
 import { UserNav } from './user-components';
+import { Category } from './genre-components';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 
 const history = createHashHistory();
 
+/**<NavBar.Link to="/games">Games</NavBar.Link> */
 class NavHeader extends Component {
   render() {
     return (
       <div>
         <NavBar brand="GS">
-          <NavBar.Link to="/games">Games</NavBar.Link>
           <UserNav />
         </NavBar>
         <Header></Header>
@@ -64,6 +65,7 @@ ReactDOM.render(
       <Route exact path="/publishedReviews/:id" component={CompleteReview} />
       <Route exact path="/editReview/:id" component={EditReview} />
       <Route exact path="/genreReviews" component={GenreReviews} />
+      <Route exact path="/categories" component={Category}></Route>
       <Route exact path="/platformReviews" component={PlatformReviews} />
     </div>
   </HashRouter>,

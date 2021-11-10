@@ -14,10 +14,23 @@ searchRouter.post('/', (request, response) => {
   } else response.status(400).send('Missing search field');
 });
 
-// Debug
 searchRouter.get('/get/:id', (request, response) => {
   searchService
     .get(request.params.id)
+    .then((res) => response.send(res))
+    .catch((err) => response.status(500).send(err));
+});
+
+searchRouter.get('/get_extra/:id', (request, response) => {
+  searchService
+    .get_extra(request.params.id)
+    .then((res) => response.send(res))
+    .catch((err) => response.status(500).send(err));
+});
+
+searchRouter.get('/get_all/:id', (request, response) => {
+  searchService
+    .get_game_and_extra(request.params.id)
     .then((res) => response.send(res))
     .catch((err) => response.status(500).send(err));
 });
