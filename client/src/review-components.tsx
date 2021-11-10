@@ -77,6 +77,7 @@ export class PublishedReviews extends Component {
 export class PlatformReviews extends Component {
   reviews: Review[] = [];
   games: Game[] = [];
+  state = { isHidden: true };
   game: Game = {
     game_id: 0,
     game_title: '',
@@ -110,6 +111,7 @@ export class PlatformReviews extends Component {
         this.reviews = data;
       })
       .catch((error) => Alert.danger('Error retrieving reviews: ' + error.message));
+    this.setState({ isHidden: false });
   }
 
   render() {
@@ -128,60 +130,71 @@ export class PlatformReviews extends Component {
             </Card>
           </Column>
           <Column width={1}>
-            <Card title="Indie">
-              <Button.Success onClick={() => this.platformCall(3)}>Open</Button.Success>
+            <Card title="Nintendo Switch">
+              <Button.Success onClick={() => this.platformCall(119)}>Open</Button.Success>
             </Card>
           </Column>
           <Column width={1}>
-            <Card title="Strategi">
-              <Button.Success onClick={() => this.platformCall(4)}>Open</Button.Success>
+            <Card title="XBox One">
+              <Button.Success onClick={() => this.platformCall(186)}>Open</Button.Success>
             </Card>
           </Column>
           <Column width={1}>
-            <Card title="Kort og brett">
-              <Button.Success onClick={() => this.platformCall(5)}>Open</Button.Success>
+            <Card title="XBox 360">
+              <Button.Success onClick={() => this.platformCall(185)}>Open</Button.Success>
             </Card>
           </Column>
           <Column width={1}>
-            <Card title="Pek og klikk">
-              <Button.Success onClick={() => this.platformCall(6)}>Open</Button.Success>
+            <Card title="PC - Microsoft">
+              <Button.Success onClick={() => this.platformCall(126)}>Open</Button.Success>
             </Card>
           </Column>
           <Column width={1}>
-            <Card title="Kampspill">
-              <Button.Success onClick={() => this.platformCall(7)}>Open</Button.Success>
+            <Card title="Gameboy">
+              <Button.Success onClick={() => this.platformCall(89)}>Open</Button.Success>
             </Card>
           </Column>
           <Column width={1}>
-            <Card title="Skyting">
-              <Button.Success onClick={() => this.platformCall(8)}>Open</Button.Success>
+            <Card title="Mac">
+              <Button.Success onClick={() => this.platformCall(100)}>Open</Button.Success>
             </Card>
           </Column>
           <Column width={1}>
-            <Card title="Musikk">
-              <Button.Success onClick={() => this.platformCall(9)}>Open</Button.Success>
+            <Card title="IOS">
+              <Button.Success onClick={() => this.platformCall(98)}>Open</Button.Success>
             </Card>
           </Column>
           <Column width={1}>
-            <Card title="Hjernetrim">
-              <Button.Success onClick={() => this.platformCall(10)}>Open</Button.Success>
+            <Card title="Nintendo DS">
+              <Button.Success onClick={() => this.platformCall(114)}>Open</Button.Success>
+            </Card>
+          </Column>
+          <Column width={1}>
+            <Card title="Andre">
+              <Button.Success onClick={() => this.platformCall(101 + 102)}>Open</Button.Success>
             </Card>
           </Column>
         </Row>
-        <Row>
-          <Column>Spill</Column>
-          <Column>Anmeldelse</Column>
-          <Column>Terningkast</Column>
-        </Row>
-        {this.reviews.map((review, index) => (
-          <Row key={index}>
-            <Column>{review.game_title}</Column>
-            <Column>
-              <NavLink to={'/publishedReviews/' + review.review_id}>{review.review_title}</NavLink>
-            </Column>
-            <Column>{review.rating}</Column>
-          </Row>
-        ))}
+        {this.state.isHidden ? null : (
+          <>
+            <Row>
+              <Column>Spill</Column>
+              <Column>Anmeldelse</Column>
+              <Column>Terningkast</Column>
+            </Row>
+            {this.reviews.map((review, index) => (
+              <Row key={index}>
+                <Column>{review.game_title}</Column>
+                <Column>
+                  <NavLink to={'/publishedReviews/' + review.review_id}>
+                    {review.review_title}
+                  </NavLink>
+                </Column>
+                <Column>{review.rating}</Column>
+              </Row>
+            ))}
+          </>
+        )}
       </>
     );
   }
@@ -220,7 +233,7 @@ export class GenreReviews extends Component {
     relevant: false,
     platform_id: 0,
   };
-
+  state = { isHidden: true };
   genreCall(id: number) {
     reviewService
       .getGenre(id)
@@ -229,6 +242,7 @@ export class GenreReviews extends Component {
         this.reviews = data;
       })
       .catch((error) => Alert.danger('Error retrieving reviews: ' + error.message));
+    this.setState({ isHidden: false });
   }
 
   render() {
@@ -359,20 +373,26 @@ export class GenreReviews extends Component {
             </Card>
           </Column>
         </Row>
-        <Row>
-          <Column>Spill</Column>
-          <Column>Anmeldelse</Column>
-          <Column>Terningkast</Column>
-        </Row>
-        {this.reviews.map((review, index) => (
-          <Row key={index}>
-            <Column>{review.game_title}</Column>
-            <Column>
-              <NavLink to={'/publishedReviews/' + review.review_id}>{review.review_title}</NavLink>
-            </Column>
-            <Column>{review.rating}</Column>
-          </Row>
-        ))}
+        {this.state.isHidden ? null : (
+          <>
+            <Row>
+              <Column>Spill</Column>
+              <Column>Anmeldelse</Column>
+              <Column>Terningkast</Column>
+            </Row>
+            {this.reviews.map((review, index) => (
+              <Row key={index}>
+                <Column>{review.game_title}</Column>
+                <Column>
+                  <NavLink to={'/publishedReviews/' + review.review_id}>
+                    {review.review_title}
+                  </NavLink>
+                </Column>
+                <Column>{review.rating}</Column>
+              </Row>
+            ))}
+          </>
+        )}
       </>
     );
   }
@@ -400,6 +420,7 @@ export class AddReview extends Component<{
   showAlert = false;
   name = '';
   genreStrings: Array<string> = [];
+  platformStrings: Array<string> = [];
 
   game: Game = {
     game_id: 0,
@@ -423,11 +444,11 @@ export class AddReview extends Component<{
           </Row>
           <Row>
             <Column width={2}>Sjanger:</Column>
-            <Column>{this.genreStrings.join(',')}</Column>
+            <Column>{this.genreStrings.join(', ')}</Column>
           </Row>
           <Row>
             <Column width={2}>Plattform:</Column>
-            <Column>{this.game.platforms}</Column>
+            <Column>{this.platformStrings.join(', ')}</Column>
           </Row>
           <FormContainer>
             <FormGroup>
@@ -508,6 +529,7 @@ export class AddReview extends Component<{
           this.game.game_title = response.data[0].name;
           this.game.game_description = response.data[0].summary;
           this.genreStrings = response.data[0].genres.map((t: any) => t.name);
+          this.platformStrings = response.data[0].platforms.map((t: any) => t.name);
           console.log(response.data[0]);
           console.log(response.data[0].platforms);
         })
@@ -516,7 +538,20 @@ export class AddReview extends Component<{
   }
 }
 
-export class PublishReview extends Component<{ match: { params: { id: number } } }> {
+export class PublishReview extends Component<{
+  match: { params: { igdb_id: number; db_id: number } };
+}> {
+  reviewTitle = '';
+  gameTitle = '';
+  genre = '';
+  platform = '';
+  text = '';
+  rating = 1;
+  showAlert = false;
+  name = '';
+  genreStrings: Array<string> = [];
+  platformStrings: Array<string> = [];
+
   review: Review = {
     review_id: 0,
     review_title: '',
@@ -527,8 +562,20 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
     game_id: '',
     user_id: 0,
     genre_id: 0,
-    relevant: false,
+
     platform_id: 0,
+    relevant: false,
+  };
+  game: Game = {
+    game_id: 0,
+    igdb_id: 0,
+    game_title: '',
+    genre: 0,
+    genres: [],
+    genre_id: 0,
+    platform: 0,
+    platforms: [],
+    game_description: '',
   };
 
   render() {
@@ -537,15 +584,15 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
         <Card title="Anmeldelse til publisering">
           <Row>
             <Column width={2}>Spill:</Column>
-            <Column>Hentes fra IGDB</Column>
+            <Column>{this.game.game_title}</Column>
           </Row>
           <Row>
             <Column width={2}>Sjanger:</Column>
-            <Column>Hentes fra IGDB</Column>
+            <Column>{this.genreStrings.join(', ')}</Column>
           </Row>
           <Row>
             <Column width={2}>Plattform:</Column>
-            <Column>Hentes fra IGDB</Column>
+            <Column>{this.platformStrings.join(', ')}</Column>
           </Row>
 
           <Row>
@@ -612,9 +659,32 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
 
   mounted() {
     reviewService
-      .get(this.props.match.params.id)
+      .getDraft(this.props.match.params.id)
       .then((review) => (this.review = review))
       .catch((error) => Alert.danger('Error getting review: ' + error.message));
+
+    this.game.game_id = this.props.match.params.db_id;
+    if (this.game.game_id > 0) {
+      gameService.get(this.game.game_id).then((result) => {
+        this.game = result;
+        console.log(this.game);
+      });
+    }
+
+    this.game.igdb_id = this.props.match.params.igdb_id;
+    if (this.game.igdb_id > 0) {
+      axios
+        .get('search/get/' + this.game.igdb_id)
+        .then((response) => {
+          this.game.game_title = response.data[0].name;
+          this.game.game_description = response.data[0].summary;
+          this.genreStrings = response.data[0].genres.map((t: any) => t.name);
+          this.platformStrings = response.data[0].platforms.map((t: any) => t.name);
+          console.log(response.data[0]);
+          console.log(response.data[0].platforms);
+        })
+        .catch((err) => console.log(err));
+    }
   }
 }
 
@@ -629,7 +699,7 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
     game_id: '',
     user_id: 0,
     genre_id: 0,
-    relevant: false,
+    relevant: 0,
     platform_id: 0,
   };
   counter: number = 0;
@@ -672,8 +742,12 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
             <Column>
               <Button.Success
                 onClick={() => {
-                  this.review.relevant = true;
-                  this.counter == 0 ? 1 : 0;
+                  this.counter = this.counter == 0 ? 1 : 0;
+                  reviewService.like(
+                    this.review.review_id,
+                    this.review.user_id,
+                    this.review.relevant
+                  );
                 }}
               >
                 Like
@@ -708,7 +782,7 @@ export class EditReview extends Component<{ match: { params: { id: number } } }>
     published: false,
     game_title: '',
     genre_id: 0,
-    relevant: false,
+    relevant: 0,
     platform_id: 0,
   };
 

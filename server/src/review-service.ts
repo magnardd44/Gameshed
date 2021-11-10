@@ -65,7 +65,24 @@ class ReviewService {
   }
 
   /**
-   * Get complete review based on ID
+   * Get unpublished review based on ID
+   */
+  getDraft(review_id: number) {
+    return new Promise<Review | undefined>((resolve, reject) => {
+      pool.query(
+        'SELECT * FROM reviews WHERE PUBLISHED=0 AND review_id = ?',
+        [review_id],
+        (error, results) => {
+          if (error) return reject(error);
+
+          resolve(results[0]);
+        }
+      );
+    });
+  }
+
+  /**
+   * Get published review based on ID
    */
   get(review_id: number) {
     return new Promise<Review | undefined>((resolve, reject) => {
@@ -97,15 +114,15 @@ class ReviewService {
   }
 
   //add like to a review
-  like(id: number, relevant: boolean) {
+  like(review_id: number, user_id: number) {
     return new Promise<number>((resolve, reject) => {
       pool.query(
-        'UPDATE reviews SET RELEVANT=? WHERE review_id=?',
-        [relevant, id],
+        `INSERT INTO mapping_relevant (review_id, user_id) VALUES (?, ?)`,
+        [review_id, user_id],
         (error, results) => {
           if (error) return reject(error);
 
-          resolve(id);
+          resolve(Number(results.insertId))
         }
       );
     });
