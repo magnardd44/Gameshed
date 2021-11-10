@@ -116,7 +116,7 @@ class GameService2 {
 	}
 
 	get_igdb_extra(id: number) {
-		axios.get<extraIGDB>('search/get_extra/' + id)
+		return axios.get<extraIGDB>('search/get_extra/' + id)
 			.then((response) => response.data)
 	}
 
