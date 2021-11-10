@@ -69,7 +69,7 @@ game: Game2 = gameService2.emptyGame();
             <Column>Plattformer: {this.game.platform.reduce((p, c)=>p == '' ? c : p + ', ' + c, '')}</Column>
           </Row>
           <Row>
-            <Column>Årstall: {this.game.igdb ? (new Date(this.game.igdb?.release_date * 1000)).getFullYear() + 1900:''}</Column>
+            <Column>Årstall: {this.game.igdb ? (new Date(this.game.igdb?.release_date * 1000)).getFullYear():''}</Column>
           </Row>
           <Row>
             <Column>Rating (1-6): {this.game.igdb ? Math.ceil(this.game.igdb?.aggregated_rating * 6 / 100):''}</Column>
