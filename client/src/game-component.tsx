@@ -19,7 +19,7 @@ import { createHashHistory } from 'history';
 import { platform } from 'os';
 import { Platform, platformService } from './services/platform-service';
 import axios from 'axios';
-//import Select from 'react-select';
+// import Select from 'react-select';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
@@ -104,7 +104,7 @@ export class GameCard extends Component<{ match: { params: { igdb_id: number; db
     }
   }
   addReview() {
-    history.push('/addReview');
+    history.push(`/addReview/${this.game.game_id}/${this.game.igdb_id}`);
   }
 }
 

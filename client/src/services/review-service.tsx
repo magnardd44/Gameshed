@@ -3,6 +3,20 @@ import { sharedComponentData } from 'react-simplified';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 
+export type Oauth_token = {
+  access_token: string;
+  expire_time: number;
+  token_type: string;
+};
+
+class SearchService {
+  token: Oauth_token = {
+    access_token: '',
+    expire_time: 0,
+    token_type: '',
+  };
+}
+
 export type Review = {
   review_id: number;
   game_id: string;
@@ -13,7 +27,8 @@ export type Review = {
   rating: number;
   published: boolean;
   genre_id: number;
-  relevant: boolean;
+  platform_id: number;
+  relevant: number;
 };
 
 class ReviewService {
@@ -27,7 +42,8 @@ class ReviewService {
     rating: 0,
     published: false,
     genre_id: 0,
-    relevant: false,
+    platform_id: 0,
+    relevant: 0,
   };
   reviews: Review[] = [];
 
@@ -36,6 +52,13 @@ class ReviewService {
    */
   getComplete(review_id: number, published: boolean) {
     return axios.get<Review>('/reviews/' + review_id).then((response) => response.data);
+  }
+
+  /**
+   * Get draft review with given id.
+   */
+  getDraft(review_id: number) {
+    return axios.get<Review>('/reviews/' + review_id + '/draft').then((response) => response.data);
   }
 
   /**
@@ -59,6 +82,11 @@ class ReviewService {
     return axios.get<Review[]>('/genreReviews/' + genre_id).then((response) => response.data);
   }
 
+  //Get reviews based on platform
+  getPlatform(platform_id: number) {
+    return axios.get<Review[]>('/genreReviews/' + platform_id).then((response) => response.data);
+  }
+
   /**
    * Create new review   *
    * Resolves the newly created review id.
@@ -76,9 +104,9 @@ class ReviewService {
       .then((response) => response.data.review_id);
   }
   //Add like to review
-  like(id: number, relevant: boolean) {
+  like(review_id: number, user_id: number, relevant: number) {
     return axios
-      .patch<Review>('/reviews/' + id, { relevant: relevant })
+      .patch<Review>('/reviews/' + review_id, { relevant: relevant })
       .then((response) => response.data);
   }
 
