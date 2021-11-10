@@ -91,7 +91,7 @@ export class PlatformReviews extends Component {
   };
   review: Review = {
     review_id: 0,
-    game_id: '',
+    game_id: 0,
     game_title: '',
     review_title: '',
     text: '',
@@ -99,7 +99,7 @@ export class PlatformReviews extends Component {
     rating: 0,
     published: false,
     genre_id: 0,
-    relevant: false,
+    relevant: 0,
     platform_id: 0,
   };
 
@@ -107,11 +107,11 @@ export class PlatformReviews extends Component {
     reviewService
       .getPlatform(id)
       .then((data) => {
+        this.setState({ isHidden: false });
         console.log(data);
         this.reviews = data;
       })
       .catch((error) => Alert.danger('Error retrieving reviews: ' + error.message));
-    this.setState({ isHidden: false });
   }
 
   render() {
@@ -222,7 +222,7 @@ export class GenreReviews extends Component {
   };
   review: Review = {
     review_id: 0,
-    game_id: '',
+    game_id: 0,
     game_title: '',
     review_title: '',
     text: '',
@@ -230,7 +230,7 @@ export class GenreReviews extends Component {
     rating: 0,
     published: false,
     genre_id: 0,
-    relevant: false,
+    relevant: 0,
     platform_id: 0,
   };
   state = { isHidden: true };
@@ -538,20 +538,7 @@ export class AddReview extends Component<{
   }
 }
 
-export class PublishReview extends Component<{
-  match: { params: { igdb_id: number; db_id: number } };
-}> {
-  reviewTitle = '';
-  gameTitle = '';
-  genre = '';
-  platform = '';
-  text = '';
-  rating = 1;
-  showAlert = false;
-  name = '';
-  genreStrings: Array<string> = [];
-  platformStrings: Array<string> = [];
-
+export class PublishReview extends Component<{ match: { params: { id: number } } }> {
   review: Review = {
     review_id: 0,
     review_title: '',
@@ -559,12 +546,12 @@ export class PublishReview extends Component<{
     text: '',
     rating: 0,
     published: false,
-    game_id: '',
+    game_id: 0,
     user_id: 0,
     genre_id: 0,
 
     platform_id: 0,
-    relevant: false,
+    relevant: 0,
   };
   game: Game = {
     game_id: 0,
@@ -588,11 +575,11 @@ export class PublishReview extends Component<{
           </Row>
           <Row>
             <Column width={2}>Sjanger:</Column>
-            <Column>{this.genreStrings.join(', ')}</Column>
+            <Column></Column>
           </Row>
           <Row>
             <Column width={2}>Plattform:</Column>
-            <Column>{this.platformStrings.join(', ')}</Column>
+            <Column></Column>
           </Row>
 
           <Row>
@@ -660,31 +647,15 @@ export class PublishReview extends Component<{
   mounted() {
     reviewService
       .getDraft(this.props.match.params.id)
-      .then((review) => (this.review = review))
+      .then((review) => {
+        this.review = review;
+        if (review.game_id) {
+          gameService.get(review.game_id).then((game) => {
+            this.game = game;
+          });
+        }
+      })
       .catch((error) => Alert.danger('Error getting review: ' + error.message));
-
-    this.game.game_id = this.props.match.params.db_id;
-    if (this.game.game_id > 0) {
-      gameService.get(this.game.game_id).then((result) => {
-        this.game = result;
-        console.log(this.game);
-      });
-    }
-
-    this.game.igdb_id = this.props.match.params.igdb_id;
-    if (this.game.igdb_id > 0) {
-      axios
-        .get('search/get/' + this.game.igdb_id)
-        .then((response) => {
-          this.game.game_title = response.data[0].name;
-          this.game.game_description = response.data[0].summary;
-          this.genreStrings = response.data[0].genres.map((t: any) => t.name);
-          this.platformStrings = response.data[0].platforms.map((t: any) => t.name);
-          console.log(response.data[0]);
-          console.log(response.data[0].platforms);
-        })
-        .catch((err) => console.log(err));
-    }
   }
 }
 
@@ -696,7 +667,7 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
     text: '',
     rating: 0,
     published: false,
-    game_id: '',
+    game_id: 0,
     user_id: 0,
     genre_id: 0,
     relevant: 0,
@@ -777,7 +748,7 @@ export class EditReview extends Component<{ match: { params: { id: number } } }>
     review_title: '',
     text: '',
     rating: 0,
-    game_id: '',
+    game_id: 0,
     user_id: 0,
     published: false,
     game_title: '',

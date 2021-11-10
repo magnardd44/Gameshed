@@ -90,6 +90,15 @@ router.get('/genreReviews/:genre_id', (request, response) => {
     .catch((error) => response.status(500).send(error));
 });
 
+//Show published reviews based on platform
+router.get('/platformReviews/:platform_id', (request, response) => {
+  const platform_id = Number(request.params.platform_id);
+  reviewService
+    .getPlatform(platform_id)
+    .then((rows) => response.send(rows))
+    .catch((error) => response.status(500).send(error));
+});
+
 //Fetch individual drafts after it has been added and saved
 router.get('/reviews/:review_id/draft', (request, response) => {
   const id = Number(request.params.review_id);
