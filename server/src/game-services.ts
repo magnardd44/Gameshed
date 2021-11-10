@@ -2,6 +2,7 @@ import pool from './mysql-pool';
 
 export type Game = {
   game_id: number;
+  igdb_id: number;
   game_title: string;
   genre: string[];
   genre_id: number;
@@ -12,6 +13,7 @@ export type Game = {
 class GameService {
   game: Game = {
     game_id: 0,
+    igdb_id: 0,
     game_title: '',
     genre: [],
     genre_id: 0,
@@ -47,7 +49,32 @@ class GameService {
 
         this.game = results[0];
 
-        resolve(results[0]);
+        //resolve(results[0]);
+
+		let platformPromise = new Promise<void>((resolve,reject) => {
+			pool.query('SELECT platform_name FROM mapping_platform left join platforms on mapping_platform.platform_id = platforms.platform_id WHERE mapping_platform.game_id = ?', [this.game.game_id], (error, results) => {
+				if (error) return reject(error);
+
+				this.game.platform = results.map((e: any)=>e.platform_name)
+
+				resolve()
+			})
+		});
+
+		let genrePromise = new Promise<void>((resolve,reject) => {
+
+			pool.query('SELECT genre_name FROM mapping_genre left join genres on mapping_genre.genre_id = genres.genre_id WHERE mapping_genre.game_id = ?', [this.game.game_id], (error, results) => {
+				if (error) return reject(error);
+
+				this.game.genre = results.map((e: any)=>e.genre_name)
+
+				resolve()
+			})
+		});
+
+		Promise.all([platformPromise, genrePromise]).then(result =>
+			resolve(this.game)
+		)
       });
     });
   }

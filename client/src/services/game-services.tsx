@@ -100,7 +100,7 @@ class GameService2 {
 	 * Get game with given id.
 	 */
 	get(id: number) {
-		return axios.get<Game>('/games/' + id).then((response) => response.data);
+		return axios.get<Game2>('/games/' + id).then((response) => response.data);
 	}
 
 	/**
