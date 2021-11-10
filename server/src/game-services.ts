@@ -42,7 +42,7 @@ class GameService {
    */
   get(id: number) {
     return new Promise<Game | undefined>((resolve, reject) => {
-      pool.query('SELECT * FROM games WHERE id = ?', [id], (error, results) => {
+      pool.query('SELECT * FROM games WHERE game_id = ?', [id], (error, results) => {
         if (error) return reject(error);
 
         this.game = results[0];
