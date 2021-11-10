@@ -61,7 +61,6 @@ game: Game2 = gameService2.emptyGame();
           </Row>
           <Linebreak></Linebreak>
           <Row>
-            <Column> Sjanger:{' '} {this.game.genre.map((genre) => { <>{genre}</>; })} </Column>
             <Column>Sjanger: {this.game.genre.reduce((p, c)=>p == '' ? c : p + ', ' + c, '')}</Column>
           </Row>
           <Linebreak></Linebreak>
@@ -75,8 +74,8 @@ game: Game2 = gameService2.emptyGame();
             <Column>Rating (1-6): {this.game.igdb ? Math.ceil(this.game.igdb?.aggregated_rating * 6 / 100):''}</Column>
           </Row>
           <Row>
-            <Column>Lignende spill: {this.game.igdb?.similar_games.map((e)=>{
-				return (<a href={"http://localhost:3000/#/games/0/" + e.id}>{e.name}, </a>)
+            <Column>Lignende spill: {this.game.igdb?.similar_games.map((e, i)=>{
+				return (<a key={i} href={"http://localhost:3000/#/games/0/" + e.id}>{e.name}, </a>)
 			})}</Column>
           </Row>
           <Row>
@@ -124,14 +123,16 @@ game: Game2 = gameService2.emptyGame();
 	  console.log(igdb_id)
 
 	  if(game_id > 0) {
-		  gameService.get(game_id).then((result) => {
-					this.game.game_id = result.game_id;
-					this.game.igdb_id = result.igdb_id;
-					this.game.game_title = result.game_title;
-					//this.game.genre = [result.genre.toString()];
-					//this.game.platform = [result.platform.toString()];
-					this.game.game_description = result.game_description;
-					this.game.igdb = null;
+		  gameService2.get(game_id).then((result) => {
+					this.game = result;
+//					this.game.game_id = result.game_id;
+//					this.game.igdb_id = result.igdb_id;
+//					this.game.game_title = result.game_title;
+//					this.game.genre = result.genre;
+//					this.game.platform = result.platform;
+//					this.game.game_description = result.game_description;
+//					this.game.igdb = null;
+					console.log(result)
 					console.log(this.game)
 
 					if(this.game.igdb_id) {
