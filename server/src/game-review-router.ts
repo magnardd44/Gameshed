@@ -90,6 +90,17 @@ router.get('/genreReviews/:genre_id', (request, response) => {
     .catch((error) => response.status(500).send(error));
 });
 
+//Fetch individual drafts after it has been added and saved
+router.get('/reviews/:review_id/draft', (request, response) => {
+  const id = Number(request.params.review_id);
+  reviewService
+    .getDraft(id)
+    .then((review) =>
+      review ? response.send(review) : response.status(404).send('Review not found')
+    )
+    .catch((error) => response.status(500).send(error));
+});
+
 //Fetch individual review after it has been added and saved
 router.get('/reviews/:review_id', (request, response) => {
   const id = Number(request.params.review_id);
@@ -123,7 +134,7 @@ router.patch('/reviews/:id/publish', (request, response) => {
 //Add like to review
 router.patch('/reviews/:id/relevant', (request, response) => {
   reviewService
-    .like(Number(request.params.id), true)
+    .like(Number(request.params.id), 1)
     .then((id) => response.send({ id: id }))
     .catch((error) => response.status(500).send(error));
 });
