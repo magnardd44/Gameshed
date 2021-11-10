@@ -107,7 +107,7 @@ class SearchService {
 				cover_url: 'http:' + response.data[0].cover.url,
 				aggregated_rating: response.data[0].aggregated_rating,
 				screenshots_url: response.data[0].screenshots.map((e:any)=>'https://images.igdb.com/igdb/image/upload/t_original/' + e.image_id + '.jpg'),
-				similar_games: response.data[0].similar_games.map((e:any)=>e.name),
+				similar_games: response.data[0].similar_games.map((e:any)=>e),
 				release_date: response.data[0].first_release_date,
 			}
 		})

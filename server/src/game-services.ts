@@ -42,7 +42,7 @@ class GameService {
    */
   get(id: number) {
     return new Promise<Game | undefined>((resolve, reject) => {
-      pool.query('SELECT * FROM games WHERE id = ?', [id], (error, results) => {
+      pool.query('SELECT * FROM games WHERE game_id = ?', [id], (error, results) => {
         if (error) return reject(error);
 
         this.game = results[0];
@@ -71,7 +71,7 @@ class GameService {
    */
   delete(id: number) {
     return new Promise<void>((resolve, reject) => {
-      pool.query('DELETE FROM games WHERE id = ?', [id], (error, results) => {
+      pool.query('DELETE FROM games WHERE game_id = ?', [id], (error, results) => {
         if (error) return reject(error);
 
         resolve();

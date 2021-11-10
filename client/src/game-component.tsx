@@ -69,7 +69,7 @@ game: Game2 = gameService2.emptyGame();
             <Column>Plattformer: {this.game.platform.reduce((p, c)=>p == '' ? c : p + ', ' + c, '')}</Column>
           </Row>
           <Row>
-            <Column>Årstall: {this.game.igdb ? (new Date(this.game.igdb?.release_date * 1000)).getFullYear() + 1900:''}</Column>
+            <Column>Årstall: {this.game.igdb ? (new Date(this.game.igdb?.release_date * 1000)).getFullYear():''}</Column>
           </Row>
           <Row>
             <Column>Rating (1-6): {this.game.igdb ? Math.ceil(this.game.igdb?.aggregated_rating * 6 / 100):''}</Column>
@@ -120,16 +120,29 @@ game: Game2 = gameService2.emptyGame();
 	  let game_id = this.props.match.params.db_id;
 	  let igdb_id = this.props.match.params.igdb_id;
 
+	  console.log(game_id)
+	  console.log(igdb_id)
+
 	  if(game_id > 0) {
 		  gameService.get(game_id).then((result) => {
 					this.game.game_id = result.game_id;
-					this.game.igdb_id = result.game_id;
+					this.game.igdb_id = result.igdb_id;
 					this.game.game_title = result.game_title;
-					this.game.genre = [result.genre.toString()];
-					this.game.platform = [result.platform.toString()];
+					//this.game.genre = [result.genre.toString()];
+					//this.game.platform = [result.platform.toString()];
 					this.game.game_description = result.game_description;
 					this.game.igdb = null;
-				  });
+					console.log(this.game)
+
+					if(this.game.igdb_id) {
+						gameService2.get_igdb_extra(this.game.igdb_id)
+							.then((result_igdb) => {
+								this.game.igdb = result_igdb
+								console.log(this.game.igdb)
+							})
+					}
+				  })
+				  .catch(err => console.log(err));
 	  }
 	  else if(igdb_id > 0) {
 		  gameService2.get_igdb(igdb_id).then((result) => {
