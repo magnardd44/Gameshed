@@ -114,10 +114,12 @@ class ReviewService {
   }
 
   //add like to a review
-  like(review_id: number, user_id: number) {
+  relevant(review_id: number, user_id: number, relevant: number) {
     return new Promise<number>((resolve, reject) => {
       pool.query(
-        `INSERT INTO mapping_relevant (review_id, user_id) VALUES (?, ?)`,
+        relevant == 0
+          ? `DELETE FROM mapping_relevant WHERE review_id = ? AND user_id=?`
+          : `INSERT INTO mapping_relevant (review_id, user_id) VALUES (?, ?)`,
         [review_id, user_id],
         (error, results) => {
           if (error) return reject(error);

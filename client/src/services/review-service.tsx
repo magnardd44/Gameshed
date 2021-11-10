@@ -106,7 +106,10 @@ class ReviewService {
   //Add like to review
   like(review_id: number, user_id: number, relevant: number) {
     return axios
-      .patch<Review>('/reviews/' + review_id, { relevant: relevant })
+      .patch<Review>('/reviews/' + review_id + '/relevant', {
+        relevant: relevant,
+        user_id: user_id,
+      })
       .then((response) => response.data);
   }
 

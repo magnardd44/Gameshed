@@ -668,7 +668,7 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
     rating: 0,
     published: false,
     game_id: 0,
-    user_id: 0,
+    user_id: 1,
     genre_id: 0,
     relevant: 0,
     platform_id: 0,
@@ -714,11 +714,7 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
               <Button.Success
                 onClick={() => {
                   this.counter = this.counter == 0 ? 1 : 0;
-                  reviewService.like(
-                    this.review.review_id,
-                    this.review.user_id,
-                    this.review.relevant
-                  );
+                  reviewService.like(this.review.review_id, this.review.user_id, this.counter);
                 }}
               >
                 Like

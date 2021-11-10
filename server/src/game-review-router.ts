@@ -142,8 +142,9 @@ router.patch('/reviews/:id/publish', (request, response) => {
 
 //Add like to review
 router.patch('/reviews/:id/relevant', (request, response) => {
+  const data = request.body;
   reviewService
-    .like(Number(request.params.id), 1)
+    .relevant(Number(request.params.id), data.user_id, data.relevant)
     .then((id) => response.send({ id: id }))
     .catch((error) => response.status(500).send(error));
 });
