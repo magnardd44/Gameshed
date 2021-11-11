@@ -29,12 +29,12 @@ import { Hash } from 'crypto';
 import { createHashHistory } from 'history';
 import { gameService, Game } from './services/game-services';
 import { GameCard, AddGame } from './game-component';
-import { UserNav } from './user-components';
+import { UserNav, UserPage } from './user-components';
 import { Category } from './genre-components';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 
-const history = createHashHistory();
+export const history = createHashHistory();
 
 /**<NavBar.Link to="/games">Games</NavBar.Link> */
 class NavHeader extends Component {
@@ -67,6 +67,7 @@ ReactDOM.render(
       <Route exact path="/genreReviews" component={GenreReviews} />
       <Route exact path="/categories" component={Category}></Route>
       <Route exact path="/platformReviews" component={PlatformReviews} />
+      <Route exact path="/user" component={UserPage} />
     </div>
   </HashRouter>,
   document.getElementById('root')

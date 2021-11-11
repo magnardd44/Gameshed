@@ -29,6 +29,18 @@ userRouter.post('/add', (request, response) => {
 	} else response.status(400).send('Manglar epost eller passord');
 });
 
+userRouter.put('/', (request, response) => {
+	const data = request.body;
+
+	if (data?.token && data?.user) {
+		userService.verify(data.token)
+		.catch(err=>response.status(401).send(err))
+		.then(()=>userService.put(data.token.id, data.user))
+		.then(res=>response.send(res))
+		.catch(err=>response.status(500).send(err))
+	} else response.status(400).send('Manglar token eller brukar');
+});
+
 userRouter.post('/login', (request, response) => {
 	const data = request.body;
 

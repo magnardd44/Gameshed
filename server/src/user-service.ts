@@ -42,6 +42,19 @@ class UserService {
 		});
 	}
 
+	put(id: number, user: User) {
+		return new Promise<User>((resolve, reject) => {
+			pool.query(
+				'UPDATE users SET user_nickname=?, user_about=? WHERE user_id=?', 
+				[user.nick, user.about, id],
+				(error, results) => {
+					if (error) return reject(error);
+					resolve(user);
+				}
+			);
+		});
+	}
+
 	add(email: string, password: string) {
 		return new Promise<Token>((resolve, reject) => {
 			let salt: string = 'random'

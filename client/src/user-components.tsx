@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Form, Button } from './widgets';
+import { Form, Card, Alert, Button } from './widgets';
 import userService from './services/user-service';
+import { history } from './index'
 
 export class UserNav extends Component {
-  input: string = '';
   password: string = '';
 
   render() {
@@ -13,11 +13,11 @@ export class UserNav extends Component {
         <Form.Label>Brukernamn:</Form.Label>
         <Form.Input
           type="text"
-          value={this.input}
+          value={userService.email}
           placeholder="Epost"
           disabled={userService.token}
           onChange={(event) => {
-            this.input = event.currentTarget.value;
+            userService.email = event.currentTarget.value;
           }}
         />
         {userService.token ? (
@@ -26,7 +26,7 @@ export class UserNav extends Component {
             <Button.Success
               onClick={() => {
                 userService.logout();
-                this.input = '';
+                userService.email = '';
                 this.password = '';
               }}
             >
@@ -55,23 +55,152 @@ export class UserNav extends Component {
             />
             <Button.Success
               onClick={() => {
-                userService.login(this.input, this.password);
+                userService.login(userService.email, this.password).catch(err => {
+					Alert.warning(<>Feil brukarnamn eller passord</>)
+				});
                 this.password = '';
               }}
             >
               Login
             </Button.Success>
+			{history.location.pathname != '/user' ?
+				<Button.Success
+					onClick={() => {
+						history.push('/user')
+							//                this.password = '';
+							//                userService.register(this.input, this.password)
+							//				.then(()=> history.push('/user'))
+							//				.catch(()=> history.push('/user')
+							//				);
+					}}
+				>
+					Registrer
+					</Button.Success> : <></>
+			}
             <Button.Success
               onClick={() => {
-                userService.register(this.input, this.password);
+                userService.login("admin", "admin").then(()=>
+						Alert.success(<>Logged inn as admin</>)
+				)
                 this.password = '';
               }}
             >
-              Registrer
+              DebugAdmin
+            </Button.Success>
+            <Button.Success
+              onClick={() => {
+                userService.login("admin", "feil").catch(err => {
+					Alert.warning(<>Feil brukarnamn eller passord</>)
+				});
+                userService.email = 'admin';
+                this.password = 'feil';
+              }}
+            >
+              FeilPassord
             </Button.Success>
           </>
         )}
       </>
     );
   }
+}
+
+export class UserData extends Component {
+	render() {
+		return (<Card title="Brukerdata"> 
+		<Form.Label>
+		Brukarnamn
+        <Form.Input
+          type="text"
+          value={userService.name}
+          placeholder="Brukarnamn"
+          onChange={(event) => {
+            userService.name = event.currentTarget.value;
+          }}
+        />
+		</Form.Label>
+
+		<Form.Label>
+		Epost
+        <Form.Input
+          type="text"
+          value={userService.email}
+          disabled={userService.token}
+          placeholder="Epost"
+          onChange={(event) => {
+            userService.email = event.currentTarget.value;
+          }}
+        />
+		</Form.Label>
+
+
+		<Form.Label>
+		Om meg
+        <Form.Textarea
+          type="text"
+          value={userService.about}
+          placeholder="Om meg"
+          onChange={(event) => {
+            userService.about = event.currentTarget.value;
+          }}
+        />
+		</Form.Label>
+		</Card>)
+	}
+}
+
+export class UserPersonal extends Component {
+	render() {
+		return <>
+			<UserData/>
+            <Button.Success
+              onClick={() => {
+                userService.set_user().then(()=>
+						Alert.success(<>Oppdatert bruker</>)
+				)
+              }}
+            >
+              Oppdater bruker
+            </Button.Success>
+		</>
+	}
+	mounted() {
+		let result = userService.get_user().then((result)=>{
+		}).catch((err)=>{
+			console.log("Failed")
+			console.log(err)
+		})
+	}
+}
+
+export class UserRegister extends Component {
+	render() {
+		return <>
+			<UserData/>
+            <Button.Success
+              onClick={() => {
+				let newPassword = prompt('Passord')
+				if(newPassword?.length) {
+					userService.register(userService.email, newPassword).then(()=>
+							Alert.success(<>Ny bruker registrert</>)
+							)
+				} else {
+					Alert.info(<>Skriv inn passord</>);
+				}
+              }}
+            >
+              Registrer ny bruker
+            </Button.Success>
+		</>
+	}
+}
+
+export class UserPage extends Component {
+	render() {
+		return (<>
+		{userService.token ?
+			<UserPersonal/>:
+			<UserRegister/>}
+		</>)
+	}
 }
