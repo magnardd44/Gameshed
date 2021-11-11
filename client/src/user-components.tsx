@@ -5,11 +5,21 @@ import userService from './services/user-service';
 import { history } from './index'
 
 export class UserNav extends Component {
-  password: string = '';
+  //password: string = '';
 
   render() {
     return (
       <>
+            <Button.Success
+              onClick={() => {
+                userService.login("admin", "admin").then(()=>
+						Alert.success(<>Logged inn as admin</>)
+				)
+                //this.password = '';
+              }}
+            >
+              DebugAdmin
+            </Button.Success>
         <Form.Label>Brukernamn:</Form.Label>
         <Form.Input
           type="text"
@@ -22,84 +32,58 @@ export class UserNav extends Component {
         />
         {userService.token ? (
           // If user logged in
-          <>
             <Button.Success
               onClick={() => {
                 userService.logout();
                 userService.email = '';
-                this.password = '';
+                //this.password = '';
               }}
             >
               Logout
             </Button.Success>
-            <Button.Danger
-              onClick={() => {
-                userService.delete();
-                // this.input = '';
-                // this.password = '';
-              }}
-            >
-              Slett meg
-            </Button.Danger>
-          </>
         ) : (
           // else user not logged
-          <>
-            <Form.Input
-              type="text"
-              value={this.password}
-              placeholder="Passord"
-              onChange={(event) => {
-                this.password = event.currentTarget.value;
-              }}
-            />
+//          <>
+//		  {
+//            //<Form.Input
+//            //  type="text"
+//            //  value={this.password}
+//            //  placeholder="Passord"
+//            //  onChange={(event) => {
+//            //    this.password = event.currentTarget.value;
+//            //  }}
+//            ///>
+//			}
             <Button.Success
               onClick={() => {
-                userService.login(userService.email, this.password).catch(err => {
+			  console.log(userService.email.length ? true: false)
+				let password = prompt('Skriv inn passord')
+				if(userService.email.length && password?.length) {
+					userService.login(userService.email, password).catch((err)=>
 					Alert.warning(<>Feil brukarnamn eller passord</>)
-				});
-                this.password = '';
-              }}
-            >
+							)
+				} else {
+					Alert.info(<>Skriv inn brukarnamn og passord</>);
+				}
+//                this.password = '';
+              }}>
               Login
-            </Button.Success>
-			{history.location.pathname != '/user' ?
-				<Button.Success
-					onClick={() => {
-						history.push('/user')
-							//                this.password = '';
-							//                userService.register(this.input, this.password)
-							//				.then(()=> history.push('/user'))
-							//				.catch(()=> history.push('/user')
-							//				);
-					}}
-				>
-					Registrer
-					</Button.Success> : <></>
-			}
-            <Button.Success
-              onClick={() => {
-                userService.login("admin", "admin").then(()=>
-						Alert.success(<>Logged inn as admin</>)
-				)
-                this.password = '';
-              }}
-            >
-              DebugAdmin
-            </Button.Success>
-            <Button.Success
-              onClick={() => {
-                userService.login("admin", "feil").catch(err => {
-					Alert.warning(<>Feil brukarnamn eller passord</>)
-				});
-                userService.email = 'admin';
-                this.password = 'feil';
-              }}
-            >
-              FeilPassord
-            </Button.Success>
-          </>
+			  </Button.Success>
+          //</>
         )}
+			  <Button.Success
+				  onClick={() => {
+				  history.push('/user')
+				  //if(history.location.pathname != '/user')  history.push('/user')
+						  //                this.password = '';
+						  //                userService.register(this.input, this.password)
+						  //				.then(()=> history.push('/user'))
+						  //				.catch(()=> history.push('/user')
+						  //				);
+						  //				:
+					  }}>
+				  {userService.token ? "MinSide" : "Registrer"}
+				  </Button.Success>
       </>
     );
   }
@@ -127,12 +111,12 @@ export class UserData extends Component {
           value={userService.email}
           disabled={userService.token}
           placeholder="Epost"
+		  required={true}
           onChange={(event) => {
             userService.email = event.currentTarget.value;
           }}
         />
 		</Form.Label>
-
 
 		<Form.Label>
 		Om meg
@@ -162,6 +146,15 @@ export class UserPersonal extends Component {
             >
               Oppdater bruker
             </Button.Success>
+            <Button.Danger
+              onClick={() => {
+                userService.delete();
+                // this.input = '';
+                // this.password = '';
+              }}
+            >
+              Slett meg
+            </Button.Danger>
 		</>
 	}
 	mounted() {
@@ -179,7 +172,7 @@ export class UserRegister extends Component {
 			<UserData/>
             <Button.Success
               onClick={() => {
-				let newPassword = prompt('Passord')
+				let newPassword = prompt('Skriv inn passord')
 				if(newPassword?.length) {
 					userService.register(userService.email, newPassword).then(()=>
 							Alert.success(<>Ny bruker registrert</>)
