@@ -95,10 +95,10 @@ export class Card extends Component<{ title: ReactNode }> {
 export class CategoryCard extends Component<{ title: ReactNode; img: string }> {
   render() {
     return (
-      <div className="card border-success">
-        <div className="card-body">
+      <div className="card border-success my-2">
+        <div className="card-body text-center">
           <img
-            className="card-img-top d-block mx-auto my-2 w-50"
+            className="card-img-top d-block mx-auto w-25"
             src={this.props.img}
             alt="Card image cap"
           />
@@ -107,7 +107,7 @@ export class CategoryCard extends Component<{ title: ReactNode; img: string }> {
               {this.props.title}
             </a>
           </h5>
-          <div className="card-text">Adventure</div>
+          <div className="card-text">{this.props.title}</div>
         </div>
       </div>
     );

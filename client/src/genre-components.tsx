@@ -32,38 +32,26 @@ export class Category extends Component {
         <Row>
           <ColumnCentre smwidth={4} mdwidth={3}>
             <CategoryCard
-              title="Adventure"
-              img="https://cdn-icons.flaticon.com/png/512/2790/premium/2790402.png?token=exp=1636397351~hmac=497e2bcb1e7643ed7368aa6b09213aa8"
+              title="Eventyr"
+              img="https://helenaagustsson.github.io/INFT2002-images/images/adventure-game.png"
             ></CategoryCard>
           </ColumnCentre>
           <ColumnCentre smwidth={4} mdwidth={3}>
             <CategoryCard
-              title="Adventure"
-              img="https://cdn-icons.flaticon.com/png/512/2790/premium/2790402.png?token=exp=1636397351~hmac=497e2bcb1e7643ed7368aa6b09213aa8"
+              title="Plattform"
+              img="https://helenaagustsson.github.io/INFT2002-images/images/002-platform.png"
             ></CategoryCard>
           </ColumnCentre>
           <ColumnCentre smwidth={4} mdwidth={3}>
             <CategoryCard
-              title="Adventure"
-              img="https://cdn-icons.flaticon.com/png/512/2790/premium/2790402.png?token=exp=1636397351~hmac=497e2bcb1e7643ed7368aa6b09213aa8"
+              title="Indie"
+              img="https://helenaagustsson.github.io/INFT2002-images/images/003-radio.png"
             ></CategoryCard>
           </ColumnCentre>
           <ColumnCentre smwidth={4} mdwidth={3}>
             <CategoryCard
-              title="Adventure"
-              img="https://cdn-icons.flaticon.com/png/512/2790/premium/2790402.png?token=exp=1636397351~hmac=497e2bcb1e7643ed7368aa6b09213aa8"
-            ></CategoryCard>
-          </ColumnCentre>
-          <ColumnCentre smwidth={4} mdwidth={3}>
-            <CategoryCard
-              title="Adventure"
-              img="https://cdn-icons.flaticon.com/png/512/2790/premium/2790402.png?token=exp=1636397351~hmac=497e2bcb1e7643ed7368aa6b09213aa8"
-            ></CategoryCard>
-          </ColumnCentre>
-          <ColumnCentre smwidth={4} mdwidth={3}>
-            <CategoryCard
-              title="Adventure"
-              img="https://cdn-icons.flaticon.com/png/512/2790/premium/2790402.png?token=exp=1636397351~hmac=497e2bcb1e7643ed7368aa6b09213aa8"
+              title="Strategy"
+              img="https://helenaagustsson.github.io/INFT2002-images/images/012-strategy.png"
             ></CategoryCard>
           </ColumnCentre>
         </Row>
