@@ -7,19 +7,22 @@ export type Token= {
 }
 
 class UserService {
-	name: String = 'Anonym';
+	name: string = 'Anonym';
 	about: string = ''
 	email: string = ''
 
 	token: Token | null = null;
 
 	login(email: String, password: String) {
-		axios.post('user/login', {email: email, password: password})
+		return axios.post('user/login', {email: email, password: password})
 			.then((response)=>{
 				this.token = response.data;
 				this.get_user();
 			})
-			.catch(err=>console.log(err))
+			.catch(err=>{
+					console.log(err)
+					throw (err)
+			})
 	}
 
 	logout() {
@@ -43,24 +46,51 @@ class UserService {
 
 	get_user() {
 		if(this.token) {
-			axios.post('user/get', {token: this.token})
+			return axios.post('user/get', {token: this.token})
 				.then((response)=>{
 						this.name = response.data.nick;
 						this.about = response.data.about;
 						this.email = response.data.email;
 						})
-			.catch(err=>console.log(err))
+			.catch(err=>{
+					console.log(err)
+			})
+		} else {
+			return Promise.reject();
 		}
+
+	}
+
+	set_user() {
+		if(this.token) {
+			let user = {
+				nick: this.name,
+				email: this.email,
+				about: this.about
+			}
+				
+			return axios.put('user', {token: this.token, user: user})
+			.catch(err=>{
+					console.log(err)
+					throw err
+			})
+		} else {
+			return Promise.reject();
+		}
+
 	}
 
 	register(email: string, password: string) {
-		axios.post('user/add', {email: email, password: password})
+		return axios.post('user/add', {email: email, password: password})
 			.then((response)=>{
 				this.token = response.data;
 
 				this.get_user();
 			})
-			.catch(err=>console.log(err))
+			.catch(err=>{
+					console.log(err)
+					throw err
+			})
 	}
 
 	delete() {
