@@ -23,6 +23,13 @@ class GenreService {
   }
 
   /**
+   * Get genre id with given name.
+   */
+  getId(name: string) {
+    return axios.get<Genre>('/genres/' + name).then((response) => response.data);
+  }
+
+  /**
    * Get all genres.
    */
   getAll() {

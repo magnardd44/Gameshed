@@ -91,9 +91,14 @@ class ReviewService {
    * Create new review   *
    * Resolves the newly created review id.
    */
-  create(title: string, text: string, rating: number) {
+  create(game_id: number, title: string, text: string, rating: number) {
     return axios
-      .post<{ id: number }>('/reviews', { review_title: title, text: text, rating: rating })
+      .post<{ id: number }>('/reviews', {
+        game_id: game_id,
+        review_title: title,
+        text: text,
+        rating: rating,
+      })
       .then((response) => response.data.id);
   }
 

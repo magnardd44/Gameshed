@@ -23,6 +23,13 @@ class PlatformService {
   }
 
   /**
+   * Get platform id with given name.
+   */
+  getId(name: string) {
+    return axios.get<Platform>('/platforms/' + name).then((response) => response.data);
+  }
+
+  /**
    * Get all platforms.
    */
   getAll() {
@@ -41,13 +48,17 @@ class PlatformService {
       })
       .then((response) => response.data.id);
   }
+
+  /**
+   * Update mappin_platform with platform_id and game_id.
+   *
+   * Resolves the newly created platform id.
+   */
   updatePlatformMap(platform_id: number, game_id: number) {
-    return axios
-      .post<{ id: number }>('/platformMap', {
-        platform_id: platform_id,
-        game_id: game_id,
-      })
-      .then((response) => response.data.id);
+    return axios.post<{ id: number }>('/platformMap', {
+      platform_id: platform_id,
+      game_id: game_id,
+    });
   }
 }
 

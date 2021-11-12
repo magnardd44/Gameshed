@@ -35,11 +35,11 @@ class ReviewService {
    *
    
    */
-  create(review_title: string, text: string, rating: number) {
+  create(game_id: number, review_title: string, text: string, rating: number) {
     return new Promise<number>((resolve, reject) => {
       pool.query(
-        'INSERT INTO reviews SET review_title=?, text=?, rating=?, published=0',
-        [review_title, text, rating],
+        'INSERT INTO reviews SET game_id=?, review_title=?, text=?, rating=?, published=0',
+        [game_id, review_title, text, rating],
         (error, results) => {
           if (error) return reject(error);
 
