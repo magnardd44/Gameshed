@@ -69,7 +69,7 @@ export class Category extends Component {
       <Container>
         Velg kategori/sjanger:
         <Row>
-          <ColumnCentre width={12} smwidth={4} mdwidth={2}>
+          <ColumnCentre width={6} smwidth={4} mdwidth={2}>
             {this.genres.map((genre) => (
               <CategoryCard
                 key={genre.genre_id}
