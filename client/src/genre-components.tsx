@@ -34,13 +34,18 @@ export class Category extends Component {
             <CategoryCard
               title="Eventyr"
               img="https://helenaagustsson.github.io/INFT2002-images/images/adventure-game.png"
-            ></CategoryCard>
+            >
+              {' '}
+              <Button.Success onClick={() => console.log(' ')}>Eventyr</Button.Success>
+            </CategoryCard>
           </ColumnCentre>
           <ColumnCentre smwidth={4} mdwidth={3}>
             <CategoryCard
               title="Plattform"
               img="https://helenaagustsson.github.io/INFT2002-images/images/002-platform.png"
-            ></CategoryCard>
+            >
+              <Button.Success onClick={() => console.log(' ')}>Eventyr</Button.Success>
+            </CategoryCard>
           </ColumnCentre>
           <ColumnCentre smwidth={4} mdwidth={3}>
             <CategoryCard
