@@ -24,6 +24,7 @@ import { platformService } from './services/platform-service';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
+//Renders an overvew of all published reviews
 export class PublishedReviews extends Component {
   reviews: Review[] = [];
   games: Game[] = [];
@@ -76,6 +77,7 @@ export class PublishedReviews extends Component {
   }
 }
 
+//Renders overview of published reviews based on genre
 export class PlatformReviews extends Component {
   reviews: Review[] = [];
   games: Game[] = [];
@@ -208,6 +210,8 @@ export class PlatformReviews extends Component {
       .catch((error) => Alert.danger('Error getting reviews: ' + error.message));
   }
 }
+
+//Renders overview of published reviews based on genre
 export class GenreReviews extends Component {
   reviews: Review[] = [];
   games: Game[] = [];
@@ -571,6 +575,7 @@ export class AddReview extends Component<{
   }
 }
 
+//Renders a draft review with option to edit, delete or publish
 export class PublishReview extends Component<{ match: { params: { id: number } } }> {
   review: Review = {
     review_id: 0,
@@ -692,6 +697,7 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
   }
 }
 
+//Renders Single complete review with option to "like"
 export class CompleteReview extends Component<{ match: { params: { id: number } } }> {
   review: Review = {
     review_id: 0,
