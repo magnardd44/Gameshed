@@ -25,18 +25,18 @@ import axios from 'axios';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
 export class GameCard extends Component<{ match: { params: { igdb_id: number; db_id: number } } }> {
-//  game: Game = {
-//    game_id: 0,
-//    igdb_id: 0,
-//    game_title: '',
-//    genre: 0,
-//    genres: [],
-//    genre_id: 0,
-//    platform: 0,
-//    platforms: [],
-//    game_description: '',
-//  };
-game: Game2 = gameService2.emptyGame();
+  //  game: Game = {
+  //    game_id: 0,
+  //    igdb_id: 0,
+  //    game_title: '',
+  //    genre: 0,
+  //    genres: [],
+  //    genre_id: 0,
+  //    platform: 0,
+  //    platforms: [],
+  //    game_description: '',
+  //  };
+  game: Game2 = gameService2.game2;
 
   render() {
     return (
@@ -51,7 +51,12 @@ game: Game2 = gameService2.emptyGame();
           </h6>
           <Row>
             <Column width={2}>
-              <ThumbNail img={this.game.igdb?.cover_url || "https://cdn-icons-png.flaticon.com/512/686/686589.png"}></ThumbNail>
+              <ThumbNail
+                img={
+                  this.game.igdb?.cover_url ||
+                  'https://cdn-icons-png.flaticon.com/512/686/686589.png'
+                }
+              ></ThumbNail>
             </Column>
             <Column width={6}>
               {this.game.game_description}
@@ -61,27 +66,44 @@ game: Game2 = gameService2.emptyGame();
           </Row>
           <Linebreak></Linebreak>
           <Row>
-            <Column>Sjanger: {this.game.genre.reduce((p, c)=>p == '' ? c : p + ', ' + c, '')}</Column>
+            <Column>
+              Sjanger: {this.game.genre.reduce((p, c) => (p == '' ? c : p + ', ' + c), '')}
+            </Column>
           </Row>
           <Linebreak></Linebreak>
           <Row>
-            <Column>Plattformer: {this.game.platform.reduce((p, c)=>p == '' ? c : p + ', ' + c, '')}</Column>
+            <Column>
+              Plattformer: {this.game.platform.reduce((p, c) => (p == '' ? c : p + ', ' + c), '')}
+            </Column>
           </Row>
           <Row>
-            <Column>Årstall: {this.game.igdb ? (new Date(this.game.igdb?.release_date * 1000)).getFullYear():''}</Column>
+            <Column>
+              Årstall:{' '}
+              {this.game.igdb ? new Date(this.game.igdb?.release_date * 1000).getFullYear() : ''}
+            </Column>
           </Row>
           <Row>
-            <Column>Rating (1-6): {this.game.igdb ? Math.ceil(this.game.igdb?.aggregated_rating * 6 / 100):''}</Column>
+            <Column>
+              Rating (1-6):{' '}
+              {this.game.igdb ? Math.ceil((this.game.igdb?.aggregated_rating * 6) / 100) : ''}
+            </Column>
           </Row>
           <Row>
-            <Column>Lignende spill: {this.game.igdb?.similar_games.map((e, i)=>{
-				return (<a key={i} href={"http://localhost:3000/#/games/0/" + e.id}>{e.name}, </a>)
-			})}</Column>
+            <Column>
+              Lignende spill:{' '}
+              {this.game.igdb?.similar_games.map((e, i) => {
+                return (
+                  <a key={i} href={'http://localhost:3000/#/games/0/' + e.id}>
+                    {e.name},{' '}
+                  </a>
+                );
+              })}
+            </Column>
           </Row>
           <Row>
-		  {this.game.igdb?.screenshots_url.map((url,index)=>{
-			return (<ThumbNail img={url} key={index}/>)
-		  })}
+            {this.game.igdb?.screenshots_url.map((url, index) => {
+              return <ThumbNail img={url} key={index} />;
+            })}
           </Row>
         </Card>
         <Linebreak></Linebreak>
@@ -98,59 +120,66 @@ game: Game2 = gameService2.emptyGame();
   }
 
   mounted() {
-//    this.game.game_id = this.props.match.params.db_id;
-//    if (this.game.game_id > 0) {
-//      gameService.get(this.game.game_id).then((result) => {
-//        this.game = result;
-//        console.log(this.game);
-//      });
-//    }
-//
-//    this.game.igdb_id = this.props.match.params.igdb_id;
-//    if (this.game.igdb_id > 0) {
-//      axios
-//        .get('search/get/' + this.game.igdb_id)
-//        .then((response) => {
-//          console.log(response.data);
-//          console.log(response.data[0].platforms);
-//        })
-//        .catch((err) => console.log(err));
-//    }
-	  let game_id = this.props.match.params.db_id;
-	  let igdb_id = this.props.match.params.igdb_id;
+    //    this.game.game_id = this.props.match.params.db_id;
+    //    if (this.game.game_id > 0) {
+    //      gameService.get(this.game.game_id).then((result) => {
+    //        this.game = result;
+    //        console.log(this.game);
+    //      });
+    //    }
+    //
+    //    this.game.igdb_id = this.props.match.params.igdb_id;
+    //    if (this.game.igdb_id > 0) {
+    //      axios
+    //        .get('search/get/' + this.game.igdb_id)
+    //        .then((response) => {
+    //          console.log(response.data);
+    //          console.log(response.data[0].platforms);
+    //        })
+    //        .catch((err) => console.log(err));
+    //    }
+    let game_id = this.props.match.params.db_id;
+    let igdb_id = this.props.match.params.igdb_id;
 
-	  console.log(game_id)
-	  console.log(igdb_id)
+    if (game_id == 0 && igdb_id == 0) {
+      Alert.danger('Heiheihei dette går ikke');
+    }
 
-	  if(game_id > 0) {
-		  gameService2.get(game_id).then((result) => {
-					this.game = result;
-//					this.game.game_id = result.game_id;
-//					this.game.igdb_id = result.igdb_id;
-//					this.game.game_title = result.game_title;
-//					this.game.genre = result.genre;
-//					this.game.platform = result.platform;
-//					this.game.game_description = result.game_description;
-//					this.game.igdb = null;
-					console.log(result)
-					console.log(this.game)
+    console.log(game_id);
+    console.log(igdb_id);
 
-					if(this.game.igdb_id) {
-						gameService2.get_igdb_extra(this.game.igdb_id)
-							.then((result_igdb) => {
-								this.game.igdb = result_igdb
-								console.log(this.game.igdb)
-							})
-					}
-				  })
-				  .catch(err => console.log(err));
-	  }
-	  else if(igdb_id > 0) {
-		  gameService2.get_igdb(igdb_id).then((result) => {
-					  this.game = result;
-					  console.log(this.game);
-				  }).catch();
-	  }
+    if (game_id > 0) {
+      gameService2
+        .get(game_id)
+        .then((result) => {
+          this.game = result;
+          //					this.game.game_id = result.game_id;
+          //					this.game.igdb_id = result.igdb_id;
+          //					this.game.game_title = result.game_title;
+          //					this.game.genre = result.genre;
+          //					this.game.platform = result.platform;
+          //					this.game.game_description = result.game_description;
+          //					this.game.igdb = null;
+          console.log(result);
+          console.log(this.game);
+
+          if (this.game.igdb_id) {
+            gameService2.get_igdb_extra(this.game.igdb_id).then((result_igdb) => {
+              this.game.igdb = result_igdb;
+              console.log(this.game.igdb);
+            });
+          }
+        })
+        .catch((err) => console.log(err));
+    } else if (igdb_id > 0) {
+      gameService2
+        .get_igdb(igdb_id)
+        .then((result) => {
+          this.game = result;
+          console.log(this.game);
+        })
+        .catch();
+    }
   }
   addReview() {
     history.push(`/addReview/${this.game.game_id}/${this.game.igdb_id}`);
@@ -343,8 +372,19 @@ export class AddGame extends Component {
                   ) {
                     Alert.danger('Alle feltene må være fylt ut!');
                   } else {
+                    axios
+                      .post('search', { game: this.game.game_title })
+                      .then((response) => {
+                        this.games = response.data;
+                      })
+                      .catch((err) => console.log(err));
+
                     gameService
-                      .create(this.game.game_title, this.game.game_description)
+                      .create(
+                        this.games[0].igdb_id,
+                        this.game.game_title,
+                        this.game.game_description
+                      )
                       .then((id) => {
                         for (let i = 0; i < this.genreElCount; i++) {
                           genreService.updateGenreMap(id, this.game.genres[i]);
@@ -409,7 +449,6 @@ export class AddGame extends Component {
                   value={this.game.genres[i]}
                   onChange={(event) => {
                     this.game.genres[i] = Number(event.currentTarget.value);
-                    this.addGenreEl();
                   }}
                 >
                   <option hidden>Velg sjanger her:</option>
@@ -440,7 +479,7 @@ export class AddGame extends Component {
               <Column>
                 <Form.Select
                   key={i}
-                  value={this.game.platforms[i]}
+                  value={this.platformEl[i]}
                   onChange={(event) => {
                     this.game.platforms[i] = Number(event.currentTarget.value);
                   }}

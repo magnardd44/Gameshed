@@ -25,11 +25,11 @@ class GameService {
   /**
    * Create new game having the given title.
    */
-  create(title: string, description: string) {
+  create(igdb_id: number, title: string, description: string) {
     return new Promise<number>((resolve, reject) => {
       pool.query(
-        'INSERT INTO games SET game_title=?, game_description=?',
-        [title, description],
+        'INSERT INTO games SET igdb_id=?, game_title=?, game_description=?',
+        [igdb_id, title, description],
         (error, results) => {
           if (error) return reject(error);
 
@@ -51,30 +51,35 @@ class GameService {
 
         //resolve(results[0]);
 
-		let platformPromise = new Promise<void>((resolve,reject) => {
-			pool.query('SELECT platform_name FROM mapping_platform left join platforms on mapping_platform.platform_id = platforms.platform_id WHERE mapping_platform.game_id = ?', [this.game.game_id], (error, results) => {
-				if (error) return reject(error);
+        let platformPromise = new Promise<void>((resolve, reject) => {
+          pool.query(
+            'SELECT platform_name FROM mapping_platform left join platforms on mapping_platform.platform_id = platforms.platform_id WHERE mapping_platform.game_id = ?',
+            [this.game.game_id],
+            (error, results) => {
+              if (error) return reject(error);
 
-				this.game.platform = results.map((e: any)=>e.platform_name)
+              this.game.platform = results.map((e: any) => e.platform_name);
 
-				resolve()
-			})
-		});
+              resolve();
+            }
+          );
+        });
 
-		let genrePromise = new Promise<void>((resolve,reject) => {
+        let genrePromise = new Promise<void>((resolve, reject) => {
+          pool.query(
+            'SELECT genre_name FROM mapping_genre left join genres on mapping_genre.genre_id = genres.genre_id WHERE mapping_genre.game_id = ?',
+            [this.game.game_id],
+            (error, results) => {
+              if (error) return reject(error);
 
-			pool.query('SELECT genre_name FROM mapping_genre left join genres on mapping_genre.genre_id = genres.genre_id WHERE mapping_genre.game_id = ?', [this.game.game_id], (error, results) => {
-				if (error) return reject(error);
+              this.game.genre = results.map((e: any) => e.genre_name);
 
-				this.game.genre = results.map((e: any)=>e.genre_name)
+              resolve();
+            }
+          );
+        });
 
-				resolve()
-			})
-		});
-
-		Promise.all([platformPromise, genrePromise]).then(result =>
-			resolve(this.game)
-		)
+        Promise.all([platformPromise, genrePromise]).then((result) => resolve(this.game));
       });
     });
   }

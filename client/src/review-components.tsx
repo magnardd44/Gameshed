@@ -17,8 +17,10 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { Review, reviewService } from './services/review-service';
 
 import { createHashHistory } from 'history';
-import { Game, gameService } from './services/game-services';
+import { Game, Game2, gameService, gameService2 } from './services/game-services';
 import axios from 'axios';
+import { genreService } from './services/genre-service';
+import { platformService } from './services/platform-service';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
@@ -434,26 +436,31 @@ export class AddReview extends Component<{
     game_description: '',
   };
 
+  game2: Game2 = gameService2.game2;
+
+  nums = [1, 2, 3, 4, 5, 6];
+
   render() {
     return (
       <Container>
         <Card title="Skriv anmeldelse">
           <Row>
             <Column width={2}>Spill:</Column>
-            <Column>{this.game.game_title}</Column>
+            <Column>{this.game2.game_title}</Column>
           </Row>
           <Row>
             <Column width={2}>Sjanger:</Column>
-            <Column>{this.genreStrings.join(', ')}</Column>
+            <Column>{this.game2.genre.join(', ')}</Column>
           </Row>
           <Row>
             <Column width={2}>Plattform:</Column>
-            <Column>{this.platformStrings.join(', ')}</Column>
+            <Column>{this.game2.platform.join(', ')}</Column>
           </Row>
           <FormContainer>
             <FormGroup>
               <Form.Label>Overskrift:</Form.Label>
               <Form.Input
+                placeholder="Skriv inn overskriften her:"
                 type="text"
                 value={this.reviewTitle}
                 onChange={(event) => (this.reviewTitle = event.currentTarget.value)}
@@ -462,6 +469,7 @@ export class AddReview extends Component<{
             <FormGroup>
               <Form.Label>Anmeldelse:</Form.Label>
               <Form.Textarea
+                placeholder="Skriv inn anmeldelsen her:"
                 value={this.text ?? ''}
                 onChange={(event) => {
                   this.text = event.currentTarget.value;
@@ -473,38 +481,67 @@ export class AddReview extends Component<{
             <FormGroup>
               <Form.Label>Terningkast:</Form.Label>
               <Form.Select
+                placeholder={<div>Velg terningkast:</div>}
                 value={this.rating}
                 onChange={(event) => {
                   this.rating = Number(event.currentTarget.value);
                 }}
               >
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
+                {this.nums.map((num, i) => {
+                  return (
+                    <option key={i} value={num}>
+                      {num}
+                    </option>
+                  );
+                })}
               </Form.Select>
             </FormGroup>
           </FormContainer>
         </Card>
-        <Linebreak></Linebreak>
+        <Linebreak />
+        <Alert />
         <Button.Success
           onClick={async () => {
-            if (this.game.game_id == 0) {
-              const newGameId = await gameService.create(
-                this.game.game_title,
-                this.game.game_description
-              );
-            }
-            reviewService
-              .create(this.reviewTitle, this.text, this.rating)
+            if (this.reviewTitle == '' || this.text == '' || this.rating == 0) {
+              Alert.danger('Alle feltene må være fylt ut!');
+            } else {
+              if (this.props.match.params.db_id == 0) {
+                for (let i = 0; i < this.game2.genre.length; i++) {
+                  await genreService.getId(this.game2.genre[i]).then((res) => {
+                    this.game.genres.push(res.genre_id);
+                  });
+                }
+                for (let i = 0; i < this.game2.platform.length; i++) {
+                  await platformService.getId(this.game2.platform[i]).then((res) => {
+                    this.game.platforms.push(res.platform_id);
+                  });
+                }
 
-              .then((id) => {
-                alert('Anmeldelsen er lagret');
-                history.push('/publishReview/' + id);
-              })
-              .catch((error) => Alert.danger('Error creating task: ' + error.message));
+                gameService
+                  .create(this.game2.igdb_id, this.game2.game_title, this.game2.game_description)
+                  .then((res) => {
+                    for (let i = 0; i < this.game.genres.length; i++) {
+                      genreService.updateGenreMap(res, this.game.genres[i]);
+                    }
+                    for (let i = 0; i < this.game.platforms.length; i++) {
+                      platformService.updatePlatformMap(this.game.platforms[i], res);
+                    }
+                    reviewService
+                      .create(res, this.reviewTitle, this.text, this.rating)
+                      .then((res) => {
+                        Alert.success('Anmeldelsen er lagret!');
+                        history.push('/publishReview/' + res);
+                      });
+                  });
+              } else {
+                reviewService
+                  .create(this.props.match.params.db_id, this.reviewTitle, this.text, this.rating)
+                  .then((res) => {
+                    Alert.success('Anmeldelsen er lagret!');
+                    history.push('/publishReview/' + res);
+                  });
+              }
+            }
           }}
         >
           Lagre
@@ -523,17 +560,13 @@ export class AddReview extends Component<{
 
     this.game.igdb_id = this.props.match.params.igdb_id;
     if (this.game.igdb_id > 0) {
-      axios
-        .get('search/get/' + this.game.igdb_id)
-        .then((response) => {
-          this.game.game_title = response.data[0].name;
-          this.game.game_description = response.data[0].summary;
-          this.genreStrings = response.data[0].genres.map((t: any) => t.name);
-          this.platformStrings = response.data[0].platforms.map((t: any) => t.name);
-          console.log(response.data[0]);
-          console.log(response.data[0].platforms);
+      gameService2
+        .get_igdb(this.game.igdb_id)
+        .then((result) => {
+          this.game2 = result;
+          console.log(this.game2);
         })
-        .catch((err) => console.log(err));
+        .catch();
     }
   }
 }

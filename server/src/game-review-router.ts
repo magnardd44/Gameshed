@@ -33,7 +33,7 @@ router.post('/games', (request, response) => {
   const data = request.body;
   if (data && data.game_title.length != 0 && data.game_description.length != 0)
     gameService
-      .create(data.game_title, data.game_description)
+      .create(data.igdb_id, data.game_title, data.game_description)
       .then((id) => response.send({ id: id }))
       .catch((error) => response.status(500).send(error));
   else response.status(400).send('Missing review title');
@@ -64,9 +64,9 @@ router.post('/genreMap', (request, response) => {
 //Add new review to database
 router.post('/reviews', (request, response) => {
   const data = request.body;
-  if (data && data.review_title.length != 0)
+  if (data && data.review_title.length != 0 && data.game_id != 0)
     reviewService
-      .create(data.review_title, data.text, data.rating)
+      .create(data.game_id, data.review_title, data.text, data.rating)
 
       .then((id) => response.send({ id: id }))
       .catch((error) => response.status(500).send(error));
@@ -166,6 +166,14 @@ router.get('/genre/:id', (request, response) => {
     .catch((error) => response.status(500).send(error));
 });
 
+router.get('/genres/:name', (request, response) => {
+  const name = request.params.name;
+  genreService
+    .getId(name)
+    .then((genre) => (genre ? response.send(genre) : response.status(404).send('Genre not found')))
+    .catch((error) => response.status(500).send(error));
+});
+
 router.get('/genres', (_request, response) => {
   genreService
     .getAll()
@@ -196,10 +204,20 @@ router.post('/genres', (_request, response) => {
   else response.status(400).send('Missing genre name');
 });
 
+/*
 router.get('/platforms/:id', (request, response) => {
   const id = Number(request.params.id);
   platformService
     .get(id)
+    .then((genre) => (genre ? response.send(genre) : response.status(404).send('Genre not found')))
+    .catch((error) => response.status(500).send(error));
+});
+*/
+
+router.get('/platforms/:name', (request, response) => {
+  const name = request.params.name;
+  platformService
+    .getId(name)
     .then((genre) => (genre ? response.send(genre) : response.status(404).send('Genre not found')))
     .catch((error) => response.status(500).send(error));
 });

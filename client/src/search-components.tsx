@@ -44,6 +44,18 @@ export class Search extends Component {
   games: Game[] = [];
   filtered: Game[] = [];
 
+  game: Game = {
+    game_id: 0,
+    igdb_id: 0,
+    game_title: '',
+    genre: 0,
+    genres: [],
+    genre_id: 0,
+    platform: 0,
+    platforms: [],
+    game_description: '',
+  };
+
   render() {
     return (
       <>
@@ -79,7 +91,7 @@ export class Search extends Component {
                 if (this.input != '') {
                   return (
                     <div
-                      id={game.game_title}
+                      id={game.game_id}
                       key={game.game_id}
                       role="option"
                       className=" option"
@@ -91,7 +103,8 @@ export class Search extends Component {
                         backgroundColor: 'lightgray',
                       }}
                       onClick={(event) => {
-                        this.input = event.currentTarget.id;
+                        this.input = event.currentTarget.innerHTML;
+                        this.game = game;
                         this.search();
                       }}
                     >
@@ -117,6 +130,9 @@ export class Search extends Component {
                       }}
                       onClick={(event) => {
                         this.input = event.currentTarget.innerHTML;
+                        shared.game = game;
+                        this.game.game_id = 0;
+                        this.game.igdb_id = game.id;
                         this.search();
                       }}
                     >
@@ -159,7 +175,7 @@ export class Search extends Component {
         shared.games = response.data;
       })
       .catch((err) => console.log(err));
-    history.push('/results');
+    history.push('/games/' + this.game.game_id + '/' + this.game.igdb_id);
   }
 
   IGDB_update() {
@@ -186,7 +202,7 @@ export class SearchListings extends Component {
               <Form.Label>Sjanger: </Form.Label>
               <Form.Select value={'Adventure'} onChange={() => console.log('sjanger')}>
                 {this.genres.map((genre) => (
-                  <option>{genre.genre_name}</option>
+                  <option key={genre.genre_id}>{genre.genre_name}</option>
                 ))}
               </Form.Select>
 

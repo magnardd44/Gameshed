@@ -28,6 +28,21 @@ class GenreService {
   }
 
   /**
+   * Get genreId with given name.
+   */
+  getId(name: string) {
+    return new Promise<Genre | undefined>((resolve, reject) => {
+      pool.query('SELECT * FROM genres WHERE genre_name = ?', [name], (error, results) => {
+        if (error) return reject(error);
+
+        this.genre = results[0];
+
+        resolve(results[0]);
+      });
+    });
+  }
+
+  /**
    * Get all genres.
    */
   getAll() {
@@ -68,14 +83,14 @@ class GenreService {
   }
 
   updateGenreMap(game_id: number, genre_id: number) {
-    return new Promise<number>((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       pool.query(
         'INSERT INTO mapping_genre SET g_mapping_id=NULL, game_id=?, genre_id=?',
         [game_id, genre_id],
         (error, results) => {
           if (error) return reject(error);
 
-          resolve(Number(results.insertId));
+          resolve();
         }
       );
     });

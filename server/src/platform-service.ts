@@ -15,9 +15,27 @@ class PlatformService {
   /**
    * Get platform with given id.
    */
+
+  /*
   get(id: number) {
     return new Promise<Platform | undefined>((resolve, reject) => {
       pool.query('SELECT * FROM platforms WHERE platform_id = ?', [id], (error, results) => {
+        if (error) return reject(error);
+
+        this.platform = results[0];
+
+        resolve(results[0]);
+      });
+    });
+  }
+  */
+
+  /**
+   * Get platform id with given name.
+   */
+  getId(name: string) {
+    return new Promise<Platform | undefined>((resolve, reject) => {
+      pool.query('SELECT * FROM platforms WHERE platform_name = ?', [name], (error, results) => {
         if (error) return reject(error);
 
         this.platform = results[0];
@@ -66,15 +84,19 @@ class PlatformService {
       });
     });
   }
+
+  /**
+   * Create new mapping platform.
+   */
   updatePlatformMap(platform_id: number, game_id: number) {
-    return new Promise<number>((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       pool.query(
         'INSERT INTO mapping_platform SET p_mapping_id=NULL, platform_id=?, game_id=?',
         [platform_id, game_id],
         (error, results) => {
           if (error) return reject(error);
 
-          resolve(Number(results.insertId));
+          resolve();
         }
       );
     });
