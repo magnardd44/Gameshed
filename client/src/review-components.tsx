@@ -677,7 +677,8 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
                       this.review.rating
                     )
                     .then(() => {
-                      history.push('/reviews');
+                      history.push(`/games/${this.game.game_id}/${this.game.igdb_id}`);
+                      Alert.success('Review deleted');
                     })
                     .catch((error) => Alert.danger('Error deleting task: ' + error.message));
                 }}
@@ -800,7 +801,7 @@ export class EditReview extends Component<{ match: { params: { id: number } } }>
 
   mounted() {
     reviewService
-      .get(this.props.match.params.id)
+      .getDraft(this.props.match.params.id)
       .then((review) => (this.review = review))
       .catch((error) => Alert.danger('Error getting review: ' + error.message));
   }
