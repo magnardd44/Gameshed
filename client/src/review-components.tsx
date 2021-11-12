@@ -28,14 +28,6 @@ const history = createHashHistory(); // Use history.push(...) to programmaticall
 export class PublishedReviews extends Component {
   reviews: Review[] = [];
   games: Game[] = [];
-  // game: Game = {
-  //   game_id: 0,
-  //   game_title: '',
-  //   genre: [],
-  //   genre_id: 0,
-  //   platform: [],
-  //   game_description: '',
-  // };
 
   render() {
     return (
@@ -51,6 +43,9 @@ export class PublishedReviews extends Component {
             <Column>
               <b>Terningkast</b>
             </Column>
+            <Column>
+              <b>Relevant</b>
+            </Column>
           </Row>
           {this.reviews.map((review, index) => (
             <Row key={review.review_id}>
@@ -62,6 +57,7 @@ export class PublishedReviews extends Component {
                 </NavLink>
               </Column>
               <Column>{review.rating}</Column>
+              <Column>{review.likes}</Column>
             </Row>
           ))}
         </Card>
@@ -105,6 +101,7 @@ export class PlatformReviews extends Component {
     genre_id: 0,
     relevant: 0,
     platform_id: 0,
+    likes: 0,
   };
 
   platformCall(id: number) {
@@ -185,6 +182,7 @@ export class PlatformReviews extends Component {
               <Column>Spill</Column>
               <Column>Anmeldelse</Column>
               <Column>Terningkast</Column>
+              <Column>Relevant</Column>
             </Row>
             {this.reviews.map((review, index) => (
               <Row key={index}>
@@ -195,6 +193,7 @@ export class PlatformReviews extends Component {
                   </NavLink>
                 </Column>
                 <Column>{review.rating}</Column>
+                <Column>{review.likes}</Column>
               </Row>
             ))}
           </>
@@ -238,6 +237,7 @@ export class GenreReviews extends Component {
     genre_id: 0,
     relevant: 0,
     platform_id: 0,
+    likes: 0,
   };
   state = { isHidden: true };
   genreCall(id: number) {
@@ -385,6 +385,7 @@ export class GenreReviews extends Component {
               <Column>Spill</Column>
               <Column>Anmeldelse</Column>
               <Column>Terningkast</Column>
+              <Column>Relevant</Column>
             </Row>
             {this.reviews.map((review, index) => (
               <Row key={index}>
@@ -395,6 +396,7 @@ export class GenreReviews extends Component {
                   </NavLink>
                 </Column>
                 <Column>{review.rating}</Column>
+                <Column>{review.likes}</Column>
               </Row>
             ))}
           </>
@@ -590,6 +592,7 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
 
     platform_id: 0,
     relevant: 0,
+    likes: 0,
   };
   game: Game = {
     game_id: 0,
@@ -605,12 +608,13 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
 
   render() {
     return (
-      <>
+      <Container>
         <Card title="Anmeldelse til publisering">
           <Row>
             <Column width={2}>Spill:</Column>
             <Column>{this.game.game_title}</Column>
           </Row>
+
           <Row>
             <Column width={2}>Sjanger:</Column>
             <Column></Column>
@@ -619,24 +623,29 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
             <Column width={2}>Plattform:</Column>
             <Column></Column>
           </Row>
-
-          <Row>
-            <Column width={12}>
-              <div>
-                <b>{this.review.review_title}</b>
-              </div>
-            </Column>
-          </Row>
-          <Row>
-            <Column width={12}>
-              <div>{this.review.text}</div>
-            </Column>
-          </Row>
-          <Row>
-            <Column width={12}>
-              <div>Terningkast: {this.review.rating}</div>
-            </Column>
-          </Row>
+          <Linebreak />
+          <Card title="">
+            <Row>
+              <Column width={12}>
+                <div>
+                  <b>{this.review.review_title}</b>
+                </div>
+              </Column>
+            </Row>
+            <Linebreak />
+            <Row>
+              <Column width={12}>
+                <div>{this.review.text}</div>
+              </Column>
+            </Row>
+            <Linebreak />
+            <Row>
+              <Column width={12}>
+                <div>Terningkast: {this.review.rating}</div>
+              </Column>
+            </Row>
+          </Card>
+          <Linebreak />
           <Row>
             <Column>
               <Button.Success
@@ -678,7 +687,7 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
             </Column>
           </Row>
         </Card>
-      </>
+      </Container>
     );
   }
 
@@ -697,6 +706,106 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
   }
 }
 
+// /**
+//  * Renders form to edit an existing review
+//  */
+export class EditReview extends Component<{ match: { params: { id: number } } }> {
+  review: Review = {
+    review_id: 0,
+    review_title: '',
+    text: '',
+    rating: 0,
+    game_id: 0,
+    user_id: 0,
+    published: false,
+    game_title: '',
+    genre_id: 0,
+    relevant: 0,
+    platform_id: 0,
+    likes: 0,
+  };
+
+  nums = [1, 2, 3, 4, 5, 6];
+  render() {
+    return (
+      <Container>
+        <Card title="Edit review">
+          <FormContainer>
+            <FormGroup>
+              <Form.Label>Title:</Form.Label>
+
+              <Form.Input
+                type="text"
+                value={this.review.review_title}
+                onChange={(event) => (this.review.review_title = event.currentTarget.value)}
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <Form.Label>Text:</Form.Label>
+
+              <Form.Textarea
+                value={this.review.text ?? ''}
+                onChange={(event) => {
+                  this.review.text = event.currentTarget.value;
+                }}
+                rows={10}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Form.Label>Terningkast:</Form.Label>
+              <Form.Select
+                placeholder={<div>Velg terningkast:</div>}
+                value={this.review.rating}
+                onChange={(event) => {
+                  this.review.rating = Number(event.currentTarget.value);
+                }}
+              >
+                {this.nums.map((num, i) => {
+                  return (
+                    <option key={i} value={num}>
+                      {num}
+                    </option>
+                  );
+                })}
+              </Form.Select>
+            </FormGroup>
+          </FormContainer>
+        </Card>
+        <Row>
+          <Column>
+            <Linebreak />
+            <Button.Success
+              onClick={() => {
+                alert('review saved');
+
+                reviewService
+                  .edit(
+                    this.review.review_id,
+                    this.review.review_title,
+                    this.review.text,
+                    this.review.rating
+                  )
+                  .then(() => history.push('/publishReview/' + this.review.review_id))
+                  .catch((error) => Alert.danger('Error editing review: ' + error.message));
+              }}
+            >
+              Save
+            </Button.Success>
+          </Column>
+        </Row>
+      </Container>
+    );
+  }
+
+  mounted() {
+    reviewService
+      .get(this.props.match.params.id)
+      .then((review) => (this.review = review))
+      .catch((error) => Alert.danger('Error getting review: ' + error.message));
+  }
+}
+
 //Renders Single complete review with option to "like"
 export class CompleteReview extends Component<{ match: { params: { id: number } } }> {
   review: Review = {
@@ -711,6 +820,7 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
     genre_id: 0,
     relevant: 0,
     platform_id: 0,
+    likes: 0,
   };
   counter: number = 0;
   render() {
@@ -762,88 +872,6 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
             <Column>{this.counter}</Column>
           </Row>
         </Card>
-      </>
-    );
-  }
-
-  mounted() {
-    reviewService
-      .get(this.props.match.params.id)
-      .then((review) => (this.review = review))
-      .catch((error) => Alert.danger('Error getting review: ' + error.message));
-  }
-}
-
-// /**
-//  * Renders form to edit an existing review
-//  */
-export class EditReview extends Component<{ match: { params: { id: number } } }> {
-  review: Review = {
-    review_id: 0,
-    review_title: '',
-    text: '',
-    rating: 0,
-    game_id: 0,
-    user_id: 0,
-    published: false,
-    game_title: '',
-    genre_id: 0,
-    relevant: 0,
-    platform_id: 0,
-  };
-
-  render() {
-    return (
-      <>
-        <Card title="Edit review">
-          <Row>
-            <Column width={2}>
-              <Form.Label>Title:</Form.Label>
-            </Column>
-            <Column>
-              <Form.Input
-                type="text"
-                value={this.review.review_title}
-                onChange={(event) => (this.review.review_title = event.currentTarget.value)}
-              />
-            </Column>
-          </Row>
-          <Row>
-            <Column width={2}>
-              <Form.Label>Text:</Form.Label>
-            </Column>
-            <Column>
-              <Form.Textarea
-                value={this.review.text ?? ''}
-                onChange={(event) => {
-                  this.review.text = event.currentTarget.value;
-                }}
-                rows={10}
-              />
-            </Column>
-          </Row>
-        </Card>
-        <Row>
-          <Column>
-            <Button.Success
-              onClick={() => {
-                alert('review saved');
-
-                reviewService
-                  .edit(
-                    this.review.review_id,
-                    this.review.review_title,
-                    this.review.text,
-                    this.review.rating
-                  )
-                  .then(() => history.push('/publishReview/' + this.review.review_id))
-                  .catch((error) => Alert.danger('Error editing review: ' + error.message));
-              }}
-            >
-              Save
-            </Button.Success>
-          </Column>
-        </Row>
       </>
     );
   }

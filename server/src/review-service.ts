@@ -1,3 +1,4 @@
+import { resolveConfig } from 'prettier';
 import pool from './mysql-pool';
 
 export type Review = {
@@ -11,7 +12,8 @@ export type Review = {
   published: boolean;
   genre_id: number;
   platform_id: number;
-  relevant: boolean;
+  relevant: number;
+  likes: number;
 };
 
 class ReviewService {
@@ -26,7 +28,8 @@ class ReviewService {
     published: false,
     genre_id: 0,
     platform_id: 0,
-    relevant: false,
+    relevant: 0,
+    likes: 0,
   };
   reviews: Review[] = [];
 
@@ -82,12 +85,12 @@ class ReviewService {
   }
 
   /**
-   * Get published review based on ID
+   * Get single complete review based on ID
    */
   get(review_id: number) {
     return new Promise<Review | undefined>((resolve, reject) => {
       pool.query(
-        'SELECT * FROM reviews WHERE PUBLISHED=1 AND review_id = ?',
+        `SELECT *, (SELECT COUNT(*) FROM mapping_relevant WHERE review_id = r.review_id) AS likes FROM reviews r WHERE PUBLISHED=1 AND review_id = ?`,
         [review_id],
         (error, results) => {
           if (error) return reject(error);
@@ -136,7 +139,7 @@ class ReviewService {
   getPublished() {
     return new Promise<Review[]>((resolve, reject) => {
       pool.query(
-        `SELECT game_title, review_id, review_title, rating 
+        `SELECT game_title, review_id, review_title, rating, (SELECT COUNT(*) FROM mapping_relevant WHERE review_id = r.review_id) AS likes 
         FROM games g INNER JOIN reviews r ON g.game_id = r.game_id 
         WHERE published = 1 ORDER BY game_title, review_title;`,
         (error, results) => {
@@ -153,7 +156,8 @@ class ReviewService {
   getGenre(genre_id: number) {
     return new Promise<Review[]>((resolve, reject) => {
       pool.query(
-        `SELECT ge.genre_id, ge.genre_name, g.game_title, r.review_id, r.review_title, r.rating FROM reviews r
+        `SELECT ge.genre_id, ge.genre_name, g.game_title, r.review_id, r.review_title, r.rating, (SELECT COUNT(*) FROM mapping_relevant WHERE review_id = r.review_id) AS likes 
+        FROM reviews r
         INNER JOIN games g ON g.game_id = r.game_id
         INNER JOIN mapping_genre mg ON mg.game_id = g.game_id
         INNER JOIN genres ge ON mg.genre_id = ge.genre_id
@@ -173,7 +177,7 @@ class ReviewService {
   getPlatform(platform_id: number) {
     return new Promise<Review[]>((resolve, reject) => {
       pool.query(
-        `SELECT p.platform_id, p.platform_name, g.game_title, r.review_id, r.review_title, r.rating
+        `SELECT p.platform_id, p.platform_name, g.game_title, r.review_id, r.review_title, r.rating, (SELECT COUNT(*) FROM mapping_relevant WHERE review_id = r.review_id) AS likes
         FROM reviews r
         INNER JOIN games g ON g.game_id = r.game_id
         INNER JOIN mapping_platform mp ON mp.game_id = g.game_id
@@ -202,6 +206,5 @@ class ReviewService {
     });
   }
 }
-///Join review and game table
 
 export const reviewService = new ReviewService();
