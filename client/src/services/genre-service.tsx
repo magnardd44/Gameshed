@@ -6,12 +6,14 @@ axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 export type Genre = {
   genre_id: number;
   genre_name: string;
+  genre_img: string;
 };
 
 class GenreService {
   genre: Genre = {
     genre_id: 0,
     genre_name: '',
+    genre_img: '',
   };
   genres: Genre[] = [];
 
