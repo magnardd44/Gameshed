@@ -29,6 +29,7 @@ export type Review = {
   genre_id: number;
   platform_id: number;
   relevant: number;
+  likes: number;
 };
 
 class ReviewService {
@@ -44,6 +45,7 @@ class ReviewService {
     genre_id: 0,
     platform_id: 0,
     relevant: 0,
+    likes: 0,
   };
   reviews: Review[] = [];
 
