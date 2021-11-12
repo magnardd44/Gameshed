@@ -14,6 +14,7 @@ import {
   FormContainer,
   FormGroup,
   CategoryCard,
+  ReviewCard,
 } from './widgets';
 import { NavLink } from 'react-router-dom';
 import { gameService, Game } from './services/game-services';
@@ -52,13 +53,13 @@ export class Category extends Component {
     genre_id: 0,
     relevant: 0,
     platform_id: 0,
+    likes: 0,
   };
   state = { isHidden: false };
   genreCall(id: number) {
     reviewService
       .getGenre(id)
       .then((data) => {
-        console.log(data);
         this.reviews = data;
       })
       .catch((error) => Alert.danger('Error retrieving reviews: ' + error.message));
@@ -94,13 +95,21 @@ export class Category extends Component {
               <div className="sticky-top">
                 {this.reviews.map((review, index) => (
                   <Row key={index}>
-                    <Column>{review.game_title}</Column>
-                    <Column>
-                      <NavLink to={'/publishedReviews/' + review.review_id}>
-                        {review.review_title}
-                      </NavLink>
-                    </Column>
-                    <Column>{review.rating}</Column>
+                    <ReviewCard
+                      title={review.review_title}
+                      subtitle={review.game_title}
+                      terningkast={review.rating}
+                      relevanse={review.likes}
+                      text={review.text}
+                    >
+                      <Button.Success
+                        onClick={() => {
+                          history.push('/publishedReviews/' + review.review_id);
+                        }}
+                      >
+                        Les mer
+                      </Button.Success>
+                    </ReviewCard>
                   </Row>
                 ))}
               </div>
