@@ -11,6 +11,8 @@ export type Token = {
 	token: string;
 }
 
+// TODO: passportjs + bcrypt
+
 class UserService {
 	users_logged_in: Token[] = [];
 
@@ -26,10 +28,10 @@ class UserService {
 		return {id: id, token: 'randomstring'}
 	}
 
-	get(token: Token) {
+	get(id: Number) {
 		return new Promise<User>((resolve, reject) => {
 			pool.query(
-				'SELECT * FROM users WHERE user_id=?', [token.id],
+				'SELECT * FROM users WHERE user_id=?', [id],
 				(error, results) => {
 					if (error) return reject(error);
 					resolve({
@@ -105,16 +107,17 @@ class UserService {
 	}
 
 	// Check if user token is valid and logged in
-	verify(token: Token) {
-		return new Promise<void>((resolve, reject) => {
+	verify(authorization: string | undefined) {
+		let token = JSON.parse(authorization || '{"id":0, "token":""}');
+		return new Promise<number>((resolve, reject) => {
 			let index: number = this.users_logged_in.findIndex(t => 
-				t.id == token.id && token.token == t.token
+				t.id == token?.id && token?.token == t.token
 			)
 
 			if(index < 0) {
-				return reject();
+				reject();
 			}
-			return resolve();
+			resolve(token.id);
 		})
 	}
 

@@ -10,13 +10,11 @@ userRouter.get('/', (request, response) => {
 userRouter.post('/get', (request, response) => {
 	const data = request.body;
 
-	if (data?.token) {
-		userService.verify(data.token)
-		.catch(err=>response.status(401).send(err))
-		.then(()=>userService.get(data.token))
-		.then(res=>response.send(res))
-		.catch(err=>response.status(500).send(err))
-	} else response.status(400).send('Manglar token');
+	userService.verify(request.headers.authorization)
+	.catch(err=>{response.status(401).send(err); throw(err)})
+	.then((id)=>userService.get(id))
+	.then(res=>response.send(res))
+	.catch(err=>response.status(500).send(err))
 });
 
 userRouter.post('/add', (request, response) => {
@@ -32,13 +30,13 @@ userRouter.post('/add', (request, response) => {
 userRouter.put('/', (request, response) => {
 	const data = request.body;
 
-	if (data?.token && data?.user) {
-		userService.verify(data.token)
-		.catch(err=>response.status(401).send(err))
-		.then(()=>userService.put(data.token.id, data.user))
+	if (data?.user) {
+		userService.verify(request.headers.authorization)
+		.catch(err=>{response.status(401).send(err); throw(err)})
+		.then((id)=>userService.put(id, data.user))
 		.then(res=>response.send(res))
 		.catch(err=>response.status(500).send(err))
-	} else response.status(400).send('Manglar token eller brukar');
+	} else response.status(400).send('Manglar brukar');
 });
 
 userRouter.post('/login', (request, response) => {
@@ -54,38 +52,34 @@ userRouter.post('/login', (request, response) => {
 userRouter.post('/logout', (request, response) => {
 	const data = request.body;
 
-	if (data?.token) {
-		userService.verify(data.token)
-		.catch(err=>response.status(401).send(err))
-		.then(()=>{
-			userService.logout(data.token.id)
+		userService.verify(request.headers.authorization)
+		.catch(err=>{response.status(401).send(err); throw(err)})
+		.then((id)=>{
+			userService.logout(id)
 			response.send();
 		})
-	} else response.status(400).send('Manglar token');
+	//} else response.status(400).send('Manglar token');
 
 });
 
 userRouter.post('/delete', (request, response) => {
 	const data = request.body;
 
-	if (data?.token) {
-		userService.verify(data.token)
-		.catch(err=>response.status(401).send(err))
-		.then(()=>userService.delete(data.token.id))
+		userService.verify(request.headers.authorization)
+		.catch(err=>{response.status(401).send(err); throw(err)})
+		.then((id)=>userService.delete(id))
 		.then(()=>response.send())
 		.catch(err=>response.status(500).send(err))
-	} else response.status(400).send('Manglar token');
+	//} else response.status(400).send('Manglar token');
 });
 
 //// DEBUG ///
 userRouter.post('/verify', (request, response) => {
 	const data = request.body;
 
-	if (data?.token) {
-		userService.verify(data.token)
-			.then(res=>response.send(res))
-			.catch(err=>response.status(401).send(err))
-	} else response.status(400).send('Manglar token');
+	userService.verify(request.headers.authorization)
+	.then(res=>response.send(res))
+	.catch(err=>response.status(401).send(err));
 });
 
 userRouter.get('/debug/user/:id', (request, response) => {
