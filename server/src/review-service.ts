@@ -156,7 +156,7 @@ class ReviewService {
   getGenre(genre_id: number) {
     return new Promise<Review[]>((resolve, reject) => {
       pool.query(
-        `SELECT ge.genre_id, ge.genre_name, g.game_title, r.review_id, r.review_title, r.rating, (SELECT COUNT(*) FROM mapping_relevant WHERE review_id = r.review_id) AS likes 
+        `SELECT ge.genre_id, ge.genre_name, g.game_title, r.review_id, r.review_title, r.rating, r.text, (SELECT COUNT(*) FROM mapping_relevant WHERE review_id = r.review_id) AS likes 
         FROM reviews r
         INNER JOIN games g ON g.game_id = r.game_id
         INNER JOIN mapping_genre mg ON mg.game_id = g.game_id

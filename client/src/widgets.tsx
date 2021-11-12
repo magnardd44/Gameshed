@@ -109,6 +109,33 @@ export class CategoryCard extends Component<{ title?: ReactNode; img: string }> 
   }
 }
 
+export class ReviewCard extends Component<{
+  title: ReactNode;
+  subtitle?: string;
+  text?: string;
+  terningkast?: number;
+  relevanse?: number;
+}> {
+  render() {
+    return (
+      <div className="card border-success my-2">
+        <div className="card-body">
+          <h5 className="card-title">{this.props.title + ' ' + this.props.terningkast}</h5>
+          <h6 className="card-subtitle mb-2 text-muted">Spill: {this.props.subtitle}</h6>
+          <Row>
+            <ColumnCentre width={10}>
+              <div className="card-text">{this.props.text?.substr(0, 175) + '...'}</div>
+            </ColumnCentre>
+            <ColumnCentre width={2}>
+              <div>{this.props.children}</div>
+            </ColumnCentre>
+          </Row>
+        </div>
+      </div>
+    );
+  }
+}
+
 /**
  * Renders a row using Bootstrap classes.
  */
