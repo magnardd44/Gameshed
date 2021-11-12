@@ -102,8 +102,8 @@ export class CategoryCard extends Component<{ title?: ReactNode; img: string }> 
             src={this.props.img}
             alt="Card image cap"
           />
-          {this.props.children}
         </div>
+        {this.props.children}
       </div>
     );
   }

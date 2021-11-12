@@ -102,7 +102,11 @@ export class GameCard extends Component<{ match: { params: { igdb_id: number; db
           </Row>
           <Row>
             {this.game.igdb?.screenshots_url.map((url, index) => {
-              return <ThumbNail img={url} key={index} />;
+              return (
+                <ColumnCentre width={12} smwidth={6} mdwidth={3}>
+                  <ThumbNail img={url} key={index} />
+                </ColumnCentre>
+              );
             })}
           </Row>
         </Card>
@@ -198,6 +202,7 @@ export class AddGame extends Component {
   genre: Genre = {
     genre_id: 0,
     genre_name: '',
+    genre_img: '',
   };
   genres: Genre[] = [];
 
