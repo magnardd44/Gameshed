@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { sharedComponentData } from 'react-simplified';
+import userService from './user-service'
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 
@@ -92,7 +93,7 @@ class ReviewService {
    * Resolves the newly created review id.
    */
   create(game_id: number, title: string, text: string, rating: number) {
-    return axios
+    return userService.axios
       .post<{ id: number }>('/reviews', {
         game_id: game_id,
         review_title: title,
