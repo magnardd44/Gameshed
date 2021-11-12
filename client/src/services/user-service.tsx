@@ -16,7 +16,9 @@ class UserService {
 	   axios;
 
 	   constructor () {
-		   this.axios = axios.create();
+		   this.axios = axios.create({
+				baseURL :  'http://localhost:3000/api/v2'
+			});
 		   this.axios.interceptors.request.use((config)=>{
 				   config.headers.common['Authorization'] = JSON.stringify(this.token)
 				   return config;
