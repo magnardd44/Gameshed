@@ -125,7 +125,7 @@ router.get('/reviews/:review_id/draft', (request, response) => {
     .catch((error) => response.status(500).send(error));
 });
 
-//Fetch individual review after it has been added and saved
+//Fetch published review
 router.get('/reviews/:review_id', (request, response) => {
   const id = Number(request.params.review_id);
   reviewService
