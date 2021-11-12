@@ -92,7 +92,7 @@ export class Card extends Component<{ title: ReactNode }> {
   }
 }
 
-export class CategoryCard extends Component<{ title: ReactNode; img: string }> {
+export class CategoryCard extends Component<{ title?: ReactNode; img: string }> {
   render() {
     return (
       <div className="card border-success my-2">
@@ -102,12 +102,7 @@ export class CategoryCard extends Component<{ title: ReactNode; img: string }> {
             src={this.props.img}
             alt="Card image cap"
           />
-          <h5 className="card-title">
-            <a href="" className="text-success">
-              {this.props.title}
-            </a>
-          </h5>
-          <div className="card-text">{this.props.title}</div>
+          {this.props.children}
         </div>
       </div>
     );
