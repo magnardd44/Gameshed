@@ -139,7 +139,6 @@ export class UserPersonal extends Component {
   render() {
     return (
       <>
-        <UserData />
         <Button.Success
           onClick={() => {
             userService.set_user().then(() => Alert.success(<>Oppdatert bruker</>));
@@ -174,7 +173,6 @@ export class UserRegister extends Component {
   render() {
     return (
       <>
-        <UserData />
         <Button.Success
           onClick={() => {
             let newPassword = prompt('Skriv inn passord');
@@ -196,6 +194,11 @@ export class UserRegister extends Component {
 
 export class UserPage extends Component {
   render() {
-    return <>{userService.token ? <UserPersonal /> : <UserRegister />}</>;
+    return (
+      <>
+        <UserData />
+        {userService.token ? <UserPersonal /> : <UserRegister />}
+      </>
+    );
   }
 }

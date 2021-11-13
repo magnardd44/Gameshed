@@ -7,7 +7,7 @@ export type Token = {
 };
 
 class UserService {
-  name: string = 'Anonym';
+  name: string = '';
   about: string = '';
   email: string = '';
 
@@ -46,7 +46,7 @@ class UserService {
         .post('user/logout')
         .then(() => {
           this.token = null;
-          this.name = 'Anonym';
+          this.name = '';
           this.about = '';
           this.email = '';
         })
@@ -65,8 +65,8 @@ class UserService {
       return this.axios
         .post('user/get')
         .then((response) => {
-          if (this.name) this.name = response.data.nick;
-          if (this.about) this.about = response.data.about;
+          this.name = response.data.nick || 'Anonym';
+          this.about = response.data.about || '';
           this.email = response.data.email;
         })
         .catch((err) => {
