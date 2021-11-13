@@ -91,7 +91,7 @@ export class Search extends Component {
                 if (this.input != '') {
                   return (
                     <div
-                      id={game.game_id}
+                      id={game.game_id.toString()}
                       key={game.game_id}
                       role="option"
                       className=" option"

@@ -6,6 +6,6 @@
     "jsx": "react",
     "strict": true,
     "sourceMap": true,
-    "types": ["node"]
+    "types": ["jest", "node"]
   }
 }
