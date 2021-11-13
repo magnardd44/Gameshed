@@ -120,7 +120,17 @@ export class ReviewCard extends Component<{
     return (
       <div className="card border-success my-2">
         <div className="card-body">
-          <h5 className="card-title">{this.props.title + ' ' + this.props.terningkast}</h5>
+          <h5 className="card-title">
+            {this.props.title + ' '}
+            <ThumbNail
+              small
+              img={
+                'https://helenaagustsson.github.io/INFT2002-images/images/dice-' +
+                this.props.terningkast +
+                '.png'
+              }
+            ></ThumbNail>
+          </h5>
           <h6 className="card-subtitle mb-2 text-muted">Spill: {this.props.subtitle}</h6>
           <Row>
             <ColumnCentre width={10}>
