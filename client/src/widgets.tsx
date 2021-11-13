@@ -119,25 +119,39 @@ export class ReviewCard extends Component<{
   render() {
     return (
       <div className="card border-success my-2">
-        <div className="card-body">
-          <h5 className="card-title">
-            {this.props.title + ' '}
+        <Row>
+          <Column width={2} offset={10} right>
             <ThumbNail
               small
-              img={
-                'https://helenaagustsson.github.io/INFT2002-images/images/dice-' +
-                this.props.terningkast +
-                '.png'
-              }
+              img={'https://helenaagustsson.github.io/INFT2002-images/images/star.png'}
             ></ThumbNail>
-          </h5>
-          <h6 className="card-subtitle mb-2 text-muted">Spill: {this.props.subtitle}</h6>
+
+            {' ' + this.props.relevanse}
+          </Column>
+        </Row>
+        <div className="card-body pt-0">
           <Row>
-            <ColumnCentre width={10}>
-              <div className="card-text">{this.props.text?.substr(0, 175) + '...'}</div>
+            <ColumnCentre width={11}>
+              <h5 className="card-title">
+                {this.props.title + ' '}
+                <ThumbNail
+                  small
+                  img={
+                    'https://helenaagustsson.github.io/INFT2002-images/images/dice-' +
+                    this.props.terningkast +
+                    '.png'
+                  }
+                ></ThumbNail>
+              </h5>
+              <h6 className="card-subtitle mb-2 text-muted">Spill: {this.props.subtitle}</h6>
             </ColumnCentre>
-            <ColumnCentre width={2}>
-              <div>{this.props.children}</div>
+          </Row>
+          <Row>
+            <ColumnCentre width={12}>
+              <div className="card-text">
+                {this.props.text?.substr(0, 175) + '... '}
+                {this.props.children}
+              </div>
             </ColumnCentre>
           </Row>
         </div>
@@ -183,10 +197,16 @@ export class ColumnCentre extends Component<{
  *
  * Properties: width, right
  */
-export class Column extends Component<{ width?: number; right?: boolean }> {
+export class Column extends Component<{ width?: number; right?: boolean; offset?: number }> {
   render() {
     return (
-      <div className={'col-sm' + (this.props.width ? '-' + this.props.width : '')}>
+      <div
+        className={
+          'col-sm' +
+          (this.props.width ? '-' + this.props.width : '') +
+          (this.props.offset ? ' offset-' + this.props.offset : '')
+        }
+      >
         <div className={'float-' + (this.props.right ? 'end' : 'start')}>{this.props.children}</div>
       </div>
     );
