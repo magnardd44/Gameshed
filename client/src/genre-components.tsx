@@ -103,6 +103,7 @@ export class Category extends Component {
                       text={review.text}
                     >
                       <Button.Success
+                        small
                         onClick={() => {
                           history.push('/publishedReviews/' + review.review_id);
                         }}
