@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { sharedComponentData } from 'react-simplified';
-import userService from './user-service'
+import userService from './user-service';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 

@@ -3,7 +3,7 @@ import { gameService } from './game-services';
 import { reviewService } from './review-service';
 import { genreService } from './genre-service';
 import { platformService } from './platform-service';
-import userService from './user-service'
+import userService from './user-service';
 
 /**
  * Express router containing task methods.
@@ -68,14 +68,17 @@ router.post('/reviews', (request, response) => {
   const data = request.body;
 
   if (data && data.review_title.length != 0 && data.game_id != 0)
-	  userService.verify(request.headers.authorization)
-		  .catch(err=>{response.status(401).send(err); throw(err)})
-		  .then((userId)=>
-			  reviewService
-				  .create(data.game_id, data.review_title, data.text, data.rating, userId)
-		  )
-		  .then((id) => response.send({ id: id }))
-		  .catch((error) => response.status(500).send(error));
+    userService
+      .verify(request.headers.authorization)
+      .catch((err) => {
+        response.status(401).send(err);
+        throw err;
+      })
+      .then((userId) =>
+        reviewService.create(data.game_id, data.review_title, data.text, data.rating, userId)
+      )
+      .then((id) => response.send({ id: id }))
+      .catch((error) => response.status(500).send(error));
   else response.status(400).send('Missing review title');
 
   //const data = request.body;
