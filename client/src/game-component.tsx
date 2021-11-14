@@ -20,6 +20,7 @@ import { createHashHistory } from 'history';
 import { platform } from 'os';
 import { Platform, platformService } from './services/platform-service';
 import axios from 'axios';
+import { RelatedReviews } from './related-reviews';
 // import Select from 'react-select';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
@@ -40,86 +41,90 @@ export class GameCard extends Component<{ match: { params: { igdb_id: number; db
 
   render() {
     return (
-      <Container>
-        <Card title={this.game.game_title}>
-          <h6 className="card-subtitle mb-2 text-muted">
-            Terningkast:
-            <ThumbNail
-              small
-              img="https://cdn-icons-png.flaticon.com/512/220/220725.png"
-            ></ThumbNail>
-          </h6>
-          <Row>
-            <Column width={2}>
-              <ThumbNail
-                img={
-                  this.game.igdb?.cover_url ||
-                  'https://cdn-icons-png.flaticon.com/512/686/686589.png'
-                }
-              ></ThumbNail>
-            </Column>
-            <Column width={6}>
-              {this.game.game_description}
-              <Linebreak></Linebreak>
-            </Column>
-            <Column width={2}></Column>
-          </Row>
-          <Linebreak></Linebreak>
-          <Row>
-            <Column>
-              Sjanger: {this.game.genre.reduce((p, c) => (p == '' ? c : p + ', ' + c), '')}
-            </Column>
-          </Row>
-          <Linebreak></Linebreak>
-          <Row>
-            <Column>
-              Plattformer: {this.game.platform.reduce((p, c) => (p == '' ? c : p + ', ' + c), '')}
-            </Column>
-          </Row>
-          <Row>
-            <Column>
-              Årstall:{' '}
-              {this.game.igdb ? new Date(this.game.igdb?.release_date * 1000).getFullYear() : ''}
-            </Column>
-          </Row>
-          <Row>
-            <Column>
-              Rating (1-6):{' '}
-              {this.game.igdb ? Math.ceil((this.game.igdb?.aggregated_rating * 6) / 100) : ''}
-            </Column>
-          </Row>
-          <Row>
-            <Column>
-              Lignende spill:{' '}
-              {this.game.igdb?.similar_games.map((e, i) => {
+      <>
+        <Container>
+          <Card title={this.game.game_title}>
+            <h6 className="card-subtitle mb-2 text-muted">
+              <ColumnCentre>
+                Terningkast:{' '}
+                <ThumbNail
+                  small
+                  img={
+                    'https://helenaagustsson.github.io/INFT2002-images/images/dice-' +
+                    this.rating() +
+                    '.png'
+                  }
+                ></ThumbNail>
+              </ColumnCentre>
+            </h6>
+            <Row>
+              <ColumnCentre width={12} mdwidth={2}>
+                <ThumbNail
+                  img={
+                    this.game.igdb?.cover_url ||
+                    'https://cdn-icons-png.flaticon.com/512/686/686589.png'
+                  }
+                ></ThumbNail>
+              </ColumnCentre>
+              <ColumnCentre width={12} mdwidth={10}>
+                {this.game.game_description}
+                <Linebreak></Linebreak>
+              </ColumnCentre>
+              <ColumnCentre width={2}></ColumnCentre>
+            </Row>
+            <Linebreak></Linebreak>
+            <Row>
+              <ColumnCentre>
+                Sjanger: {this.game.genre.reduce((p, c) => (p == '' ? c : p + ', ' + c), '')}
+              </ColumnCentre>
+            </Row>
+            <Row>
+              <ColumnCentre>
+                Plattformer: {this.game.platform.reduce((p, c) => (p == '' ? c : p + ', ' + c), '')}
+              </ColumnCentre>
+            </Row>
+            <Row>
+              <ColumnCentre>
+                Årstall:{' '}
+                {this.game.igdb ? new Date(this.game.igdb?.release_date * 1000).getFullYear() : ''}
+              </ColumnCentre>
+            </Row>
+            <Row>
+              <ColumnCentre>
+                Lignende spill:{' '}
+                {this.game.igdb?.similar_games.map((e, i) => {
+                  return (
+                    <a key={i} href={'http://localhost:3000/#/games/0/' + e.id}>
+                      {e.name},{' '}
+                    </a>
+                  );
+                })}
+              </ColumnCentre>
+            </Row>
+            <Row>
+              {this.game.igdb?.screenshots_url.map((url, index) => {
                 return (
-                  <a key={i} href={'http://localhost:3000/#/games/0/' + e.id}>
-                    {e.name},{' '}
-                  </a>
+                  <ColumnCentre width={12} smwidth={6} mdwidth={3}>
+                    <ThumbNail img={url} key={index} />
+                  </ColumnCentre>
                 );
               })}
+            </Row>
+          </Card>
+          <Linebreak></Linebreak>
+          <Row>
+            <Column>
+              <Button.Danger onClick={() => history.push('/')}>Tilbake til søk</Button.Danger>
+            </Column>
+            <Column right={true}>
+              <Button.Success onClick={() => this.addReview()}>Anmeld dette spillet</Button.Success>
             </Column>
           </Row>
-          <Row>
-            {this.game.igdb?.screenshots_url.map((url, index) => {
-              return (
-                <ColumnCentre width={12} smwidth={6} mdwidth={3}>
-                  <ThumbNail img={url} key={index} />
-                </ColumnCentre>
-              );
-            })}
-          </Row>
-        </Card>
-        <Linebreak></Linebreak>
-        <Row>
-          <Column>
-            <Button.Danger onClick={() => history.push('/')}>Tilbake til søk</Button.Danger>
-          </Column>
-          <Column right={true}>
-            <Button.Success onClick={() => this.addReview()}>Anmeld dette spillet</Button.Success>
-          </Column>
-        </Row>
-      </Container>
+        </Container>
+        <Container>
+          <RelatedReviews></RelatedReviews>
+        </Container>
+      </>
     );
   }
 
@@ -187,6 +192,12 @@ export class GameCard extends Component<{ match: { params: { igdb_id: number; db
   }
   addReview() {
     history.push(`/addReview/${this.game.game_id}/${this.game.igdb_id}`);
+  }
+  rating() {
+    let terningkast = this.game.igdb
+      ? Math.ceil((this.game.igdb?.aggregated_rating * 6) / 100)
+      : '';
+    return terningkast;
   }
 }
 

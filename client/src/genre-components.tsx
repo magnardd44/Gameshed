@@ -23,6 +23,7 @@ import { createHashHistory } from 'history';
 import axios from 'axios';
 import { genreService } from './services/genre-service';
 import { Review, reviewService } from './services/review-service';
+import { RelatedReviews } from './related-reviews';
 
 const history = createHashHistory();
 
@@ -67,57 +68,59 @@ export class Category extends Component {
   }
   render() {
     return (
-      <Container>
-        Velg kategori/sjanger:
-        <Row>
-          <ColumnCentre width={6} smwidth={4} mdwidth={2}>
-            {this.genres.map((genre) => (
-              <CategoryCard
-                key={genre.genre_id}
-                img={
-                  genre.genre_img
-                    ? 'https://helenaagustsson.github.io/INFT2002-images/images/' +
-                      genre.genre_img +
-                      '.png'
-                    : 'https://helenaagustsson.github.io/INFT2002-images/images/' +
-                      genre.genre_name +
-                      '.png'
-                }
-              >
-                <Button.Success onClick={() => this.genreCall(genre.genre_id)}>
-                  {genre.genre_name}
-                </Button.Success>
-              </CategoryCard>
-            ))}
-          </ColumnCentre>
-          <ColumnCentre>
-            {this.state.isHidden ? null : (
-              <div className="sticky-top">
-                {this.reviews.map((review, index) => (
-                  <Row key={index}>
-                    <ReviewCard
-                      title={review.review_title}
-                      subtitle={review.game_title}
-                      terningkast={review.rating}
-                      relevanse={review.likes}
-                      text={review.text}
-                    >
-                      <Button.Success
-                        small
-                        onClick={() => {
-                          history.push('/publishedReviews/' + review.review_id);
-                        }}
+      <>
+        <Container>
+          Velg kategori/sjanger:
+          <Row>
+            <ColumnCentre width={6} smwidth={4} mdwidth={2}>
+              {this.genres.map((genre) => (
+                <CategoryCard
+                  key={genre.genre_id}
+                  img={
+                    genre.genre_img
+                      ? 'https://helenaagustsson.github.io/INFT2002-images/images/' +
+                        genre.genre_img +
+                        '.png'
+                      : 'https://helenaagustsson.github.io/INFT2002-images/images/' +
+                        genre.genre_name +
+                        '.png'
+                  }
+                >
+                  <Button.Success onClick={() => this.genreCall(genre.genre_id)}>
+                    {genre.genre_name}
+                  </Button.Success>
+                </CategoryCard>
+              ))}
+            </ColumnCentre>
+            <ColumnCentre>
+              {this.state.isHidden ? null : (
+                <div className="sticky-top">
+                  {this.reviews.map((review, index) => (
+                    <Row key={index}>
+                      <ReviewCard
+                        title={review.review_title}
+                        subtitle={review.game_title}
+                        terningkast={review.rating}
+                        relevanse={review.likes}
+                        text={review.text}
                       >
-                        Les mer
-                      </Button.Success>
-                    </ReviewCard>
-                  </Row>
-                ))}
-              </div>
-            )}
-          </ColumnCentre>
-        </Row>
-      </Container>
+                        <Button.Success
+                          small
+                          onClick={() => {
+                            history.push('/publishedReviews/' + review.review_id);
+                          }}
+                        >
+                          Les mer
+                        </Button.Success>
+                      </ReviewCard>
+                    </Row>
+                  ))}
+                </div>
+              )}
+            </ColumnCentre>
+          </Row>
+        </Container>
+      </>
     );
   }
   mounted() {
