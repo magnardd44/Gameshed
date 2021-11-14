@@ -122,7 +122,7 @@ export class GameCard extends Component<{ match: { params: { igdb_id: number; db
           </Row>
         </Container>
         <Container>
-          <RelatedReviews></RelatedReviews>
+          <RelatedReviews genre_id={1}></RelatedReviews>
         </Container>
       </>
     );
@@ -189,6 +189,7 @@ export class GameCard extends Component<{ match: { params: { igdb_id: number; db
         })
         .catch();
     }
+    console.log('sjanger' + this.game.genre);
   }
   addReview() {
     history.push(`/addReview/${this.game.game_id}/${this.game.igdb_id}`);

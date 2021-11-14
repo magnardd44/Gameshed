@@ -22,11 +22,14 @@ import { createHashHistory } from 'history';
 import { platform } from 'os';
 import { Platform, platformService } from './services/platform-service';
 import axios from 'axios';
+
 // import Select from 'react-select';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
-export class RelatedReviews extends Component {
+export class RelatedReviews extends Component<{ game_id?: number; genre_id?: number }> {
+  reviews: Review[] = [];
+  publishedreviews: Review[] = [];
   review: Review = {
     review_id: 0,
     game_id: 0,
@@ -41,28 +44,51 @@ export class RelatedReviews extends Component {
     platform_id: 0,
     likes: 0,
   };
+
   render() {
     return (
       <Container>
-        <Row></Row>
-        <ColumnCentre width={4}>
-          <ReviewCard
-            title={this.review.review_title}
-            subtitle={this.review.game_title}
-            terningkast={this.review.rating}
-            relevanse={this.review.likes}
-            text={this.review.text}
-          ></ReviewCard>
-        </ColumnCentre>
+        <Row>
+          <h5>Relaterte anmeldelser</h5>
+          <ColumnCentre width={4}>
+            <ReviewCard
+              title={this.review.review_title}
+              subtitle={this.review.game_title}
+              terningkast={this.review.rating}
+              relevanse={this.review.likes}
+              text={this.review.text}
+            ></ReviewCard>
+          </ColumnCentre>
+        </Row>
+        <Row>
+          {this.reviews.map((review) => {
+            <ColumnCentre width={4}>
+              <ReviewCard
+                title={review.review_title}
+                subtitle={review.game_title}
+                terningkast={review.rating}
+                relevanse={review.likes}
+                text={review.text}
+              ></ReviewCard>
+            </ColumnCentre>;
+          })}
+        </Row>
       </Container>
     );
   }
+
   mounted() {
+    reviewService.getGenre(1).then((reviews) => {
+      this.reviews = reviews;
+      console.log('reviews' + this.reviews[0]);
+    });
+
     reviewService
-      .getComplete(1, true)
+      .get(1)
       .then((review) => {
         this.review = review;
+        console.log('reviews' + this.reviews[0]);
       })
-      .catch((error) => Alert.danger('Error getting reviews: ' + error.message));
+      .catch((error) => Alert.danger('Error retrieving reviews: ' + error.message));
   }
 }
