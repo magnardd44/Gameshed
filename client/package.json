@@ -24,6 +24,7 @@
     "child_process": "^1.0.2",
     "react-dropdown-input": "^0.1.11",
     "react-router-dom": "^5.2.0",
+    "react-share": "^4.4.0",
     "react-simplified": "^3.0.0"
   },
   "devDependencies": {
