@@ -22,6 +22,8 @@ import axios from 'axios';
 import { genreService } from './services/genre-service';
 import { platformService } from './services/platform-service';
 
+import { FacebookShareButton, FacebookIcon, EmailShareButton, EmailIcon } from 'react-share';
+
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
 //Renders an overvew of all published reviews
@@ -823,8 +825,17 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
     platform_id: 0,
     likes: 0,
   };
+
   counter: number = 0;
   render() {
+    const shareButtonProps = {
+      url: 'https://localhost:3000/#/publishedReviews/' + this.review.review_id,
+      network: 'Facebook',
+      text: 'Tror du vil like denne anmeldelsen',
+      longtext:
+        'Social sharing buttons for React. Use one of the build-in themes or create a custom one from the scratch.',
+    };
+
     return (
       <>
         <Card title="Anmeldelse">
@@ -840,7 +851,7 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
             <Column width={2}>Plattform:</Column>
             <Column>Hentes fra IGDB</Column>
           </Row>
-
+          <Linebreak />
           <Row>
             <Column width={12}>
               <div>
@@ -848,19 +859,21 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
               </div>
             </Column>
           </Row>
+          <Linebreak />
           <Row>
             <Column width={12}>
               <div>{this.review.text}</div>
             </Column>
           </Row>
+          <Linebreak />
           <Row>
             <Column width={12}>
               <div>Terningkast: {this.review.rating}</div>
             </Column>
           </Row>
+          <Linebreak />
           <Row>
-            <Column></Column>
-            <Column>
+            <Column width={1}>
               <Button.Success
                 onClick={() => {
                   this.counter = this.counter == 0 ? 1 : 0;
@@ -870,7 +883,24 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
                 Like
               </Button.Success>
             </Column>
-            <Column>{this.counter}</Column>
+            <Column width={1}>{this.counter}</Column>
+            <Column></Column>
+            <Column width={2}>
+              <div> Del denne anmeldelsen:</div>
+            </Column>
+            <Column width={1}>
+              <FacebookShareButton {...shareButtonProps}>
+                <FacebookIcon size="40" round />
+              </FacebookShareButton>
+            </Column>
+            <Column width={1}>
+              <EmailShareButton
+                {...shareButtonProps}
+                subject="Tror du vil like denne spillanmeldelsen!"
+              >
+                <EmailIcon size="40" round />
+              </EmailShareButton>
+            </Column>
           </Row>
         </Card>
       </>
