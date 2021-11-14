@@ -63,7 +63,7 @@ class UserService {
   get_user() {
     if (this.token) {
       return this.axios
-        .post('user/get')
+        .get('user')
         .then((response) => {
           this.name = response.data.nick || 'Anonym';
           this.about = response.data.about || '';
@@ -106,7 +106,7 @@ class UserService {
   delete() {
     if (this.token) {
       this.axios
-        .post('user/delete')
+        .delete('user/')
         .then((response) => {
           this.token = null;
           this.name = 'Anonym';

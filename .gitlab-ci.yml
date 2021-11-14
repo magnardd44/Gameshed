@@ -1,11 +1,11 @@
 image: node:latest # Use a docker image from https://hub.docker.com with latest Node.js already installed
 
-variables:
-  # Configure server/src/mysql-pool.ts
-  MYSQL_HOST: localhost
-  MYSQL_USER: root # Docker commands are run as root
-  MYSQL_PASSWORD: '' # Default root password is empty string
-  MYSQL_DATABASE: todo_test
+#variables:
+#  # Configure server/src/mysql-pool.ts
+#  MYSQL_HOST: localhost
+#  MYSQL_USER: root # Docker commands are run as root
+#  MYSQL_PASSWORD: '' # Default root password is empty string
+#  MYSQL_DATABASE: todo_test
 
 stages:
   - build # Jobs placed in build stage will run first
@@ -45,17 +45,17 @@ typescript:
 test:
   stage: test # The test job will run in parallel with the typescript and prettier jobs
   script:
-    - apt-get update
-    - apt-get -y upgrade
-    - apt-get -y install default-mysql-server
-    - service mysql start
-    # Workaround from https://github.com/mysqljs/mysql/issues/1507#issuecomment-242885003
-    - echo "UPDATE user SET authentication_string=password(''), plugin='mysql_native_password' WHERE
-      user='root';" | mysql mysql
-    - mysqladmin create $MYSQL_DATABASE
-    # Create database table
-    - echo "CREATE TABLE Tasks (id INT NOT NULL AUTO_INCREMENT, title TEXT NOT NULL, done BOOL
-      DEFAULT false, PRIMARY KEY(id));" | mysql $MYSQL_DATABASE
+#    - apt-get update
+#    - apt-get -y upgrade
+#    - apt-get -y install default-mysql-server
+#    - service mysql start
+#    # Workaround from https://github.com/mysqljs/mysql/issues/1507#issuecomment-242885003
+#    - echo "UPDATE user SET authentication_string=password(''), plugin='mysql_native_password' WHERE
+#      user='root';" | mysql mysql
+#    - mysqladmin create $MYSQL_DATABASE
+#    # Create database table
+#    - echo "CREATE TABLE Tasks (id INT NOT NULL AUTO_INCREMENT, title TEXT NOT NULL, done BOOL
+#      DEFAULT false, PRIMARY KEY(id));" | mysql $MYSQL_DATABASE
 
     - cd server/test
     - touch config.ts

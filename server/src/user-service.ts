@@ -31,11 +31,24 @@ class UserService {
     return new Promise<User>((resolve, reject) => {
       pool.query('SELECT * FROM users WHERE user_id=?', [id], (error, results) => {
         if (error) return reject(error);
-        resolve({
-          nick: results[0].user_nickname,
-          about: results[0].user_about,
-          email: results[0].email,
-        });
+        try {
+          resolve({
+            nick: results[0].user_nickname,
+            about: results[0].user_about,
+            email: results[0].email,
+          });
+        } catch {
+          reject('Userdata not found');
+        }
+      });
+    });
+  }
+
+  get_all() {
+    return new Promise<User[]>((resolve, reject) => {
+      pool.query('SELECT * FROM users', (error, results) => {
+        if (error) return reject(error);
+        resolve(results);
       });
     });
   }
@@ -125,24 +138,24 @@ class UserService {
     });
   }
 
-  get_login_debug() {
-    return new Promise<Token[]>((resolve, reject) => {
-      resolve(this.users_logged_in);
-    });
-  }
-
-  get_debug(id: number) {
-    return new Promise<User>((resolve, reject) => {
-      pool.query('SELECT * FROM users WHERE user_id=?', [id], (error, results) => {
-        if (error) return reject(error);
-        resolve({
-          nick: results[0].user_nickname,
-          about: results[0].user_about,
-          email: results[0].email,
-        });
-      });
-    });
-  }
+  //  get_login_debug() {
+  //    return new Promise<Token[]>((resolve, reject) => {
+  //      resolve(this.users_logged_in);
+  //    });
+  //  }
+  //
+  //  get_debug(id: number) {
+  //    return new Promise<User>((resolve, reject) => {
+  //      pool.query('SELECT * FROM users WHERE user_id=?', [id], (error, results) => {
+  //        if (error) return reject(error);
+  //        resolve({
+  //          nick: results[0].user_nickname,
+  //          about: results[0].user_about,
+  //          email: results[0].email,
+  //        });
+  //      });
+  //    });
+  //  }
 }
 
 const userService = new UserService();
