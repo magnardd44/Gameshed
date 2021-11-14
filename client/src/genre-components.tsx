@@ -62,6 +62,7 @@ export class Category extends Component {
       .getGenre(id)
       .then((data) => {
         this.reviews = data;
+        console.log(this.reviews);
       })
       .catch((error) => Alert.danger('Error retrieving reviews: ' + error.message));
     this.setState({ isHidden: false });
@@ -129,6 +130,6 @@ export class Category extends Component {
       .then((genres) => {
         this.genres = genres;
       })
-      .catch((error) => Alert.danger('Error getting reviews: ' + error.message));
+      .catch((error) => Alert.danger('Error getting genres: ' + error.message));
   }
 }
