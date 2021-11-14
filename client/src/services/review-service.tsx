@@ -107,7 +107,7 @@ class ReviewService {
 
   //Change review status to published
   publish(id: number) {
-    return axios
+    return userService.axios
       .patch<Review>('/reviews/' + id + '/publish')
       .then((response) => response.data.review_id);
   }
@@ -123,7 +123,7 @@ class ReviewService {
 
   //Edit review before publishing
   edit(id: number, title: string, text: string, rating: number) {
-    return axios
+    return userService.axios
       .patch<Review>('/reviews/' + id, { title: title, text: text, rating: rating })
       .then((response) => response.data);
   }

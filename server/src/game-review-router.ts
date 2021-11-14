@@ -75,7 +75,7 @@ router.post('/reviews', (request, response) => {
         throw err;
       })
       .then((userId) =>
-        reviewService.create(data.game_id, data.review_title, data.text, data.rating, userId)
+        reviewService.create(data.game_id, data.review_title, data.text, data.rating, userId, false)
       )
       .then((id) => response.send({ id: id }))
       .catch((error) => response.status(500).send(error));

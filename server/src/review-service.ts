@@ -3,7 +3,7 @@ import pool from './mysql-pool';
 
 export type Review = {
   review_id: number;
-  game_id: string;
+  game_id: number;
   game_title: string;
   review_title: string;
   text: string;
@@ -19,7 +19,7 @@ export type Review = {
 class ReviewService {
   review: Review = {
     review_id: 0,
-    game_id: '',
+    game_id: 0,
     game_title: '',
     review_title: '',
     text: '',
@@ -38,11 +38,18 @@ class ReviewService {
    *
    
    */
-  create(game_id: number, review_title: string, text: string, rating: number, user_id: number) {
+  create(
+    game_id: number,
+    review_title: string,
+    text: string,
+    rating: number,
+    user_id: number,
+    published: boolean
+  ) {
     return new Promise<number>((resolve, reject) => {
       pool.query(
-        'INSERT INTO reviews SET game_id=?, review_title=?, text=?, rating=?, published=0, user_id=?',
-        [game_id, review_title, text, rating, user_id],
+        'INSERT INTO reviews SET game_id=?, review_title=?, text=?, rating=?, published=?, user_id=?',
+        [game_id, review_title, text, rating, published, user_id],
         (error, results) => {
           if (error) return reject(error);
 
