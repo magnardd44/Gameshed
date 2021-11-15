@@ -68,7 +68,7 @@ class ReviewService {
         (error, results) => {
           if (error) return reject(error);
 
-          resolve(Number(results.insertId));
+          resolve(review_id);
         }
       );
     });

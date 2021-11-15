@@ -15,6 +15,7 @@ export type Token = {
 
 class UserService {
   users_logged_in: Token[] = [];
+  axios: any;
 
   create_hash(password: string, salt: string) {
     let hashed: string = salt + password;
