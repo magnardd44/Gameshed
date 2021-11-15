@@ -28,7 +28,7 @@ import { RelatedReviews } from './related-reviews';
 
 const history = createHashHistory();
 
-export class Category extends Component {
+export class Platform extends Component {
   genres: Genre[] = [];
   reviews: Review[] = [];
   games: Game[] = [];
