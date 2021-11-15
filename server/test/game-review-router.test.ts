@@ -1,10 +1,10 @@
 import axios from 'axios';
 import pool from '../src/mysql-pool';
 import app from '../src/app';
-import { Review, reviewService } from '../src/review-service';
-import userService, { Token } from '../src/user-service';
-import { gameService } from '../src/game-services';
-import { genreService } from '../src/genre-service';
+import { Review, reviewService } from '../src/services/review-service';
+import userService, { Token } from '../src/services/user-service';
+import { gameService } from '../src/services/game-services';
+import { genreService } from '../src/services/genre-service';
 
 // // Since API is not compatible with v1, API version is increased to v2
 axios.defaults.baseURL = 'http://localhost:3001/api/v2';

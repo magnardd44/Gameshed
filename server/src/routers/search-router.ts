@@ -1,5 +1,5 @@
 import express from 'express';
-import searchService from './search-service';
+import searchService from '../services/search-service';
 
 const searchRouter = express.Router();
 

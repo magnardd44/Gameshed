@@ -1,5 +1,9 @@
 import express from 'express';
-import userService from './user-service';
+import userService from '../services/user-service';
+
+/**
+ * Express router containing user methods.
+ */
 
 const userRouter = express.Router();
 

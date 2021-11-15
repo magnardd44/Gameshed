@@ -1,4 +1,4 @@
-import pool from './mysql-pool';
+import pool from '../mysql-pool';
 
 export type Platform = {
   platform_id: number;
