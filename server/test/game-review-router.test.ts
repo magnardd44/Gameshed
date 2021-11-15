@@ -2,6 +2,9 @@ import axios from 'axios';
 import pool from '../src/mysql-pool';
 import app from '../src/app';
 import { Review, reviewService } from '../src/review-service';
+import userService, { Token } from '../src/user-service';
+import { gameService } from '../src/game-services';
+import { genreService } from '../src/genre-service';
 
 // // Since API is not compatible with v1, API version is increased to v2
 axios.defaults.baseURL = 'http://localhost:3001/api/v2';
@@ -14,6 +17,11 @@ jest.mock('../src/mysql-pool', () => {
     user: 'solveol_gameshed',
     password: 'gameshed',
     database: 'solveol_test',
+  });
+});
+userService.verify = jest.fn(() => {
+  return new Promise((resolve: any, reject: any) => {
+    resolve(890);
   });
 });
 
@@ -78,8 +86,8 @@ const testReviews: Review[] = [
 
 let webServer: any;
 beforeAll((done) => {
-  // Use separate port for testing
   webServer = app.listen(3001, () => done());
+  // Use separate port for testing
 });
 
 beforeEach((done) => {
@@ -156,6 +164,23 @@ describe('Fetch  reviews (GET)', () => {
 
       done();
     });
+
+    // const createGame = async () => {
+    //   const game_id = await gameService.create(11, 'test-game1', 'dette er et testspill');
+    //   const genre_id = await genreService.create('adventure');
+    //   await genreService.updateGenreMap(game_id, genre_id);
+    // };
+
+    // test('Fetch reviews according to genre (200 OK)', () => {
+    //   createGame().then(() => {
+    //     axios.get('/genreReviews').then((response) => {
+    //       expect(response.status).toEqual(200);
+    //       expect(response.data[0].genre_id).toEqual(testReviews[0].genre_id);
+
+    //       done();
+    //     });
+    //   });
+    // });
   });
 
   //Test getting a single complete review
@@ -171,42 +196,51 @@ describe('Fetch  reviews (GET)', () => {
   test('Fetch task (404 Not Found)', (done) => {
     axios
       .get('/reviews/4')
-      .then((_response) => done.fail(new Error()))
+      .then((response) => done.fail(new Error()))
       .catch((error) => {
         expect(error.message).toEqual('Request failed with status code 404');
         done();
       });
   });
+});
 
-  describe('Create new review (POST)', () => {
-    test('Create new review (200 OK)', (done) => {
-      axios
-        .post('/reviews', {
-          review_title: 'Ny testanmeldelse',
-          text: 'Dette er en ny testanmeldelse fra Solveig',
-          rating: 6,
-        })
-        .then((response) => {
-          expect(response.status).toEqual(200);
-          // expect(response.data).toEqual({ id: 4 });
-          done();
-        });
+describe('Create new review (POST)', () => {
+  test('Create new review (200 OK)', (done) => {
+    axios
+      .post('/reviews', {
+        review_title: 'Ny testanmeldelse',
+        text: 'Dette er en ny testanmeldelse fra Solveig',
+        rating: 6,
+      })
+      .then((response: any) => {
+        expect(response.status).toEqual(200);
+        // expect(response.data).toEqual({ id: 4 });
+        done();
+      });
+  });
+});
+
+describe('Delete review (DELETE)', () => {
+  test('Delete review (200 OK)', (done) => {
+    axios.delete('/reviews/' + testReviews[0].review_id).then((response) => {
+      expect(response.status).toEqual(200);
+      done();
     });
   });
-
-  // describe('Delete task (DELETE)', () => {
-  //   test('Delete task (200 OK)', (done) => {
-  //     axios.delete('/tasks/2').then((response) => {
-  //       expect(response.status).toEqual(200);
-  //       done();
-  //     });
-  //   });
-  // });
-  // //Test Edit task
-  // describe('Update task(PATCH)', () => {
-  //   test('Update task', (done) => {
-  //     axios.patch('/tasks/1', { done: true }).then((response) => {
-  //       expect(response.status).toEqual(200);
-  //     });
-  //   });
 });
+
+// //Test Edit review
+// describe('Update review(PATCH)', () => {
+//   test('Update review', (done) => {
+//     axios
+//       .patch('/reviews/' + testReviews[0].review_id, {
+//         title: 'Dette er en test2',
+//         text: 'test',
+//         rating: 3,
+//         done: true,
+//       })
+//       .then((response) => {
+//         expect(response.status).toEqual(200);
+//       });
+//   });
+// });
