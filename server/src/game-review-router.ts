@@ -10,6 +10,19 @@ import userService from './user-service';
  */
 const router = express.Router();
 
+router.get('/games/search/:searchString', (request, response) => {
+  const searchString = request.params.searchString;
+
+  gameService
+    .search(searchString)
+    .then((rows) => {
+      response.send(rows);
+    })
+    .catch((error) => {
+      response.status(500).send(error);
+    });
+});
+
 router.get('/games', (_request, response) => {
   gameService
     .getAll()

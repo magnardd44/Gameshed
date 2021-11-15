@@ -52,11 +52,29 @@ class SearchService {
         'Client-ID': process.env.IGDB_CLIENT_ID,
         Authorization: this.token.token_type + ' ' + this.token.access_token,
       },
-      data:
-        'search "' + game + '"; fields name,summary,cover.url,aggregated_rating,genres,platforms;',
+      data: 'search "' + game + '"; fields ' + this.gameFields + ',' + this.extraFields + ';', //cover.url,aggregated_rating;',
     })
       .then((response) => {
-        return response.data;
+        return response.data.map((g: any) => {
+          return {
+            game_id: 0,
+            igdb_id: g.id,
+            game_title: g.name,
+            genre: g.genres?.map((e: any) => e.name),
+            platform: g.platforms?.map((e: any) => e.name),
+            game_description: g.summary,
+            igdb: {
+              cover_url: 'http:' + g.cover?.url,
+              aggregated_rating: g.aggregated_rating,
+              screenshots_url: g.screenshots?.map(
+                (e: any) =>
+                  'https://images.igdb.com/igdb/image/upload/t_original/' + e.image_id + '.jpg'
+              ),
+              similar_games: g.similar_games?.map((e: any) => e),
+              release_date: g.first_release_date,
+            },
+          };
+        });
       })
       .catch((err) => {
         console.error(err);
@@ -144,7 +162,7 @@ class SearchService {
           igdb: {
             cover_url: 'http:' + response.data[0].cover.url,
             aggregated_rating: response.data[0].aggregated_rating,
-            screenshots_url: response.data[0].screenshots.map(
+            screenshots_url: response.data[0].screenshots?.map(
               (e: any) =>
                 'https://images.igdb.com/igdb/image/upload/t_original/' + e.image_id + '.jpg'
             ),

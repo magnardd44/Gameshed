@@ -92,7 +92,7 @@ export class GameCard extends Component<{ match: { params: { igdb_id: number; db
             <Row>
               <ColumnCentre>
                 Lignende spill:{' '}
-                {this.game.igdb?.similar_games.map((e, i) => {
+                {this.game.igdb?.similar_games?.map((e, i) => {
                   return (
                     <a key={i} href={'http://localhost:3000/#/games/0/' + e.id}>
                       {e.name},{' '}
@@ -102,7 +102,7 @@ export class GameCard extends Component<{ match: { params: { igdb_id: number; db
               </ColumnCentre>
             </Row>
             <Row>
-              {this.game.igdb?.screenshots_url.map((url, index) => {
+              {this.game.igdb?.screenshots_url?.map((url, index) => {
                 return (
                   <ColumnCentre width={12} smwidth={6} mdwidth={3}>
                     <ThumbNail img={url} key={index} />

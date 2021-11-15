@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Alert } from '../widgets';
 import { sharedComponentData } from 'react-simplified';
 
 export type Token = {
@@ -25,6 +26,15 @@ class UserService {
         return config;
       },
       (error) => Promise.reject(error)
+    );
+    this.axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response.status == 401) {
+          Alert.info('Vennligst logg inn.');
+        }
+        return Promise.reject(error);
+      }
     );
   }
 
