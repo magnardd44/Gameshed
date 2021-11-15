@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Form, Card, Alert, Button, Container } from './widgets';
+import { Form, Card, Alert, Button, Container, Column } from './widgets';
 import userService from './services/user-service';
 import { history } from './index';
 
@@ -11,6 +11,7 @@ export class UserNav extends Component {
     return (
       <>
         <Button.Success
+          small
           onClick={() => {
             userService.login('admin', 'admin').then(() => Alert.success(<>Logged inn as admin</>));
             //this.password = '';
@@ -31,6 +32,7 @@ export class UserNav extends Component {
         {userService.token ? (
           // If user logged in
           <Button.Success
+            small
             onClick={() => {
               userService.logout();
               userService.email = '';
@@ -53,6 +55,7 @@ export class UserNav extends Component {
           //            ///>
           //			}
           <Button.Success
+            small
             onClick={() => {
               console.log(userService.email.length ? true : false);
               let password = prompt('Skriv inn passord');
@@ -71,6 +74,7 @@ export class UserNav extends Component {
           //</>
         )}
         <Button.Success
+          small
           onClick={() => {
             history.push('/user');
             //if(history.location.pathname != '/user')  history.push('/user')

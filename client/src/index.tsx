@@ -8,11 +8,14 @@ import {
   Form,
   Column,
   Button,
+  JustifiedNavBar,
   NavBar,
-  Header,
+  NavBarLink,
   Container,
   ColumnCentre,
+  Heading,
 } from './widgets';
+import { NavLink } from 'react-router-dom';
 import axios from 'axios';
 import { HashRouter, Route } from 'react-router-dom';
 import {
@@ -38,25 +41,32 @@ axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 export const history = createHashHistory();
 
 /**<NavBar.Link to="/games">Games</NavBar.Link>
- *  <Row>
-            <ColumnCentre width={12}></ColumnCentre>
-            <NavBar brand="GS"></NavBar>
-            <UserNav />
-          </Row>
+ *  <div>
+          <nav className="navbar navbar-expand-sm navbar-light bg-light">
+            <div className="container-fluid justify-content-end">
+              <NavLink className="navbar-brand" activeClassName="active" exact to="/"></NavLink>
+              <div className="navbar-nav">
+                <UserNav />
+              </div>
+            </div>
+          </nav>
+        </div>
  * 
  */
 class NavHeader extends Component {
   render() {
     return (
-      <Container>
+      <>
+        <JustifiedNavBar justify="end">
+          <UserNav />
+        </JustifiedNavBar>
+        <JustifiedNavBar justify="start" brand="GS">
+          <NavBarLink to="">Søk</NavBarLink>
+        </JustifiedNavBar>
         <Row>
-          <NavBar brand="GS">
-            {' '}
-            <UserNav />
-          </NavBar>
+          <Heading header></Heading>
         </Row>
-        <Header header></Header>
-      </Container>
+      </>
     );
   }
 }

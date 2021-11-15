@@ -8,7 +8,7 @@ import { NavLink } from 'react-router-dom';
  * 
                   
  */
-export class Header extends Component<{ header?: boolean }> {
+export class Heading extends Component<{ header?: boolean }> {
   render() {
     return (
       <div
@@ -348,7 +348,7 @@ export class Button {
  *
  * Properties: to
  */
-class NavBarLink extends Component<{ to: string }> {
+export class NavBarLink extends Component<{ to: string }> {
   render() {
     return (
       <NavLink className="nav-link" activeClassName="active" to={this.props.to}>
@@ -363,7 +363,24 @@ class NavBarLink extends Component<{ to: string }> {
  *
  * Properties: brand
  */
-export class NavBar extends Component<{ brand: ReactNode }> {
+export class JustifiedNavBar extends Component<{ brand?: ReactNode; justify?: string }> {
+  static Link = NavBarLink;
+
+  render() {
+    return (
+      <nav className="navbar navbar-expand-sm navbar-light bg-light">
+        <div className={'container-fluid justify-content-' + this.props.justify}>
+          <NavLink className="navbar-brand" activeClassName="active" exact to="/">
+            {this.props.brand}
+          </NavLink>
+          <div className="navbar-nav">{this.props.children}</div>
+        </div>
+      </nav>
+    );
+  }
+}
+
+export class NavBar extends Component<{ brand: ReactNode; justify?: string }> {
   static Link = NavBarLink;
 
   render() {
