@@ -31,21 +31,32 @@ import { gameService, Game } from './services/game-services';
 import { GameCard, AddGame } from './game-component';
 import { UserNav, UserPage } from './user-components';
 import { Category } from './genre-components';
+import { Platform } from './platform-components';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 
 export const history = createHashHistory();
 
-/**<NavBar.Link to="/games">Games</NavBar.Link> */
+/**<NavBar.Link to="/games">Games</NavBar.Link>
+ *  <Row>
+            <ColumnCentre width={12}></ColumnCentre>
+            <NavBar brand="GS"></NavBar>
+            <UserNav />
+          </Row>
+ * 
+ */
 class NavHeader extends Component {
   render() {
     return (
-      <div>
-        <NavBar brand="GS">
-          <UserNav />
-        </NavBar>
-        <Header></Header>
-      </div>
+      <Container>
+        <Row>
+          <NavBar brand="GS">
+            {' '}
+            <UserNav />
+          </NavBar>
+        </Row>
+        <Header header></Header>
+      </Container>
     );
   }
 }
@@ -65,7 +76,8 @@ ReactDOM.render(
       <Route exact path="/publishedReviews/:id" component={CompleteReview} />
       <Route exact path="/editReview/:id" component={EditReview} />
       <Route exact path="/genreReviews" component={GenreReviews} />
-      <Route exact path="/categories" component={Category}></Route>
+      <Route exact path="/reviews-by-genre" component={Category}></Route>
+      <Route exact path="/reviews-by-platform" component={Platform}></Route>
       <Route exact path="/platformReviews" component={PlatformReviews} />
       <Route exact path="/user" component={UserPage} />
     </div>

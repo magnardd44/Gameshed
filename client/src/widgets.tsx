@@ -5,11 +5,23 @@ import { NavLink } from 'react-router-dom';
 
 /**
  * boostrap header
+ * 
+                  
  */
-export class Header extends Component {
+export class Header extends Component<{ header?: boolean }> {
   render() {
     return (
-      <div className="container text-center">
+      <div
+        className="container text-center"
+        style={
+          this.props.header
+            ? {
+                color: '#3e78b2ff',
+              }
+            : {}
+        }
+      >
+        {this.props.children}
         <div className="jumbotron">
           <h1>GameShed</h1>
         </div>
@@ -31,6 +43,28 @@ export class Container extends Component<{ textalign?: string }> {
         }
       >
         {this.props.children}
+      </div>
+    );
+  }
+}
+
+export class DropDown extends Component {
+  render() {
+    return (
+      <div className="dropdown">
+        <button
+          className="btn btn-secondary dropdown-toggle"
+          type="button"
+          id="dropdownMenuButton"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          Dropdown button
+        </button>
+        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          {this.props.children}
+        </div>
       </div>
     );
   }

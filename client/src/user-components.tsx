@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Form, Card, Alert, Button } from './widgets';
+import { Form, Card, Alert, Button, Container } from './widgets';
 import userService from './services/user-service';
 import { history } from './index';
 
