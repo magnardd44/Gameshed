@@ -168,26 +168,31 @@ describe('Fetch  reviews (GET)', () => {
     });
   });
 
-  //   test('Fetch task (404 Not Found)', (done) => {
-  //     axios
-  //       .get('/tasks/4')
-  //       .then((_response) => done.fail(new Error()))
-  //       .catch((error) => {
-  //         expect(error.message).toEqual('Request failed with status code 404');
-  //         done();
-  //       });
-  //   });
-  // });
+  test('Fetch task (404 Not Found)', (done) => {
+    axios
+      .get('/reviews/4')
+      .then((_response) => done.fail(new Error()))
+      .catch((error) => {
+        expect(error.message).toEqual('Request failed with status code 404');
+        done();
+      });
+  });
 
-  // describe('Create new task (POST)', () => {
-  //   test('Create new task (200 OK)', (done) => {
-  //     axios.post('/tasks', { title: 'Ny oppgave' }).then((response) => {
-  //       expect(response.status).toEqual(200);
-  //       expect(response.data).toEqual({ id: 4 });
-  //       done();
-  //     });
-  //   });
-  // });
+  describe('Create new review (POST)', () => {
+    test('Create new review (200 OK)', (done) => {
+      axios
+        .post('/reviews', {
+          review_title: 'Ny testanmeldelse',
+          text: 'Dette er en ny testanmeldelse fra Solveig',
+          rating: 6,
+        })
+        .then((response) => {
+          expect(response.status).toEqual(200);
+          // expect(response.data).toEqual({ id: 4 });
+          done();
+        });
+    });
+  });
 
   // describe('Delete task (DELETE)', () => {
   //   test('Delete task (200 OK)', (done) => {
