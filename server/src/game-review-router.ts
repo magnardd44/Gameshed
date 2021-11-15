@@ -1,9 +1,9 @@
 import express, { request, response } from 'express';
-import { gameService } from './game-services';
-import { reviewService } from './review-service';
-import { genreService } from './genre-service';
-import { platformService } from './platform-service';
-import userService from './user-service';
+import { gameService } from './services/game-services';
+import { reviewService } from './services/review-service';
+import { genreService } from './services/genre-service';
+import { platformService } from './services/platform-service';
+import userService from './services/user-service';
 
 /**
  * Express router containing task methods.
