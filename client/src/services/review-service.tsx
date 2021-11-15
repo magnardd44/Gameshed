@@ -75,11 +75,11 @@ class ReviewService {
    * Get published reviews
    */
   getPublisedReviews() {
-    return axios.get<Review[]>('/reviews/publised').then((response) => response.data);
+    return axios.get<Review[]>('/reviews/published').then((response) => response.data);
   }
 
   getPublishedReviews() {
-    return axios.get<Review[]>('/reviews/publised').then((response) => response.data);
+    return axios.get<Review[]>('/reviews/published').then((response) => response.data);
   }
 
   /**
