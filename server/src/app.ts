@@ -16,9 +16,9 @@ app.use(express.json());
 // Since API is not compatible with v1, API version is increased to v2
 app.use('/api/v2/search', searchRouter);
 app.use('/api/v2/user', userRouter);
-app.use('/api/v2/game', gameRouter);
-app.use('/api/v2/review', reviewRouter);
-app.use('/api/v2/review', genreRouter);
-app.use('/api/v2/platform', platformRouter);
+app.use('/api/v2/games', gameRouter);
+app.use('/api/v2/reviews', reviewRouter);
+app.use('/api/v2/genres', genreRouter);
+app.use('/api/v2/platforms', platformRouter);
 
 export default app;

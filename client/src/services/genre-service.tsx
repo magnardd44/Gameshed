@@ -52,7 +52,7 @@ class GenreService {
   }
   updateGenreMap(game_id: number, genre_id: number) {
     return axios
-      .post<{ id: number }>('/genreMap', {
+      .post<{ id: number }>('/genres/map', {
         game_id: game_id,
         genre_id: genre_id,
       })

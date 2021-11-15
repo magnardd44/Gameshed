@@ -8,7 +8,7 @@ import { platformService } from '../services/platform-service';
 const platformRouter = express.Router();
 
 //Update mapping_platform
-platformRouter.post('/platformMap', (request, response) => {
+platformRouter.post('/map', (request, response) => {
   const data = request.body;
   if (data)
     platformService
@@ -28,7 +28,7 @@ router.get('/platforms/:id', (request, response) => {
 });
 */
 
-platformRouter.get('/platforms/:name', (request, response) => {
+platformRouter.get('/:name', (request, response) => {
   const name = request.params.name;
   platformService
     .getId(name)
@@ -36,7 +36,7 @@ platformRouter.get('/platforms/:name', (request, response) => {
     .catch((error) => response.status(500).send(error));
 });
 
-platformRouter.get('/platforms', (_request, response) => {
+platformRouter.get('/', (_request, response) => {
   platformService
     .getAll()
     .then((rows) => {
@@ -47,7 +47,7 @@ platformRouter.get('/platforms', (_request, response) => {
     });
 });
 
-platformRouter.post('/platforms', (_request, response) => {
+platformRouter.post('/', (_request, response) => {
   const data = request.body;
   if (data && data.platform_name.length != 0)
     platformService
@@ -58,7 +58,7 @@ platformRouter.post('/platforms', (_request, response) => {
   else response.status(400).send('Missing platform name');
 });
 
-platformRouter.delete('/platforms/:id', (request, response) => {
+platformRouter.delete('/:id', (request, response) => {
   const id = Number(request.params.id);
   genreService
     .get(id)

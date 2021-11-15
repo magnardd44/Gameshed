@@ -75,23 +75,23 @@ class ReviewService {
    * Get published reviews
    */
   getPublisedReviews() {
-    return axios.get<Review[]>('/publishedReviews').then((response) => response.data);
+    return axios.get<Review[]>('/reviews/publised').then((response) => response.data);
   }
 
   getPublishedReviews() {
-    return axios.get<Review[]>('/publishedReviews').then((response) => response.data);
+    return axios.get<Review[]>('/reviews/publised').then((response) => response.data);
   }
 
   /**
    * Get reviews based on genre
    */
   getGenre(genre_id: number) {
-    return axios.get<Review[]>('/genreReviews/' + genre_id).then((response) => response.data);
+    return axios.get<Review[]>('/reviews/genre/' + genre_id).then((response) => response.data);
   }
 
   //Get reviews based on platform
   getPlatform(platform_id: number) {
-    return axios.get<Review[]>('/platformReviews/' + platform_id).then((response) => response.data);
+    return axios.get<Review[]>('/reviews/platform/' + platform_id).then((response) => response.data);
   }
 
   /**

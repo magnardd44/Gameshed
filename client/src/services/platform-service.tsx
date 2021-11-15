@@ -55,7 +55,7 @@ class PlatformService {
    * Resolves the newly created platform id.
    */
   updatePlatformMap(platform_id: number, game_id: number) {
-    return axios.post<{ id: number }>('/platformMap', {
+    return axios.post<{ id: number }>('/platforms/map', {
       platform_id: platform_id,
       game_id: game_id,
     });

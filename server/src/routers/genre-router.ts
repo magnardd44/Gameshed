@@ -7,7 +7,7 @@ import { genreService } from '../services/genre-service';
 const genreRouter = express.Router();
 
 //Update mapping_genre
-genreRouter.post('/genreMap', (request, response) => {
+genreRouter.post('/map', (request, response) => {
   const data = request.body;
   if (data)
     genreService
@@ -17,7 +17,7 @@ genreRouter.post('/genreMap', (request, response) => {
   else response.status(400).send('Missing genre');
 });
 
-genreRouter.get('/genre/:id', (request, response) => {
+genreRouter.get('/:id', (request, response) => {
   const id = Number(request.params.id);
   genreService
     .get(id)
@@ -25,7 +25,7 @@ genreRouter.get('/genre/:id', (request, response) => {
     .catch((error) => response.status(500).send(error));
 });
 
-genreRouter.get('/genres/:name', (request, response) => {
+genreRouter.get('/:name', (request, response) => {
   const name = request.params.name;
   genreService
     .getId(name)
@@ -33,7 +33,7 @@ genreRouter.get('/genres/:name', (request, response) => {
     .catch((error) => response.status(500).send(error));
 });
 
-genreRouter.get('/genres', (_request, response) => {
+genreRouter.get('/', (_request, response) => {
   genreService
     .getAll()
     .then((rows) => {
@@ -44,7 +44,7 @@ genreRouter.get('/genres', (_request, response) => {
     });
 });
 
-genreRouter.delete('/genre/:id', (request, response) => {
+genreRouter.delete('/:id', (request, response) => {
   const id = Number(request.params.id);
   genreService
     .get(id)
@@ -52,7 +52,7 @@ genreRouter.delete('/genre/:id', (request, response) => {
     .catch((error) => response.status(500).send(error));
 });
 
-genreRouter.post('/genres', (_request, response) => {
+genreRouter.post('/', (_request, response) => {
   const data = request.body;
   if (data && data.review_title.length != 0)
     genreService

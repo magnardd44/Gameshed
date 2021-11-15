@@ -6,7 +6,7 @@ import { gameService } from '../services/game-services';
  */
 const gameRouter = express.Router();
 
-gameRouter.get('/games/search/:searchString', (request, response) => {
+gameRouter.get('/search/:searchString', (request, response) => {
   const searchString = request.params.searchString;
 
   gameService
@@ -19,7 +19,7 @@ gameRouter.get('/games/search/:searchString', (request, response) => {
     });
 });
 
-gameRouter.get('/games', (_request, response) => {
+gameRouter.get('/', (_request, response) => {
   gameService
     .getAll()
     .then((rows) => {
@@ -30,7 +30,7 @@ gameRouter.get('/games', (_request, response) => {
     });
 });
 
-gameRouter.get('/games/:id', (request, response) => {
+gameRouter.get('/:id', (request, response) => {
   const id = Number(request.params.id);
   gameService
     .get(id)
@@ -39,7 +39,7 @@ gameRouter.get('/games/:id', (request, response) => {
 });
 
 //Add new game to database
-gameRouter.post('/games', (request, response) => {
+gameRouter.post('/', (request, response) => {
   const data = request.body;
 
   if (data && data.game_title.length != 0 && data.game_description.length != 0)

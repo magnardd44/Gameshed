@@ -8,7 +8,7 @@ import userService from '../services/user-service';
 const reviewRouter = express.Router();
 
 //Add new review to database
-reviewRouter.post('/reviews', (request, response) => {
+reviewRouter.post('/', (request, response) => {
   const data = request.body;
 
   if (data && data.review_title.length != 0 && data.game_id != 0)
@@ -36,7 +36,7 @@ reviewRouter.post('/reviews', (request, response) => {
 });
 
 //Show published reviews
-reviewRouter.get('/publishedReviews', (request, response) => {
+reviewRouter.get('/published', (request, response) => {
   reviewService
     .getPublished()
     .then((rows) => response.send(rows))
@@ -44,7 +44,7 @@ reviewRouter.get('/publishedReviews', (request, response) => {
 });
 
 //Show published reviews based on genre
-reviewRouter.get('/genreReviews/:genre_id', (request, response) => {
+reviewRouter.get('/genre/:genre_id', (request, response) => {
   const genre_id = Number(request.params.genre_id);
   reviewService
     .getGenre(genre_id)
@@ -53,7 +53,7 @@ reviewRouter.get('/genreReviews/:genre_id', (request, response) => {
 });
 
 //Show published reviews based on platform
-reviewRouter.get('/platformReviews/:platform_id', (request, response) => {
+reviewRouter.get('/platform/:platform_id', (request, response) => {
   const platform_id = Number(request.params.platform_id);
   reviewService
     .getPlatform(platform_id)
@@ -62,7 +62,7 @@ reviewRouter.get('/platformReviews/:platform_id', (request, response) => {
 });
 
 //Fetch individual drafts after it has been added and saved
-reviewRouter.get('/reviews/:review_id/draft', (request, response) => {
+reviewRouter.get('/:review_id/draft', (request, response) => {
   const id = Number(request.params.review_id);
   reviewService
     .getDraft(id)
@@ -73,7 +73,7 @@ reviewRouter.get('/reviews/:review_id/draft', (request, response) => {
 });
 
 //Fetch published review
-reviewRouter.get('/reviews/:review_id', (request, response) => {
+reviewRouter.get('/:review_id', (request, response) => {
   const id = Number(request.params.review_id);
   reviewService
     .get(id)
@@ -84,7 +84,7 @@ reviewRouter.get('/reviews/:review_id', (request, response) => {
 });
 
 //Edit review
-reviewRouter.patch('/reviews/:id', (request, response) => {
+reviewRouter.patch('/:id', (request, response) => {
   const data = request.body;
   if ((data && data.title, data.text, data.rating != undefined))
     reviewService
@@ -95,7 +95,7 @@ reviewRouter.patch('/reviews/:id', (request, response) => {
 });
 
 //Set review status to published
-reviewRouter.patch('/reviews/:id/publish', (request, response) => {
+reviewRouter.patch('/:id/publish', (request, response) => {
   reviewService
     .publish(Number(request.params.id), true)
     .then((id) => response.send({ id: id }))
@@ -103,7 +103,7 @@ reviewRouter.patch('/reviews/:id/publish', (request, response) => {
 });
 
 //Add like to review
-reviewRouter.patch('/reviews/:id/relevant', (request, response) => {
+reviewRouter.patch('/:id/relevant', (request, response) => {
   const data = request.body;
   reviewService
     .relevant(Number(request.params.id), data.user_id, data.relevant)
@@ -113,7 +113,7 @@ reviewRouter.patch('/reviews/:id/relevant', (request, response) => {
 
 //Delete review
 
-reviewRouter.delete('/reviews/:id', (request, response) => {
+reviewRouter.delete('/:id', (request, response) => {
   reviewService
     .delete(Number(request.params.id))
     .then((_result) => response.send())
