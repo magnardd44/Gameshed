@@ -18,6 +18,7 @@ import { Review, reviewService } from './services/review-service';
 
 import { createHashHistory } from 'history';
 import { Game, Game2, gameService, gameService2 } from './services/game-services';
+import { gameService3 } from './services/game-services';
 import axios from 'axios';
 import { genreService } from './services/genre-service';
 import { platformService } from './services/platform-service';
@@ -841,15 +842,28 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
         <Card title="Anmeldelse">
           <Row>
             <Column width={2}>Spill:</Column>
-            <Column>Hentes fra IGDB</Column>
+            <Column>{gameService3.current.game_title}</Column>
           </Row>
           <Row>
-            <Column width={2}>Sjanger:</Column>
-            <Column>Hentes fra IGDB</Column>
+            <Column width={2}>Sjanger: </Column>
+            <Column>
+              {gameService3.current.genre?.reduce((p, c) => (p == '' ? c : p + ', ' + c), '')}
+            </Column>
           </Row>
           <Row>
             <Column width={2}>Plattform:</Column>
-            <Column>Hentes fra IGDB</Column>
+            <Column>
+              {gameService3.current.platform?.reduce((p, c) => (p == '' ? c : p + ', ' + c), '')}
+            </Column>
+          </Row>
+          <Row>
+            <Column>
+              <ThumbNail
+                img={
+                  gameService3.current.igdb?.cover_url ? gameService3.current.igdb.cover_url : ''
+                }
+              ></ThumbNail>
+            </Column>
           </Row>
           <Linebreak />
           <Row>
@@ -910,7 +924,10 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
   mounted() {
     reviewService
       .get(this.props.match.params.id)
-      .then((review) => (this.review = review))
+      .then((review) => {
+        this.review = review;
+        gameService3.set(this.review.game_id, 0);
+      })
       .catch((error) => Alert.danger('Error getting review: ' + error.message));
   }
 }
