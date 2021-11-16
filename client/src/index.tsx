@@ -61,7 +61,9 @@ class NavHeader extends Component {
           <UserNav />
         </JustifiedNavBar>
         <JustifiedNavBar justify="start" brand="GS">
-          <NavBarLink to="">Søk</NavBarLink>
+          <NavBarLink to="/">Søk spill</NavBarLink>
+          <NavBarLink to="/">Anmeldelser</NavBarLink>
+          <NavBarLink to="/">Legg til spill</NavBarLink>
         </JustifiedNavBar>
         <Row>
           <Heading header></Heading>
