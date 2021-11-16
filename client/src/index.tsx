@@ -27,14 +27,16 @@ import {
   CompleteReview,
   PlatformReviews,
 } from './review-components';
-import { Search, SearchListings } from './search-components';
+
 import { Hash } from 'crypto';
 import { createHashHistory } from 'history';
 import { gameService, Game } from './services/game-services';
+import { Search, SearchListings } from './search-components';
 import { GameCard, AddGame } from './game-component';
 import { UserNav, UserPage } from './user-components';
 import { Category } from './genre-components';
 import { Platform } from './platform-components';
+import { Home, ReviewHome } from './home-components';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 
@@ -61,9 +63,9 @@ class NavHeader extends Component {
           <UserNav />
         </JustifiedNavBar>
         <JustifiedNavBar justify="start" brand="GS">
-          <NavBarLink to="/">Søk spill</NavBarLink>
-          <NavBarLink to="/">Anmeldelser</NavBarLink>
-          <NavBarLink to="/">Legg til spill</NavBarLink>
+          <NavBarLink to="/search">Søk spill</NavBarLink>
+          <NavBarLink to="/reviews">Anmeldelser</NavBarLink>
+          <NavBarLink to="/addGame">Legg til spill</NavBarLink>
         </JustifiedNavBar>
         <Row>
           <Heading header></Heading>
@@ -78,14 +80,17 @@ ReactDOM.render(
     <div>
       <Alert />
       <NavHeader />
-      <Route exact path="/" component={Search}></Route>
+      <Route exact path="/" component={Home}></Route>
+      <Route exact path="/search" component={Search}></Route>
       <Route exact path="/results" component={SearchListings}></Route>
       <Route exact path="/games/:db_id/:igdb_id" component={GameCard}></Route>
       <Route exact path="/addGame" component={AddGame}></Route>
-      <Route exact path="/addReview/:db_id/:igdb_id" component={AddReview} />
-      <Route exact path="/publishReview/:id" component={PublishReview} />
+      <Route exact path="/reviews" component={ReviewHome} />
       <Route exact path="/publishedReviews" component={PublishedReviews} />
       <Route exact path="/publishedReviews/:id" component={CompleteReview} />
+      <Route exact path="/addReview/:db_id/:igdb_id" component={AddReview} />
+      <Route exact path="/publishReview/:id" component={PublishReview} />
+
       <Route exact path="/editReview/:id" component={EditReview} />
       <Route exact path="/genreReviews" component={GenreReviews} />
       <Route exact path="/reviews-by-genre" component={Category}></Route>

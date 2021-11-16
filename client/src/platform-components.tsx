@@ -23,26 +23,149 @@ import { Genre } from './services/genre-service';
 import { createHashHistory } from 'history';
 import axios from 'axios';
 import { genreService } from './services/genre-service';
+import { platformService } from './services/platform-service';
 import { Review, reviewService } from './services/review-service';
 import { RelatedReviews } from './related-reviews';
 
 const history = createHashHistory();
 
+//Renders overview of published reviews based on genre
 export class Platform extends Component {
-  genres: Genre[] = [];
   reviews: Review[] = [];
   games: Game[] = [];
-  game: Game = {
+  state = { isHidden: true };
+
+  review: Review = {
+    review_id: 0,
     game_id: 0,
     game_title: '',
-    genre: 0,
+    review_title: '',
+    text: '',
+    user_id: 0,
+    rating: 0,
+    published: false,
     genre_id: 0,
-    platform: 0,
-    game_description: '',
-    igdb_id: 0,
-    genres: [],
-    platforms: [],
+    relevant: 0,
+    platform_id: 0,
+    likes: 0,
   };
+
+  platformCall(id: number) {
+    reviewService
+      .getPlatform(id)
+      .then((data) => {
+        this.setState({ isHidden: false });
+        console.log(data);
+        this.reviews = data;
+      })
+      .catch((error) => Alert.danger('Error retrieving reviews: ' + error.message));
+  }
+
+  render() {
+    return (
+      <>
+        <Container>
+          <h3 className="text-center">Her kan du søke anmeldelser etter platform</h3>
+          <div className="text-center">
+            <Button.Success
+              small
+              onClick={() => {
+                history.push('/reviews-by-genre');
+              }}
+            >
+              Klikk her
+            </Button.Success>{' '}
+            for å søke etter sjanger
+          </div>
+          <Linebreak></Linebreak>
+          <h5>Velg platform:</h5>
+          <Row>
+            <ColumnCentre width={6} smwidth={4} mdwidth={2}>
+              <Card title="Play Station 4">
+                <Button.Success onClick={() => this.platformCall(145)}>Vis</Button.Success>
+              </Card>
+              <Card title="Play Station 5">
+                <Button.Success onClick={() => this.platformCall(146)}>Vis</Button.Success>
+              </Card>
+              <Card title="Nintendo Switch">
+                <Button.Success onClick={() => this.platformCall(119)}>Vis</Button.Success>
+              </Card>
+              <Card title="XBox One">
+                <Button.Success onClick={() => this.platformCall(186)}>Vis</Button.Success>
+              </Card>
+              <Card title="XBox 360">
+                <Button.Success onClick={() => this.platformCall(185)}>Vis</Button.Success>
+              </Card>
+              <Card title="PC - Microsoft">
+                <Button.Success onClick={() => this.platformCall(126)}>Vis</Button.Success>
+              </Card>
+              <Card title="Gameboy">
+                <Button.Success onClick={() => this.platformCall(89)}>Vis</Button.Success>
+              </Card>
+              <Card title="Mac">
+                <Button.Success onClick={() => this.platformCall(100)}>Vis</Button.Success>
+              </Card>
+              <Card title="IOS">
+                <Button.Success onClick={() => this.platformCall(98)}>Vis</Button.Success>
+              </Card>
+              <Card title="Nintendo DS">
+                <Button.Success onClick={() => this.platformCall(114)}>Vis</Button.Success>
+              </Card>
+              <Card title="Andre">
+                <Button.Success onClick={() => this.platformCall(101 + 102)}>Vis</Button.Success>
+              </Card>
+            </ColumnCentre>
+            <ColumnCentre>
+              {' '}
+              {this.state.isHidden ? null : (
+                <>
+                  <Row>
+                    <Column>Resultater</Column>
+                  </Row>
+                  {this.reviews.map((review, index) => (
+                    <Row key={index}>
+                      <ReviewCard
+                        title={review.review_title}
+                        subtitle={review.game_title}
+                        terningkast={review.rating}
+                        relevanse={review.likes}
+                        text={review.text}
+                      >
+                        <Button.Success
+                          small
+                          onClick={() => {
+                            history.push('/publishedReviews/' + review.review_id);
+                          }}
+                        >
+                          Les mer
+                        </Button.Success>
+                      </ReviewCard>
+                    </Row>
+                  ))}
+                </>
+              )}
+            </ColumnCentre>
+          </Row>
+        </Container>
+      </>
+    );
+  }
+
+  mounted() {
+    reviewService
+      .getPublisedReviews()
+      .then((reviews) => (this.reviews = reviews))
+      .catch((error) => Alert.danger('Error getting reviews: ' + error.message));
+  }
+}
+
+/**
+ * 
+export class Platform extends Component {
+  platforms: Platform[] = [];
+  genres: Genre[] = [];
+  reviews: Review[] = [];
+
   review: Review = {
     review_id: 0,
     game_id: 0,
@@ -58,36 +181,41 @@ export class Platform extends Component {
     likes: 0,
   };
   state = { isHidden: false };
-  genreCall(id: number) {
+  platformCall(id: number) {
     reviewService
-      .getGenre(id)
+      .getPlatform(id)
       .then((data) => {
+        //this.setState({ isHidden: false });
+        console.log(data);
         this.reviews = data;
-        console.log(this.reviews);
       })
       .catch((error) => Alert.danger('Error retrieving reviews: ' + error.message));
-    this.setState({ isHidden: false });
   }
   render() {
     return (
       <>
         <Container>
-          <h3 className="text-center">Her kan du søke anmeldelser etter sjanger</h3>
+          <h3 className="text-center">Her kan du søke anmeldelser etter platform</h3>
           <div className="text-center">
             <Button.Success
               small
               onClick={() => {
-                history.push('');
+                history.push('/reviews-by-genre');
               }}
             >
               Klikk her
             </Button.Success>{' '}
-            for å søke etter plattform
+            for å søke etter sjanger
           </div>
           <Linebreak></Linebreak>
-          <h5>Velg sjanger:</h5>
+          <h5>Velg platform:</h5>
 
           <Row>
+            <Column width={1}>
+              <Card title="Play Station 4">
+                <Button.Success onClick={() => this.platformCall(145)}>Open</Button.Success>
+              </Card>
+            </Column>
             <ColumnCentre width={6} smwidth={4} mdwidth={2}>
               {this.genres.map((genre) => (
                 <CategoryCard
@@ -104,7 +232,7 @@ export class Platform extends Component {
                 >
                   <Button.Success
                     onClick={() => {
-                      this.genreCall(genre.genre_id);
+                      this.platformCall(genre.genre_id);
                     }}
                   >
                     {genre.genre_name}
@@ -146,11 +274,13 @@ export class Platform extends Component {
     );
   }
   mounted() {
-    genreService
-      .getAll()
-      .then((genres) => {
-        this.genres = genres;
-      })
-      .catch((error) => Alert.danger('Error getting genres: ' + error.message));
+    reviewService
+      .getPublisedReviews()
+      .then((reviews) => (this.reviews = reviews))
+      .catch((error) => Alert.danger('Error getting reviews: ' + error.message));
+    //platformService.getAll().then((platforms)=>{this.platforms = platforms})
   }
 }
+
+ * 
+ */

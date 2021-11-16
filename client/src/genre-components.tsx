@@ -77,7 +77,7 @@ export class Category extends Component {
             <Button.Success
               small
               onClick={() => {
-                history.push('');
+                history.push('/reviews-by-platform');
               }}
             >
               Klikk her
