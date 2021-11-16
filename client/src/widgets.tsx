@@ -12,18 +12,21 @@ export class Heading extends Component<{ header?: boolean }> {
   render() {
     return (
       <div
-        className="container text-center"
+        className="container text-center jumbotron my-3"
         style={
           this.props.header
             ? {
-                color: '#3e78b2ff',
+                color: '#24272bff',
+                fontFamily: 'Road Rage, cursive',
+                fontSize: '',
               }
             : {}
         }
       >
         {this.props.children}
         <div className="jumbotron">
-          <h1>GameShed</h1>
+          <h1 className="display-1 text-underline">GameShed</h1>
+          <h2 className="display-5">Nettstedet for spillanmeldelser</h2>
         </div>
       </div>
     );
@@ -370,7 +373,21 @@ export class JustifiedNavBar extends Component<{ brand?: ReactNode; justify?: st
     return (
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
         <div className={'container-fluid justify-content-' + this.props.justify}>
-          <NavLink className="navbar-brand" activeClassName="active" exact to="/">
+          <NavLink
+            className="navbar-brand"
+            activeClassName="active"
+            exact
+            to="/"
+            style={
+              this.props.brand
+                ? {
+                    color: '#24272bff',
+                    fontFamily: 'Road Rage, cursive',
+                    fontSize: '2rem',
+                  }
+                : {}
+            }
+          >
             {this.props.brand}
           </NavLink>
           <div className="navbar-nav">{this.props.children}</div>
