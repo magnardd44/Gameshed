@@ -33,6 +33,21 @@ export type Review = {
   likes: number;
 };
 
+export type RelatedReview = {
+  review_id: number;
+  game_id: number;
+  game_title: string;
+  review_title: string;
+  text: string;
+  user_id: number;
+  rating: number;
+  published: boolean;
+  genre_id: number;
+  platform_id: number;
+  relevant: number;
+  likes: number;
+};
+
 class ReviewService {
   review: Review = {
     review_id: 0,
@@ -49,6 +64,25 @@ class ReviewService {
     likes: 0,
   };
   reviews: Review[] = [];
+
+  relatedReview: RelatedReview = {
+    review_id: 0,
+    game_id: 0,
+    game_title: '',
+    review_title: '',
+    text: '',
+    user_id: 0,
+    rating: 0,
+    published: false,
+    genre_id: 0,
+    platform_id: 0,
+    relevant: 0,
+    likes: 0,
+  };
+
+  relatedReviews: RelatedReview[] = [];
+
+  publishedreviews: Review[] = [];
 
   /**
    * Get review with given id.
@@ -91,7 +125,9 @@ class ReviewService {
 
   //Get reviews based on platform
   getPlatform(platform_id: number) {
-    return axios.get<Review[]>('/reviews/platform/' + platform_id).then((response) => response.data);
+    return axios
+      .get<Review[]>('/reviews/platform/' + platform_id)
+      .then((response) => response.data);
   }
 
   /**

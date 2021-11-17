@@ -502,6 +502,7 @@ class FormSelect extends Component<{
     const { value, onChange, children, ...rest } = this.props;
     return (
       <select {...rest} className="custom-select" value={value} onChange={onChange}>
+        <option hidden>Velg her: </option>
         {children}
       </select>
     );

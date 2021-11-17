@@ -19,7 +19,7 @@ platformRouter.post('/map', (request, response) => {
 });
 
 /*
-router.get('/platforms/:id', (request, response) => {
+platformRouter.get('/platforms/:id', (request, response) => {
   const id = Number(request.params.id);
   platformService
     .get(id)
@@ -30,9 +30,12 @@ router.get('/platforms/:id', (request, response) => {
 
 platformRouter.get('/:name', (request, response) => {
   const name = request.params.name;
+
   platformService
     .getId(name)
-    .then((genre) => (genre ? response.send(genre) : response.status(404).send('Genre not found')))
+    .then((platform) =>
+      platform ? response.send(platform) : response.status(404).send('Platform not found')
+    )
     .catch((error) => response.status(500).send(error));
 });
 
