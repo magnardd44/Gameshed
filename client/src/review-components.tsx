@@ -66,8 +66,9 @@ export class PublishedReviews extends Component {
   }
 
   mounted() {
+    console.log(reviewService);
     reviewService
-      .getPublisedReviews()
+      .getPublishedReviews()
       .then((reviews) => {
         reviewService.reviews = reviews;
         console.log(reviews);
@@ -180,7 +181,7 @@ export class PlatformReviews extends Component {
 
   mounted() {
     reviewService
-      .getPublisedReviews()
+      .getPublishedReviews()
       .then((reviews) => (reviewService.reviews = reviews))
       .catch((error) => Alert.danger('Error getting reviews: ' + error.message));
   }
@@ -356,7 +357,7 @@ export class GenreReviews extends Component {
 
   mounted() {
     reviewService
-      .getPublisedReviews()
+      .getPublishedReviews()
       .then((reviews) => (reviewService.reviews = reviews))
       .catch((error) => Alert.danger('Error getting reviews: ' + error.message));
   }
@@ -649,8 +650,8 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
       .then((review) => {
         reviewService.review = review;
         if (review.game_id) {
-          gameService.get(review.game_id).then((game) => {
-            gameService.game = game;
+          gameService2.get(review.game_id).then((game) => {
+            gameService2.game = game;
             console.log(gameService.game);
           });
         }
