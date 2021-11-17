@@ -19,7 +19,7 @@ export class UserNav extends Component {
         >
           DebugAdmin
         </Button.Success>
-        <Form.Label>Brukernamn:</Form.Label>
+        <Form.Label>Brukernavn:</Form.Label>
         <Form.Input
           type="text"
           value={userService.email}
@@ -62,9 +62,9 @@ export class UserNav extends Component {
               if (userService.email.length && password?.length) {
                 userService
                   .login(userService.email, password)
-                  .catch((err) => Alert.warning(<>Feil brukarnamn eller passord</>));
+                  .catch((err) => Alert.warning(<>Feil brukarnavn eller passord</>));
               } else {
-                Alert.info(<>Skriv inn brukarnamn og passord</>);
+                Alert.info(<>Skriv inn brukarnavn og passord</>);
               }
               //                this.password = '';
             }}
@@ -98,11 +98,11 @@ export class UserData extends Component {
     return (
       <Card title="Brukerdata">
         <Form.Label>
-          Brukarnamn
+          Brukarnavn
           <Form.Input
             type="text"
             value={userService.name}
-            placeholder="Brukarnamn"
+            placeholder="Brukernavn"
             onChange={(event) => {
               userService.name = event.currentTarget.value;
             }}

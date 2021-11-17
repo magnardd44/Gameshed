@@ -68,7 +68,10 @@ export class PublishedReviews extends Component {
   mounted() {
     reviewService
       .getPublisedReviews()
-      .then((reviews) => (reviewService.reviews = reviews))
+      .then((reviews) => {
+        reviewService.reviews = reviews;
+        console.log(reviews);
+      })
       .catch((error) => Alert.danger('Error getting reviews: ' + error.message));
   }
 }
@@ -499,9 +502,6 @@ export class AddReview extends Component<{
                         .then((res) => {
                           Alert.success('Anmeldelsen er lagret!');
                           history.push('/publishReview/' + res);
-                        })
-                        .catch((err) => {
-                          Alert.danger('Det oppsto en feil ved lagringen av anmeldelsen: ' + err);
                         });
                     });
                 } else {
@@ -602,6 +602,7 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
               <Button.Success
                 onClick={() => {
                   reviewService.publish(Number(this.props.match.params.id)).then(() => {
+                    Alert.success('Anmeldelsen er publisert!');
                     history.push('/publishedReviews');
                   });
                 }}
