@@ -527,6 +527,10 @@ export class AddReview extends Component<{
     );
   }
   mounted() {
+    reviewService.review.review_id = 0;
+    reviewService.review.review_title = '';
+    reviewService.review.text = '';
+    reviewService.review.rating = 0;
     gameService.game.igdb_id = this.props.match.params.igdb_id;
     if (gameService.game.igdb_id > 0) {
       gameService2
@@ -664,6 +668,20 @@ export class EditReview extends Component<{ match: { params: { id: number } } }>
     return (
       <Container>
         <Card title="Edit review">
+          <Row>
+            <Column width={2}>Spill:</Column>
+            <Column>{gameService2.game.game_title}</Column>
+          </Row>
+
+          <Row>
+            <Column width={2}>Sjanger:</Column>
+            <Column>{gameService2.game.genre.join(', ')}</Column>
+          </Row>
+          <Row>
+            <Column width={2}>Plattform:</Column>
+            <Column>{gameService2.game.platform.join(', ')}</Column>
+          </Row>
+          <Linebreak />
           <FormContainer>
             <FormGroup>
               <Form.Label>Title:</Form.Label>
@@ -737,7 +755,15 @@ export class EditReview extends Component<{ match: { params: { id: number } } }>
   mounted() {
     reviewService
       .getDraft(this.props.match.params.id)
-      .then((review) => (reviewService.review = review))
+      .then((review) => {
+        reviewService.review = review;
+        if (review.game_id) {
+          gameService.get(review.game_id).then((game) => {
+            gameService.game = game;
+            console.log(gameService.game);
+          });
+        }
+      })
       .catch((error) => Alert.danger('Error getting review: ' + error.message));
   }
 }
