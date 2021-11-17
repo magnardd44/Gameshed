@@ -51,7 +51,8 @@ export class Container extends Component<{ textalign?: string }> {
   }
 }
 
-export class DropDown extends Component {
+/**
+ * export class DropDown extends Component {
   render() {
     return (
       <div className="dropdown">
@@ -72,18 +73,7 @@ export class DropDown extends Component {
     );
   }
 }
-
-export class FormContainer extends Component {
-  render() {
-    return <form>{this.props.children}</form>;
-  }
-}
-
-export class FormGroup extends Component {
-  render() {
-    return <div className="form-group">{this.props.children}</div>;
-  }
-}
+ */
 
 export class ThumbNail extends Component<{ small?: boolean; img: string }> {
   render() {
@@ -347,6 +337,10 @@ export class Button {
 }
 
 /**
+ *  NAVBAR widgets
+ */
+
+/**
  * Renders a NavBar link using Bootstrap styles.
  *
  * Properties: to
@@ -411,6 +405,22 @@ export class NavBar extends Component<{ brand: ReactNode; justify?: string }> {
         </div>
       </nav>
     );
+  }
+}
+
+/**
+ *  FORM WIDGETS
+ */
+
+export class FormContainer extends Component {
+  render() {
+    return <form>{this.props.children}</form>;
+  }
+}
+
+export class FormGroup extends Component {
+  render() {
+    return <div className="form-group">{this.props.children}</div>;
   }
 }
 
