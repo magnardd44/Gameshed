@@ -108,11 +108,9 @@ class ReviewService {
   /**
    * Get published reviews
    */
-  getPublisedReviews() {
+  getPublishedReviews() {
     return axios.get<Review[]>('/reviews/published').then((response) => response.data);
   }
-
- 
 
   /**
    * Get reviews based on genre

@@ -153,7 +153,7 @@ export class Platform extends Component {
 
   mounted() {
     reviewService
-      .getPublisedReviews()
+      .getPublishedReviews()
       .then((reviews) => (this.reviews = reviews))
       .catch((error) => Alert.danger('Error getting reviews: ' + error.message));
   }
@@ -275,7 +275,7 @@ export class Platform extends Component {
   }
   mounted() {
     reviewService
-      .getPublisedReviews()
+      .getPublishedReviews()
       .then((reviews) => (this.reviews = reviews))
       .catch((error) => Alert.danger('Error getting reviews: ' + error.message));
     //platformService.getAll().then((platforms)=>{this.platforms = platforms})
