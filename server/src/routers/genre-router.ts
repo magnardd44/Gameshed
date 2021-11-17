@@ -25,7 +25,7 @@ genreRouter.get('/:id', (request, response) => {
     .catch((error) => response.status(500).send(error));
 });
 
-genreRouter.get('/:name', (request, response) => {
+genreRouter.get('/get/:name', (request, response) => {
   const name = request.params.name;
   genreService
     .getId(name)

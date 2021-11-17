@@ -4,7 +4,7 @@ import userRouter from './routers/user-router';
 import gameRouter from './routers/game-router';
 import reviewRouter from './routers/review-router';
 import genreRouter from './routers/genre-router';
-import platformRouter from './routers/game-router';
+import platformRouter from './routers/platform-router';
 
 /**
  * Express application.

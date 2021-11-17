@@ -87,7 +87,7 @@ export type id_name_link = {
 class GameService2 {
   games: Game2[] = [];
 
-  game2: Game2 = {
+  game: Game2 = {
     game_id: 0,
     igdb_id: 0,
     game_title: '',

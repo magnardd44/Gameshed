@@ -23,28 +23,9 @@ import { platform } from 'os';
 import { Platform, platformService } from './services/platform-service';
 import axios from 'axios';
 
-// import Select from 'react-select';
-
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
 export class RelatedReviews extends Component<{ game_id?: number; genre_id?: number }> {
-  reviews: Review[] = [];
-  publishedreviews: Review[] = [];
-  review: Review = {
-    review_id: 0,
-    game_id: 0,
-    game_title: '',
-    review_title: '',
-    text: '',
-    user_id: 0,
-    rating: 0,
-    published: false,
-    genre_id: 0,
-    relevant: 0,
-    platform_id: 0,
-    likes: 0,
-  };
-
   render() {
     return (
       <Container>
@@ -52,16 +33,16 @@ export class RelatedReviews extends Component<{ game_id?: number; genre_id?: num
           <h5>Relaterte anmeldelser</h5>
           <ColumnCentre width={4}>
             <ReviewCard
-              title={this.review.review_title}
-              subtitle={this.review.game_title}
-              terningkast={this.review.rating}
-              relevanse={this.review.likes}
-              text={this.review.text}
+              title={reviewService.relatedReview.review_title}
+              subtitle={reviewService.relatedReview.game_title}
+              terningkast={reviewService.relatedReview.rating}
+              relevanse={reviewService.relatedReview.likes}
+              text={reviewService.relatedReview.text}
             ></ReviewCard>
           </ColumnCentre>
         </Row>
         <Row>
-          {this.reviews.map((review) => {
+          {reviewService.relatedReviews.map((review) => {
             <ColumnCentre width={4}>
               <ReviewCard
                 title={review.review_title}
@@ -79,15 +60,15 @@ export class RelatedReviews extends Component<{ game_id?: number; genre_id?: num
 
   mounted() {
     reviewService.getGenre(1).then((reviews) => {
-      this.reviews = reviews;
-      console.log('reviews' + this.reviews[0]);
+      reviewService.relatedReviews = reviews;
+      console.log('reviews' + reviewService.relatedReviews[0].review_title);
     });
 
     reviewService
       .get(1)
       .then((review) => {
-        this.review = review;
-        console.log('reviews' + this.reviews[0]);
+        reviewService.relatedReview = review;
+        console.log('reviews' + reviewService.relatedReviews[0].review_title);
       })
       .catch((error) => Alert.danger('Error retrieving reviews: ' + error.message));
   }

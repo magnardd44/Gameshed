@@ -16,13 +16,6 @@ class PlatformService {
   platforms: Platform[] = [];
 
   /**
-   * Get platform with given id.
-   */
-  get(id: number) {
-    return axios.get<Platform>('/platforms/' + id).then((response) => response.data);
-  }
-
-  /**
    * Get platform id with given name.
    */
   getId(name: string) {

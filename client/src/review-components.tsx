@@ -14,7 +14,7 @@ import {
   Linebreak,
 } from './widgets';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Review, reviewService } from './services/review-service';
+import { reviewService } from './services/review-service';
 
 import { createHashHistory } from 'history';
 import { Game, Game2, gameService, gameService2 } from './services/game-services';
@@ -29,9 +29,6 @@ const history = createHashHistory(); // Use history.push(...) to programmaticall
 
 //Renders an overvew of all published reviews
 export class PublishedReviews extends Component {
-  reviews: Review[] = [];
-  games: Game[] = [];
-
   render() {
     return (
       <>
@@ -50,7 +47,7 @@ export class PublishedReviews extends Component {
               <b>Relevant</b>
             </Column>
           </Row>
-          {this.reviews.map((review, index) => (
+          {reviewService.reviews.map((review, index) => (
             <Row key={review.review_id}>
               <Column>{review.game_title}</Column>
 
@@ -71,41 +68,14 @@ export class PublishedReviews extends Component {
   mounted() {
     reviewService
       .getPublisedReviews()
-      .then((reviews) => (this.reviews = reviews))
+      .then((reviews) => (reviewService.reviews = reviews))
       .catch((error) => Alert.danger('Error getting reviews: ' + error.message));
   }
 }
 
 //Renders overview of published reviews based on genre
 export class PlatformReviews extends Component {
-  reviews: Review[] = [];
-  games: Game[] = [];
   state = { isHidden: true };
-  game: Game = {
-    game_id: 0,
-    game_title: '',
-    genre: 0,
-    genre_id: 0,
-    platform: 0,
-    game_description: '',
-    igdb_id: 0,
-    genres: [],
-    platforms: [],
-  };
-  review: Review = {
-    review_id: 0,
-    game_id: 0,
-    game_title: '',
-    review_title: '',
-    text: '',
-    user_id: 0,
-    rating: 0,
-    published: false,
-    genre_id: 0,
-    relevant: 0,
-    platform_id: 0,
-    likes: 0,
-  };
 
   platformCall(id: number) {
     reviewService
@@ -113,7 +83,7 @@ export class PlatformReviews extends Component {
       .then((data) => {
         this.setState({ isHidden: false });
         console.log(data);
-        this.reviews = data;
+        reviewService.reviews = data;
       })
       .catch((error) => Alert.danger('Error retrieving reviews: ' + error.message));
   }
@@ -187,7 +157,7 @@ export class PlatformReviews extends Component {
               <Column>Terningkast</Column>
               <Column>Relevant</Column>
             </Row>
-            {this.reviews.map((review, index) => (
+            {reviewService.reviews.map((review, index) => (
               <Row key={index}>
                 <Column>{review.game_title}</Column>
                 <Column>
@@ -208,47 +178,20 @@ export class PlatformReviews extends Component {
   mounted() {
     reviewService
       .getPublisedReviews()
-      .then((reviews) => (this.reviews = reviews))
+      .then((reviews) => (reviewService.reviews = reviews))
       .catch((error) => Alert.danger('Error getting reviews: ' + error.message));
   }
 }
 
 //Renders overview of published reviews based on genre
 export class GenreReviews extends Component {
-  reviews: Review[] = [];
-  games: Game[] = [];
-  game: Game = {
-    game_id: 0,
-    game_title: '',
-    genre: 0,
-    genre_id: 0,
-    platform: 0,
-    game_description: '',
-    igdb_id: 0,
-    genres: [],
-    platforms: [],
-  };
-  review: Review = {
-    review_id: 0,
-    game_id: 0,
-    game_title: '',
-    review_title: '',
-    text: '',
-    user_id: 0,
-    rating: 0,
-    published: false,
-    genre_id: 0,
-    relevant: 0,
-    platform_id: 0,
-    likes: 0,
-  };
   state = { isHidden: true };
   genreCall(id: number) {
     reviewService
       .getGenre(id)
       .then((data) => {
         console.log(data);
-        this.reviews = data;
+        reviewService.reviews = data;
       })
       .catch((error) => Alert.danger('Error retrieving reviews: ' + error.message));
     this.setState({ isHidden: false });
@@ -390,7 +333,7 @@ export class GenreReviews extends Component {
               <Column>Terningkast</Column>
               <Column>Relevant</Column>
             </Row>
-            {this.reviews.map((review, index) => (
+            {reviewService.reviews.map((review, index) => (
               <Row key={index}>
                 <Column>{review.game_title}</Column>
                 <Column>
@@ -411,7 +354,7 @@ export class GenreReviews extends Component {
   mounted() {
     reviewService
       .getPublisedReviews()
-      .then((reviews) => (this.reviews = reviews))
+      .then((reviews) => (reviewService.reviews = reviews))
       .catch((error) => Alert.danger('Error getting reviews: ' + error.message));
   }
 }
@@ -422,48 +365,21 @@ export class GenreReviews extends Component {
 export class AddReview extends Component<{
   match: { params: { igdb_id: number; db_id: number } };
 }> {
-  reviewTitle = '';
-  gameTitle = '';
-  genre = '';
-  platform = '';
-  text = '';
-  rating = 1;
-  showAlert = false;
-  name = '';
-  genreStrings: Array<string> = [];
-  platformStrings: Array<string> = [];
-
-  game: Game = {
-    game_id: 0,
-    igdb_id: 0,
-    game_title: '',
-    genre: 0,
-    genres: [],
-    genre_id: 0,
-    platform: 0,
-    platforms: [],
-    game_description: '',
-  };
-
-  game2: Game2 = gameService2.game2;
-
-  nums = [1, 2, 3, 4, 5, 6];
-
   render() {
     return (
       <Container>
         <Card title="Skriv anmeldelse">
           <Row>
             <Column width={2}>Spill:</Column>
-            <Column>{this.game2.game_title}</Column>
+            <Column>{gameService2.game.game_title}</Column>
           </Row>
           <Row>
             <Column width={2}>Sjanger:</Column>
-            <Column>{this.game2.genre.join(', ')}</Column>
+            <Column>{gameService2.game.genre.join(', ')}</Column>
           </Row>
           <Row>
             <Column width={2}>Plattform:</Column>
-            <Column>{this.game2.platform.join(', ')}</Column>
+            <Column>{gameService2.game.platform.join(', ')}</Column>
           </Row>
           <FormContainer>
             <FormGroup>
@@ -471,17 +387,19 @@ export class AddReview extends Component<{
               <Form.Input
                 placeholder="Skriv inn overskriften her:"
                 type="text"
-                value={this.reviewTitle}
-                onChange={(event) => (this.reviewTitle = event.currentTarget.value)}
+                value={reviewService.review.review_title}
+                onChange={(event) =>
+                  (reviewService.review.review_title = event.currentTarget.value)
+                }
               />
             </FormGroup>
             <FormGroup>
               <Form.Label>Anmeldelse:</Form.Label>
               <Form.Textarea
                 placeholder="Skriv inn anmeldelsen her:"
-                value={this.text ?? ''}
+                value={reviewService.review.text ?? ''}
                 onChange={(event) => {
-                  this.text = event.currentTarget.value;
+                  reviewService.review.text = event.currentTarget.value;
                 }}
                 rows={10}
                 cols={10}
@@ -491,12 +409,12 @@ export class AddReview extends Component<{
               <Form.Label>Terningkast:</Form.Label>
               <Form.Select
                 placeholder={<div>Velg terningkast:</div>}
-                value={this.rating}
+                value={reviewService.review.rating}
                 onChange={(event) => {
-                  this.rating = Number(event.currentTarget.value);
+                  reviewService.review.rating = Number(event.currentTarget.value);
                 }}
               >
-                {this.nums.map((num, i) => {
+                {[1, 2, 3, 4, 5, 6].map((num, i) => {
                   return (
                     <option key={i} value={num}>
                       {num}
@@ -509,142 +427,165 @@ export class AddReview extends Component<{
         </Card>
         <Linebreak />
         <Alert />
-        <Button.Success
-          onClick={async () => {
-            if (this.reviewTitle == '' || this.text == '' || this.rating == 0) {
-              Alert.danger('Alle feltene må være fylt ut!');
-            } else {
-              if (this.props.match.params.db_id == 0) {
-                for (let i = 0; i < this.game2.genre.length; i++) {
-                  await genreService.getId(this.game2.genre[i]).then((res) => {
-                    this.game.genres.push(res.genre_id);
-                  });
-                }
-                for (let i = 0; i < this.game2.platform.length; i++) {
-                  await platformService.getId(this.game2.platform[i]).then((res) => {
-                    this.game.platforms.push(res.platform_id);
-                  });
-                }
-
-                gameService
-                  .create(this.game2.igdb_id, this.game2.game_title, this.game2.game_description)
-                  .then((res) => {
-                    for (let i = 0; i < this.game.genres.length; i++) {
-                      genreService.updateGenreMap(res, this.game.genres[i]);
-                    }
-                    for (let i = 0; i < this.game.platforms.length; i++) {
-                      platformService.updatePlatformMap(this.game.platforms[i], res);
-                    }
-                    reviewService
-                      .create(res, this.reviewTitle, this.text, this.rating)
+        <Column>
+          <Button.Danger
+            onClick={() => {
+              history.push('/games/' + gameService2.game.game_id + '/' + gameService2.game.igdb);
+            }}
+          >
+            Tilbake
+          </Button.Danger>
+        </Column>
+        <Column right>
+          <Button.Success
+            onClick={async () => {
+              if (
+                reviewService.review.review_title == '' ||
+                reviewService.review.text == '' ||
+                reviewService.review.rating == 0
+              ) {
+                Alert.danger('Alle feltene må være fylt ut!');
+              } else {
+                if (this.props.match.params.db_id == 0) {
+                  gameService2.game.genre.map((genre) => {
+                    genreService
+                      .getId(genre)
                       .then((res) => {
-                        Alert.success('Anmeldelsen er lagret!');
-                        history.push('/publishReview/' + res);
+                        gameService.game.genres.push(res.genre_id);
+                      })
+                      .catch((err) => {
+                        Alert.danger('Det oppsto en feil ved hentingen av genre_id: ' + err);
                       });
                   });
-              } else {
-                reviewService
-                  .create(this.props.match.params.db_id, this.reviewTitle, this.text, this.rating)
-                  .then((res) => {
-                    Alert.success('Anmeldelsen er lagret!');
-                    history.push('/publishReview/' + res);
+                  gameService2.game.platform.map((platform) => {
+                    platformService
+                      .getId(platform)
+                      .then((res) => {
+                        gameService.game.platforms.push(res.platform_id);
+                      })
+                      .catch((err) => {
+                        Alert.danger('Det oppsto en feil ved hentingen av platform_id: ' + err);
+                      });
                   });
+
+                  gameService
+                    .create(
+                      gameService2.game.igdb_id,
+                      gameService2.game.game_title,
+                      gameService2.game.game_description
+                    )
+                    .then((res) => {
+                      gameService.game.genres.map((genre) => {
+                        genreService.updateGenreMap(res, genre).catch((err) => {
+                          Alert.danger('Det oppsto en feil ved oppdateringen av genre_map: ' + err);
+                        });
+                      });
+
+                      gameService.game.platforms.map((platform) => {
+                        platformService.updatePlatformMap(platform, res).catch((err) => {
+                          Alert.danger(
+                            'Det oppsto en feil ved oppdateringen av platform_map: ' + err
+                          );
+                        });
+                      });
+
+                      reviewService
+                        .create(
+                          res,
+                          reviewService.review.review_title,
+                          reviewService.review.text,
+                          reviewService.review.rating
+                        )
+                        .then((res) => {
+                          Alert.success('Anmeldelsen er lagret!');
+                          history.push('/publishReview/' + res);
+                        })
+                        .catch((err) => {
+                          Alert.danger('Det oppsto en feil ved lagringen av anmeldelsen: ' + err);
+                        });
+                    });
+                } else {
+                  reviewService
+                    .create(
+                      this.props.match.params.db_id,
+                      reviewService.review.review_title,
+                      reviewService.review.text,
+                      reviewService.review.rating
+                    )
+                    .then((res) => {
+                      Alert.success('Anmeldelsen er lagret!');
+                      history.push('/publishReview/' + res);
+                    });
+                }
               }
-            }
-          }}
-        >
-          Lagre
-        </Button.Success>
+            }}
+          >
+            Lagre
+          </Button.Success>
+        </Column>
       </Container>
     );
   }
   mounted() {
-    this.game.game_id = this.props.match.params.db_id;
-    if (this.game.game_id > 0) {
-      gameService.get(this.game.game_id).then((result) => {
-        this.game = result;
-        console.log(this.game);
-      });
-    }
-
-    this.game.igdb_id = this.props.match.params.igdb_id;
-    if (this.game.igdb_id > 0) {
+    gameService.game.igdb_id = this.props.match.params.igdb_id;
+    if (gameService.game.igdb_id > 0) {
       gameService2
-        .get_igdb(this.game.igdb_id)
+        .get_igdb(gameService.game.igdb_id)
         .then((result) => {
-          this.game2 = result;
-          console.log(this.game2);
+          gameService2.game = result;
+          console.log(gameService2.game);
         })
-        .catch();
+        .catch((err) => {
+          console.log('Err: ' + err);
+        });
     }
   }
 }
 
 //Renders a draft review with option to edit, delete or publish
 export class PublishReview extends Component<{ match: { params: { id: number } } }> {
-  review: Review = {
-    review_id: 0,
-    review_title: '',
-    game_title: '',
-    text: '',
-    rating: 0,
-    published: false,
-    game_id: 0,
-    user_id: 0,
-    genre_id: 0,
-
-    platform_id: 0,
-    relevant: 0,
-    likes: 0,
-  };
-  game: Game = {
-    game_id: 0,
-    igdb_id: 0,
-    game_title: '',
-    genre: 0,
-    genres: [],
-    genre_id: 0,
-    platform: 0,
-    platforms: [],
-    game_description: '',
-  };
-
   render() {
     return (
       <Container>
         <Card title="Anmeldelse til publisering">
           <Row>
             <Column width={2}>Spill:</Column>
-            <Column>{this.game.game_title}</Column>
+            <Column>{gameService2.game.game_title}</Column>
           </Row>
 
           <Row>
             <Column width={2}>Sjanger:</Column>
-            <Column></Column>
+            <Column>{gameService2.game.genre.join(', ')}</Column>
           </Row>
           <Row>
             <Column width={2}>Plattform:</Column>
-            <Column></Column>
+            <Column>{gameService2.game.platform.join(', ')}</Column>
           </Row>
           <Linebreak />
           <Card title="">
             <Row>
               <Column width={12}>
                 <div>
-                  <b>{this.review.review_title}</b>
+                  <b>Tittel: </b>
+                  {reviewService.review.review_title}
                 </div>
               </Column>
             </Row>
             <Linebreak />
             <Row>
               <Column width={12}>
-                <div>{this.review.text}</div>
+                <div>
+                  <b>Innhold: </b>
+                  {reviewService.review.text}
+                </div>
               </Column>
             </Row>
             <Linebreak />
             <Row>
               <Column width={12}>
-                <div>Terningkast: {this.review.rating}</div>
+                <div>
+                  <b>Terningkast:</b> {reviewService.review.rating}
+                </div>
               </Column>
             </Row>
           </Card>
@@ -674,13 +615,15 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
                 onClick={() => {
                   reviewService
                     .delete(
-                      this.review.review_id,
-                      this.review.review_title,
-                      this.review.text,
-                      this.review.rating
+                      reviewService.review.review_id,
+                      reviewService.review.review_title,
+                      reviewService.review.text,
+                      reviewService.review.rating
                     )
                     .then(() => {
-                      history.push(`/games/${this.game.game_id}/${this.game.igdb_id}`);
+                      history.push(
+                        `/games/${gameService.game.game_id}/${gameService.game.igdb_id}`
+                      );
                       Alert.success('Review deleted');
                     })
                     .catch((error) => Alert.danger('Error deleting task: ' + error.message));
@@ -699,13 +642,15 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
     reviewService
       .getDraft(this.props.match.params.id)
       .then((review) => {
-        this.review = review;
+        reviewService.review = review;
         if (review.game_id) {
           gameService.get(review.game_id).then((game) => {
-            this.game = game;
+            gameService.game = game;
+            console.log(gameService.game);
           });
         }
       })
+
       .catch((error) => Alert.danger('Error getting review: ' + error.message));
   }
 }
@@ -714,22 +659,6 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
 //  * Renders form to edit an existing review
 //  */
 export class EditReview extends Component<{ match: { params: { id: number } } }> {
-  review: Review = {
-    review_id: 0,
-    review_title: '',
-    text: '',
-    rating: 0,
-    game_id: 0,
-    user_id: 0,
-    published: false,
-    game_title: '',
-    genre_id: 0,
-    relevant: 0,
-    platform_id: 0,
-    likes: 0,
-  };
-
-  nums = [1, 2, 3, 4, 5, 6];
   render() {
     return (
       <Container>
@@ -740,8 +669,10 @@ export class EditReview extends Component<{ match: { params: { id: number } } }>
 
               <Form.Input
                 type="text"
-                value={this.review.review_title}
-                onChange={(event) => (this.review.review_title = event.currentTarget.value)}
+                value={reviewService.review.review_title}
+                onChange={(event) =>
+                  (reviewService.review.review_title = event.currentTarget.value)
+                }
               />
             </FormGroup>
 
@@ -749,9 +680,9 @@ export class EditReview extends Component<{ match: { params: { id: number } } }>
               <Form.Label>Text:</Form.Label>
 
               <Form.Textarea
-                value={this.review.text ?? ''}
+                value={reviewService.review.text ?? ''}
                 onChange={(event) => {
-                  this.review.text = event.currentTarget.value;
+                  reviewService.review.text = event.currentTarget.value;
                 }}
                 rows={10}
               />
@@ -760,12 +691,12 @@ export class EditReview extends Component<{ match: { params: { id: number } } }>
               <Form.Label>Terningkast:</Form.Label>
               <Form.Select
                 placeholder={<div>Velg terningkast:</div>}
-                value={this.review.rating}
+                value={reviewService.review.rating}
                 onChange={(event) => {
-                  this.review.rating = Number(event.currentTarget.value);
+                  reviewService.review.rating = Number(event.currentTarget.value);
                 }}
               >
-                {this.nums.map((num, i) => {
+                {[1, 2, 3, 4, 5, 6].map((num, i) => {
                   return (
                     <option key={i} value={num}>
                       {num}
@@ -785,12 +716,12 @@ export class EditReview extends Component<{ match: { params: { id: number } } }>
 
                 reviewService
                   .edit(
-                    this.review.review_id,
-                    this.review.review_title,
-                    this.review.text,
-                    this.review.rating
+                    reviewService.review.review_id,
+                    reviewService.review.review_title,
+                    reviewService.review.text,
+                    reviewService.review.rating
                   )
-                  .then(() => history.push('/publishReview/' + this.review.review_id))
+                  .then(() => history.push('/publishReview/' + reviewService.review.review_id))
                   .catch((error) => Alert.danger('Error editing review: ' + error.message));
               }}
             >
@@ -805,32 +736,17 @@ export class EditReview extends Component<{ match: { params: { id: number } } }>
   mounted() {
     reviewService
       .getDraft(this.props.match.params.id)
-      .then((review) => (this.review = review))
+      .then((review) => (reviewService.review = review))
       .catch((error) => Alert.danger('Error getting review: ' + error.message));
   }
 }
 
 //Renders Single complete review with option to "like"
 export class CompleteReview extends Component<{ match: { params: { id: number } } }> {
-  review: Review = {
-    review_id: 0,
-    review_title: '',
-    game_title: '',
-    text: '',
-    rating: 0,
-    published: false,
-    game_id: 0,
-    user_id: 1,
-    genre_id: 0,
-    relevant: 0,
-    platform_id: 0,
-    likes: 0,
-  };
-
   counter: number = 0;
   render() {
     const shareButtonProps = {
-      url: 'https://localhost:3000/#/publishedReviews/' + this.review.review_id,
+      url: 'https://localhost:3000/#/publishedReviews/' + reviewService.review.review_id,
       network: 'Facebook',
       text: 'Tror du vil like denne anmeldelsen',
       longtext:
@@ -869,20 +785,20 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
           <Row>
             <Column width={12}>
               <div>
-                <b>{this.review.review_title}</b>
+                <b>{reviewService.review.review_title}</b>
               </div>
             </Column>
           </Row>
           <Linebreak />
           <Row>
             <Column width={12}>
-              <div>{this.review.text}</div>
+              <div>{reviewService.review.text}</div>
             </Column>
           </Row>
           <Linebreak />
           <Row>
             <Column width={12}>
-              <div>Terningkast: {this.review.rating}</div>
+              <div>Terningkast: {reviewService.review.rating}</div>
             </Column>
           </Row>
           <Linebreak />
@@ -891,7 +807,11 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
               <Button.Success
                 onClick={() => {
                   this.counter = this.counter == 0 ? 1 : 0;
-                  reviewService.like(this.review.review_id, this.review.user_id, this.counter);
+                  reviewService.like(
+                    reviewService.review.review_id,
+                    reviewService.review.user_id,
+                    this.counter
+                  );
                 }}
               >
                 Like
@@ -925,8 +845,8 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
     reviewService
       .get(this.props.match.params.id)
       .then((review) => {
-        this.review = review;
-        gameService3.set(this.review.game_id, 0);
+        reviewService.review = review;
+        gameService3.set(reviewService.review.game_id, 0);
       })
       .catch((error) => Alert.danger('Error getting review: ' + error.message));
   }

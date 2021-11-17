@@ -28,7 +28,7 @@ class GenreService {
    * Get genre id with given name.
    */
   getId(name: string) {
-    return axios.get<Genre>('/genres/' + name).then((response) => response.data);
+    return axios.get<Genre>('/genres/get/' + name).then((response) => response.data);
   }
 
   /**
