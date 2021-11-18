@@ -44,7 +44,7 @@ export class Home extends Component {
             <Card title={'Søk etter anmeldelser'}>
               <Button.Success
                 onClick={() => {
-                  history.push('/publishedReviews');
+                  history.push('/reviews');
                 }}
               >
                 Søk

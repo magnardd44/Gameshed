@@ -12,6 +12,7 @@ import {
   FormContainer,
   FormGroup,
   Linebreak,
+  ReviewCard,
 } from './widgets';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { reviewService } from './services/review-service';
@@ -32,37 +33,30 @@ const history = createHashHistory(); // Use history.push(...) to programmaticall
 export class PublishedReviews extends Component {
   render() {
     return (
-      <>
+      <Container>
         <Card title=" Alle publiserte anmeldelser">
-          <Row>
-            <Column>
-              <b>Spill</b>
-            </Column>
-            <Column>
-              <b>Anmeldelse</b>
-            </Column>
-            <Column>
-              <b>Terningkast</b>
-            </Column>
-            <Column>
-              <b>Relevant</b>
-            </Column>
-          </Row>
           {reviewService.reviews.map((review, index) => (
-            <Row key={review.review_id}>
-              <Column>{review.game_title}</Column>
-
-              <Column>
-                <NavLink to={'/publishedReviews/' + review.review_id}>
-                  {review.review_title}
-                </NavLink>
-              </Column>
-              <Column>{review.rating}</Column>
-              <Column>{review.likes}</Column>
+            <Row key={index}>
+              <ReviewCard
+                title={review.review_title}
+                subtitle={review.game_title}
+                terningkast={review.rating}
+                relevanse={review.likes}
+                text={' '}
+              >
+                <Button.Success
+                  small
+                  onClick={() => {
+                    history.push('/publishedReviews/' + review.review_id);
+                  }}
+                >
+                  Les mer
+                </Button.Success>
+              </ReviewCard>
             </Row>
           ))}
         </Card>
-      </>
+      </Container>
     );
   }
 
@@ -74,292 +68,6 @@ export class PublishedReviews extends Component {
         reviewService.reviews = reviews;
         console.log(reviews);
       })
-      .catch((error) => Alert.danger('Error getting reviews: ' + error.message));
-  }
-}
-
-//Renders overview of published reviews based on genre
-export class PlatformReviews extends Component {
-  state = { isHidden: true };
-
-  platformCall(id: number) {
-    reviewService
-      .getPlatform(id)
-      .then((data) => {
-        this.setState({ isHidden: false });
-        console.log(data);
-        reviewService.reviews = data;
-      })
-      .catch((error) => Alert.danger('Error retrieving reviews: ' + error.message));
-  }
-
-  render() {
-    return (
-      <>
-        <Row>
-          <h5>Finn anmeldelser basert på plattform</h5>
-          <Column width={1}>
-            <Card title="Play Station 4">
-              <Button.Success onClick={() => this.platformCall(145)}>Open</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Play Station 5">
-              <Button.Success onClick={() => this.platformCall(146)}>Open</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Nintendo Switch">
-              <Button.Success onClick={() => this.platformCall(119)}>Open</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="XBox One">
-              <Button.Success onClick={() => this.platformCall(186)}>Open</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="XBox 360">
-              <Button.Success onClick={() => this.platformCall(185)}>Open</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="PC - Microsoft">
-              <Button.Success onClick={() => this.platformCall(126)}>Open</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Gameboy">
-              <Button.Success onClick={() => this.platformCall(89)}>Open</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Mac">
-              <Button.Success onClick={() => this.platformCall(100)}>Open</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="IOS">
-              <Button.Success onClick={() => this.platformCall(98)}>Open</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Nintendo DS">
-              <Button.Success onClick={() => this.platformCall(114)}>Open</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Andre">
-              <Button.Success onClick={() => this.platformCall(101 + 102)}>Open</Button.Success>
-            </Card>
-          </Column>
-        </Row>
-        {this.state.isHidden ? null : (
-          <>
-            <Row>
-              <Column>Spill</Column>
-              <Column>Anmeldelse</Column>
-              <Column>Terningkast</Column>
-              <Column>Relevant</Column>
-            </Row>
-            {reviewService.reviews.map((review, index) => (
-              <Row key={index}>
-                <Column>{review.game_title}</Column>
-                <Column>
-                  <NavLink to={'/publishedReviews/' + review.review_id}>
-                    {review.review_title}
-                  </NavLink>
-                </Column>
-                <Column>{review.rating}</Column>
-                <Column>{review.likes}</Column>
-              </Row>
-            ))}
-          </>
-        )}
-      </>
-    );
-  }
-
-  mounted() {
-    reviewService
-      .getPublishedReviews()
-      .then((reviews) => (reviewService.reviews = reviews))
-      .catch((error) => Alert.danger('Error getting reviews: ' + error.message));
-  }
-}
-
-//Renders overview of published reviews based on genre
-export class GenreReviews extends Component {
-  state = { isHidden: true };
-  genreCall(id: number) {
-    reviewService
-      .getGenre(id)
-      .then((data) => {
-        console.log(data);
-        reviewService.reviews = data;
-      })
-      .catch((error) => Alert.danger('Error retrieving reviews: ' + error.message));
-    this.setState({ isHidden: false });
-  }
-
-  render() {
-    return (
-      <>
-        <Row>
-          <h5>Finn anmeldelser basert på sjanger</h5>
-          <Column width={1}>
-            <Card title="Eventyr">
-              <Button.Success onClick={() => this.genreCall(1)}>Eventyr</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Plattform">
-              <Button.Success onClick={() => this.genreCall(2)}>Plattform</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Indie">
-              <Button.Success onClick={() => this.genreCall(3)}>Indie</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Strategi">
-              <Button.Success onClick={() => this.genreCall(4)}>Strategi</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Kort og brett">
-              <Button.Success onClick={() => this.genreCall(5)}>Platform</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Pek og klikk">
-              <Button.Success onClick={() => this.genreCall(6)}>Pek og klikk</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Kampspill">
-              <Button.Success onClick={() => this.genreCall(7)}>Kampspill</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Skyting">
-              <Button.Success onClick={() => this.genreCall(8)}>Skyting</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Musikk">
-              <Button.Success onClick={() => this.genreCall(9)}>Musikk</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Hjernetrim">
-              <Button.Success onClick={() => this.genreCall(10)}>Skyting</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Bilspill">
-              <Button.Success onClick={() => this.genreCall(11)}>Bilspill</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Sanntidsstrategi">
-              <Button.Success onClick={() => this.genreCall(12)}>RTS</Button.Success>
-            </Card>
-          </Column>
-        </Row>
-        <Row>
-          <Column width={1}>
-            <Card title="Rollespill">
-              <Button.Success onClick={() => this.genreCall(13)}>Rollespill</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Simulator">
-              <Button.Success onClick={() => this.genreCall(14)}>Simulator</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Sport">
-              <Button.Success onClick={() => this.genreCall(15)}>Sport</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Turbasert strategi">
-              <Button.Success onClick={() => this.genreCall(16)}>Turbasert strategi</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Taktisk">
-              <Button.Success onClick={() => this.genreCall(17)}>Taktisk</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Spørrespill">
-              <Button.Success onClick={() => this.genreCall(18)}>Spørrespill</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Nærkamp">
-              <Button.Success onClick={() => this.genreCall(19)}>Nærkamp</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Flipperspill">
-              <Button.Success onClick={() => this.genreCall(20)}>Flipperspill</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Arkadespill">
-              <Button.Success onClick={() => this.genreCall(21)}>Arkadespill</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Visual Novel">
-              <Button.Success onClick={() => this.genreCall(22)}>Visual Novel</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="MOBA">
-              <Button.Success onClick={() => this.genreCall(23)}>MOBA</Button.Success>
-            </Card>
-          </Column>
-          <Column width={1}>
-            <Card title="Sandkassespill">
-              <Button.Success onClick={() => this.genreCall(24)}>Sandkassespill</Button.Success>
-            </Card>
-          </Column>
-        </Row>
-        {this.state.isHidden ? null : (
-          <>
-            <Row>
-              <Column>Spill</Column>
-              <Column>Anmeldelse</Column>
-              <Column>Terningkast</Column>
-              <Column>Relevant</Column>
-            </Row>
-            {reviewService.reviews.map((review, index) => (
-              <Row key={index}>
-                <Column>{review.game_title}</Column>
-                <Column>
-                  <NavLink to={'/publishedReviews/' + review.review_id}>
-                    {review.review_title}
-                  </NavLink>
-                </Column>
-                <Column>{review.rating}</Column>
-                <Column>{review.likes}</Column>
-              </Row>
-            ))}
-          </>
-        )}
-      </>
-    );
-  }
-
-  mounted() {
-    reviewService
-      .getPublishedReviews()
-      .then((reviews) => (reviewService.reviews = reviews))
       .catch((error) => Alert.danger('Error getting reviews: ' + error.message));
   }
 }
