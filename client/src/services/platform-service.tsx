@@ -53,6 +53,18 @@ class PlatformService {
       game_id: game_id,
     });
   }
+
+  stringToId(genre: string) {
+	return this.platforms.find((s)=>s.platform_name == genre)?.platform_id || 0;
+  }
+
+  idToString(id: number) {
+	return this.platforms.find((s)=>s.platform_id == id)?.platform_name || 'None';
+  }
+
+  updatePlatformMapString(platform: string, game_id: number) {
+	this.updatePlatformMap(this.stringToId(platform), game_id);
+  }
 }
 
 export let platformService = sharedComponentData(new PlatformService());

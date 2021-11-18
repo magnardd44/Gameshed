@@ -159,7 +159,7 @@ class GameService3 {
    */
   getAll() {
     return axios
-      .get<Game4[]>('/games')
+      .get<Game2[]>('/games')
       .then((response) => response.data)
       .then((games) => {
         this.db = [];
@@ -276,6 +276,7 @@ class GameService3 {
   create(game: Game2) {
     return axios
       .post<{ id: number }>('/games', {
+        igdb_id: game.igdb_id,
         game_title: game.game_title,
         game_description: game.game_description,
       })

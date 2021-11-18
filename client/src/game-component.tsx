@@ -13,8 +13,9 @@ import {
   Linebreak,
 } from './widgets';
 import { NavLink } from 'react-router-dom';
-import { gameService, Game, gameService3 } from './services/game-services';
-import { gameService2, Game2 } from './services/game-services';
+//import { gameService, Game, gameService3 } from './services/game-services';
+//import { gameService2, Game2 } from './services/game-services';
+import { gameService3, Game2 } from './services/game-services';
 import { Genre, genreService } from './services/genre-service';
 import { createHashHistory } from 'history';
 import { platform } from 'os';
@@ -30,7 +31,7 @@ export class GameCard extends Component<{ match: { params: { igdb_id: number; db
     return (
       <>
         <Container>
-          <Card title={gameService2.game.game_title}>
+          <Card title={gameService3.current.game_title}>
             <h6 className="card-subtitle mb-2 text-muted">
               <ColumnCentre key={0}>
                 Terningkast:
@@ -48,13 +49,13 @@ export class GameCard extends Component<{ match: { params: { igdb_id: number; db
               <ColumnCentre width={12} mdwidth={2} key={1}>
                 <ThumbNail
                   img={
-                    gameService2.game.igdb?.cover_url ||
+                    gameService3.current.igdb?.cover_url ||
                     'https://cdn-icons-png.flaticon.com/512/686/686589.png'
                   }
                 ></ThumbNail>
               </ColumnCentre>
               <ColumnCentre width={12} mdwidth={10} key={2}>
-                {gameService2.game.game_description}
+                {gameService3.current.game_description}
                 <Linebreak></Linebreak>
               </ColumnCentre>
             </Row>
@@ -62,27 +63,27 @@ export class GameCard extends Component<{ match: { params: { igdb_id: number; db
             <Row>
               <ColumnCentre key={3}>
                 Sjanger:{' '}
-                {gameService2.game.genre.reduce((p, c) => (p == '' ? c : p + ', ' + c), '')}
+                {gameService3.current.genre.reduce((p, c) => (p == '' ? c : p + ', ' + c), '')}
               </ColumnCentre>
             </Row>
             <Row>
               <ColumnCentre key={4}>
                 Plattformer:{' '}
-                {gameService2.game.platform.reduce((p, c) => (p == '' ? c : p + ', ' + c), '')}
+                {gameService3.current.platform.reduce((p, c) => (p == '' ? c : p + ', ' + c), '')}
               </ColumnCentre>
             </Row>
             <Row>
               <ColumnCentre key={5}>
                 Årstall:{' '}
-                {gameService2.game.igdb
-                  ? new Date(gameService2.game.igdb?.release_date * 1000).getFullYear()
+                {gameService3.current.igdb
+                  ? new Date(gameService3.current.igdb?.release_date * 1000).getFullYear()
                   : ''}
               </ColumnCentre>
             </Row>
             <Row>
               <ColumnCentre key={6}>
                 Lignende spill:{' '}
-                {gameService2.game.igdb?.similar_games?.map((e, i) => {
+                {gameService3.current.igdb?.similar_games?.map((e, i) => {
                   return (
                     <a key={i} href={'http://localhost:3000/#/games/0/' + e.id}>
                       {e.name},{' '}
@@ -92,7 +93,7 @@ export class GameCard extends Component<{ match: { params: { igdb_id: number; db
               </ColumnCentre>
             </Row>
             <Row>
-              {gameService2.game.igdb?.screenshots_url?.map((url, index) => {
+              {gameService3.current.igdb?.screenshots_url?.map((url, index) => {
                 return (
                   <ColumnCentre width={12} smwidth={6} mdwidth={3} key={index}>
                     <ThumbNail img={url} key={index} />
@@ -129,40 +130,41 @@ export class GameCard extends Component<{ match: { params: { igdb_id: number; db
     console.log(game_id);
     console.log(igdb_id);
 
-    if (game_id > 0) {
-      gameService2
-        .get(game_id)
-        .then((result) => {
-          gameService2.game = result;
-
-          console.log(result);
-          console.log(gameService2.game);
-
-          if (gameService2.game.igdb_id) {
-            gameService2.get_igdb_extra(gameService2.game.igdb_id).then((result_igdb) => {
-              gameService2.game.igdb = result_igdb;
-              console.log(gameService2.game.igdb);
-            });
-          }
-        })
-        .catch((err) => console.log(err));
-    } else if (igdb_id > 0) {
-      gameService2
-        .get_igdb(igdb_id)
-        .then((result) => {
-          gameService2.game = result;
-          console.log(gameService2.game);
-          console.log('sjanger: ' + gameService2.game.genre.join(', '));
-        })
-        .catch();
-    }
+	gameService3.set(game_id, igdb_id);
+//    if (game_id > 0) {
+//      gameService2
+//        .get(game_id)
+//        .then((result) => {
+//          gameService2.game = result;
+//
+//          console.log(result);
+//          console.log(gameService2.game);
+//
+//          if (gameService2.game.igdb_id) {
+//            gameService2.get_igdb_extra(gameService2.game.igdb_id).then((result_igdb) => {
+//              gameService2.game.igdb = result_igdb;
+//              console.log(gameService2.game.igdb);
+//            });
+//          }
+//        })
+//        .catch((err) => console.log(err));
+//    } else if (igdb_id > 0) {
+//      gameService2
+//        .get_igdb(igdb_id)
+//        .then((result) => {
+//          gameService2.game = result;
+//          console.log(gameService2.game);
+//          console.log('sjanger: ' + gameService2.game.genre.join(', '));
+//        })
+//        .catch();
+//    }
   }
   addReview() {
-    history.push(`/addReview/${gameService2.game.game_id}/${gameService2.game.igdb_id}`);
+    history.push(`/addReview/${gameService3.current.game_id}/${gameService3.current.igdb_id}`);
   }
   rating() {
-    let terningkast = gameService2.game.igdb
-      ? Math.ceil((gameService2.game.igdb?.aggregated_rating * 6) / 100)
+    let terningkast = gameService3.current.igdb
+      ? Math.ceil((gameService3.current.igdb?.aggregated_rating * 6) / 100)
       : '';
     return terningkast;
   }
@@ -189,9 +191,9 @@ export class AddGame extends Component {
               <Form.Input
                 placeholder={'Skriv inn tittel'}
                 type="text"
-                value={gameService.game.game_title}
+                value={gameService3.current.game_title}
                 onChange={(event) => {
-                  gameService.game.game_title = event.currentTarget.value;
+                  gameService3.current.game_title = event.currentTarget.value;
                 }}
               />
             </Column>
@@ -204,9 +206,9 @@ export class AddGame extends Component {
             <Column>
               <Form.Textarea
                 placeholder={'Skriv inn en beskrivelse av spillet'}
-                value={gameService.game.game_description ?? ''}
+                value={gameService3.current.game_description ?? ''}
                 onChange={(event) => {
-                  gameService.game.game_description = event.currentTarget.value;
+                  gameService3.current.game_description = event.currentTarget.value;
                 }}
                 rows={10}
               />
@@ -244,7 +246,7 @@ export class AddGame extends Component {
                   onClick={() => {
                     if (this.genreElCount != 1) {
                       this.genreElCount--;
-                      gameService.game.genres.pop();
+                      gameService3.current.genre.pop();
                       this.addGenreEl();
                     }
                   }}
@@ -288,7 +290,7 @@ export class AddGame extends Component {
                   onClick={() => {
                     if (this.platformElCount != 1) {
                       this.platformElCount--;
-                      gameService.game.platforms.pop();
+                      gameService3.current.platform.pop();
                       this.addPlatformEl();
                     }
                   }}
@@ -307,46 +309,49 @@ export class AddGame extends Component {
             <Column>
               <Button.Success
                 onClick={() => {
-                  const genresCheck = Array.from(new Set(gameService.game.genres));
-                  const platformsCheck = Array.from(new Set(gameService.game.platforms));
+                  const genresCheck = Array.from(new Set(gameService3.current.genre));
+                  const platformsCheck = Array.from(new Set(gameService3.current.platform));
                   if (
-                    gameService.games.find(
+                    gameService3.db.find(
                       (el) =>
-                        el.game_title.toLowerCase() === gameService.game.game_title.toLowerCase()
+                        el.game_title.toLowerCase() === gameService3.current.game_title.toLowerCase()
                     ) != undefined
                   ) {
                     Alert.danger('Spillet finnes allerede i databasen!');
-                  } else if (gameService.game.genres.length != genresCheck.length) {
+                  } else if (gameService3.current.genre.length != genresCheck.length) {
                     Alert.danger('Sjangerne må være ulike!');
-                  } else if (gameService.game.platforms.length != platformsCheck.length) {
+                  } else if (gameService3.current.platform.length != platformsCheck.length) {
                     Alert.danger('Platformene må være ulike!');
                   } else if (
-                    gameService.game.game_title === '' ||
-                    gameService.game.game_description === '' ||
+                    gameService3.current.game_title === '' ||
+                    gameService3.current.game_description === '' ||
                     this.genreEl.map((el) => el === undefined) ||
                     this.platformEl.map((el) => el === undefined)
                   ) {
                     Alert.danger('Alle feltene må være fylt ut!');
                   } else {
-                    axios
-                      .post('search', { game: gameService.game.game_title })
-                      .then((response) => {
-                        gameService.games = response.data;
-                      })
-                      .catch((err) => console.log(err));
+					gameService3.search_igdb(gameService3.current.game_title);
+//                    axios
+//                      .post('search', { game: gameService.game.game_title })
+//                      .then((response) => {
+//                        gameService.games = response.data;
+//                      })
+//                      .catch((err) => console.log(err));
 
-                    gameService
+                    gameService3
                       .create(
-                        gameService.games[0].igdb_id,
-                        gameService.game.game_title,
-                        gameService.game.game_description
+					  gameService3.current
+
+                       // gameService.games[0].igdb_id,
+                       // gameService.game.game_title,
+                       // gameService.game.game_description
                       )
                       .then((id) => {
                         for (let i = 0; i < this.genreElCount; i++) {
-                          genreService.updateGenreMap(id, gameService.game.genres[i]);
+                          genreService.updateGenreMapString(id, gameService3.current.genre[i]);
                         }
                         for (let i = 0; i < this.platformElCount; i++) {
-                          platformService.updatePlatformMap(gameService.game.platforms[i], id);
+                          platformService.updatePlatformMapString(gameService3.current.platform[i], id);
                         }
                       })
                       .then((id) => {
@@ -376,6 +381,9 @@ export class AddGame extends Component {
   }
 
   mounted() {
+	gameService3.current = gameService3.empty();
+	gameService3.clear();
+
     genreService.getAll().then((res) => {
       genreService.genres = res;
       this.addGenreEl();
@@ -386,8 +394,8 @@ export class AddGame extends Component {
       this.addPlatformEl();
     });
 
-    gameService.getAll().then((res) => {
-      gameService.games = res;
+    gameService3.getAll().then((res) => {
+      //gameService.games = res;
     });
   }
 
@@ -402,15 +410,15 @@ export class AddGame extends Component {
               <Column>
                 <Form.Select
                   key={i}
-                  value={gameService.game.genres[i]}
+                  value={gameService3.current.genre[i]}
                   onChange={(event) => {
-                    gameService.game.genres[i] = Number(event.currentTarget.value);
+                    gameService3.current.genre[i] = genreService.idToString(Number(event.currentTarget.value));
                   }}
                 >
                   <option hidden>Velg sjanger her:</option>
-                  {genreService.genres.map((genre, i) => {
+                  {genreService.genres.map((genre, index) => {
                     return (
-                      <option key={i} value={genre.genre_id}>
+                      <option key={index} value={genre.genre_id}>
                         {genre.genre_name}
                       </option>
                     );
@@ -437,13 +445,13 @@ export class AddGame extends Component {
                   key={i}
                   value={this.platformEl[i]}
                   onChange={(event) => {
-                    gameService.game.platforms[i] = Number(event.currentTarget.value);
+                    gameService3.current.platform[i] = platformService.idToString(Number(event.currentTarget.value));
                   }}
                 >
                   <option hidden>Velg platform her:</option>
-                  {platformService.platforms.map((platform) => {
+                  {platformService.platforms.map((platform,index) => {
                     return (
-                      <option key={platform.platform_id} value={platform.platform_id}>
+                      <option key={index} value={platform.platform_id}>
                         {platform.platform_name}
                       </option>
                     );

@@ -15,7 +15,7 @@ import {
   FormGroup,
 } from './widgets';
 import { NavLink } from 'react-router-dom';
-import { gameService, Game } from './services/game-services';
+//import { gameService, Game } from './services/game-services';
 import { Genre } from './services/genre-service';
 import { createHashHistory } from 'history';
 import axios from 'axios';
@@ -47,17 +47,17 @@ export class Search extends Component {
   //games: Game[] = [];
   filtered: Game2[] = [];
 
-  game: Game = {
-    game_id: 0,
-    igdb_id: 0,
-    game_title: '',
-    genre: 0,
-    genres: [],
-    genre_id: 0,
-    platform: 0,
-    platforms: [],
-    game_description: '',
-  };
+//  game: Game = {
+//    game_id: 0,
+//    igdb_id: 0,
+//    game_title: '',
+//    genre: 0,
+//    genres: [],
+//    genre_id: 0,
+//    platform: 0,
+//    platforms: [],
+//    game_description: '',
+//  };
 
   render() {
     return (
