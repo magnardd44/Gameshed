@@ -13,6 +13,7 @@ import {
   FormGroup,
   Linebreak,
   ReviewCard,
+  FullReviewCard,
 } from './widgets';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { reviewService } from './services/review-service';
@@ -490,11 +491,14 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
 
     return (
       <Container>
-        <Card title="Anmeldelse">
-          <Row>
-            <Column width={2}>Spill:</Column>
-            <Column>{gameService3.current.game_title}</Column>
-          </Row>
+        <FullReviewCard
+          title={reviewService.review.review_title}
+          subtitle={gameService3.current.game_title}
+          text={reviewService.review.text}
+          terningkast={reviewService.review.rating}
+          relevanse={reviewService.review.likes}
+          img={gameService3.current.igdb?.cover_url ? gameService3.current.igdb.cover_url : ' '}
+        >
           <Row>
             <Column width={2}>Sjanger: </Column>
             <Column>
@@ -507,36 +511,7 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
               {gameService3.current.platform?.reduce((p, c) => (p == '' ? c : p + ', ' + c), '')}
             </Column>
           </Row>
-          <Row>
-            <Column>
-              <ThumbNail
-                img={
-                  gameService3.current.igdb?.cover_url ? gameService3.current.igdb.cover_url : ''
-                }
-              ></ThumbNail>
-            </Column>
-          </Row>
-          <Linebreak />
-          <Row>
-            <Column width={12}>
-              <div>
-                <b>{reviewService.review.review_title}</b>
-              </div>
-            </Column>
-          </Row>
-          <Linebreak />
-          <Row>
-            <Column width={12}>
-              <div>{reviewService.review.text}</div>
-            </Column>
-          </Row>
-          <Linebreak />
-          <Row>
-            <Column width={12}>
-              <div>Terningkast: {reviewService.review.rating}</div>
-            </Column>
-          </Row>
-          <Linebreak />
+          <Linebreak></Linebreak>
           <Row>
             <Column width={1}>
               <Button.Success
@@ -571,7 +546,7 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
               </EmailShareButton>
             </Column>
           </Row>
-        </Card>
+        </FullReviewCard>
       </Container>
     );
   }
