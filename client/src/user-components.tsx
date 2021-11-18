@@ -2,7 +2,10 @@ import * as React from 'react';
 import { Component } from 'react-simplified';
 import { Form, Card, Alert, Button, Container, Column } from './widgets';
 import userService from './services/user-service';
-import { history } from './index';
+//import { history } from './index';
+import { createHashHistory } from 'history';
+//
+const history = createHashHistory();
 
 export class UserNav extends Component {
   //password: string = '';
@@ -21,6 +24,7 @@ export class UserNav extends Component {
         </Button.Success>
         <Form.Label>Brukernavn:</Form.Label>
         <Form.Input
+          id="emailInput"
           type="text"
           value={userService.email}
           placeholder="Epost"
@@ -57,7 +61,7 @@ export class UserNav extends Component {
           <Button.Success
             small
             onClick={() => {
-              console.log(userService.email.length ? true : false);
+              //console.log(userService.email.length ? true : false);
               let password = prompt('Skriv inn passord');
               if (userService.email.length && password?.length) {
                 userService
@@ -100,6 +104,7 @@ export class UserData extends Component {
         <Form.Label>
           Brukarnavn
           <Form.Input
+            id="inputName"
             type="text"
             value={userService.name}
             placeholder="Brukernavn"
@@ -112,6 +117,7 @@ export class UserData extends Component {
         <Form.Label>
           Epost
           <Form.Input
+            id="inputEmail"
             type="text"
             value={userService.email}
             disabled={userService.token}
@@ -126,6 +132,7 @@ export class UserData extends Component {
         <Form.Label>
           Om meg
           <Form.Textarea
+            id="inputAbout"
             type="text"
             value={userService.about}
             placeholder="Om meg"
@@ -165,10 +172,10 @@ export class UserPersonal extends Component {
   mounted() {
     let result = userService
       .get_user()
-      .then((result) => {})
+      .then()
       .catch((err) => {
-        console.log('Failed');
-        console.log(err);
+        //console.log('Failed');
+        //console.log(err);
       });
   }
 }

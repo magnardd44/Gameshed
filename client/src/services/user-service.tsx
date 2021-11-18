@@ -38,6 +38,12 @@ class UserService {
     );
   }
 
+  async test() {
+    this.axios.get('/test').then(function (response) {
+      console.log(response.data);
+    });
+  }
+
   login(email: String, password: String) {
     return this.axios
       .post('user/login', { email: email, password: password })
@@ -45,7 +51,7 @@ class UserService {
         this.token = response.data;
       })
       .catch((err) => {
-        console.log(err);
+        //console.log(err);
         throw err;
       });
   }
@@ -116,7 +122,7 @@ class UserService {
   delete() {
     if (this.token) {
       this.axios
-        .delete('user/')
+        .delete('user')
         .then((response) => {
           this.token = null;
           this.name = 'Anonym';
