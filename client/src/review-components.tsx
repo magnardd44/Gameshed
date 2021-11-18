@@ -489,7 +489,7 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
     };
 
     return (
-      <>
+      <Container>
         <Card title="Anmeldelse">
           <Row>
             <Column width={2}>Spill:</Column>
@@ -572,7 +572,7 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
             </Column>
           </Row>
         </Card>
-      </>
+      </Container>
     );
   }
 
