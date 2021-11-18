@@ -17,7 +17,6 @@ import {
   ReviewCard,
 } from './widgets';
 import { NavLink } from 'react-router-dom';
-import { gameService, Game } from './services/game-services';
 import { Genre } from './services/genre-service';
 import { createHashHistory } from 'history';
 import axios from 'axios';
@@ -30,18 +29,6 @@ const history = createHashHistory();
 export class Category extends Component {
   genres: Genre[] = [];
   reviews: Review[] = [];
-  games: Game[] = [];
-  game: Game = {
-    game_id: 0,
-    game_title: '',
-    genre: 0,
-    genre_id: 0,
-    platform: 0,
-    game_description: '',
-    igdb_id: 0,
-    genres: [],
-    platforms: [],
-  };
   review: Review = {
     review_id: 0,
     game_id: 0,

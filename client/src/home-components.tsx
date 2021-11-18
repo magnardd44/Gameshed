@@ -16,13 +16,11 @@ import {
   CategoryCard,
 } from './widgets';
 import { NavLink } from 'react-router-dom';
-import { gameService, Game } from './services/game-services';
 import { Genre } from './services/genre-service';
 import { createHashHistory } from 'history';
 import axios from 'axios';
 import { genreService } from './services/genre-service';
 import { history } from './index';
-import { Game2, gameService3 } from './services/game-services';
 
 export class Home extends Component {
   render() {

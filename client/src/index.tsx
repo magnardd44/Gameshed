@@ -31,7 +31,6 @@ import {
 
 import { Hash } from 'crypto';
 import { createHashHistory } from 'history';
-import { gameService, Game } from './services/game-services';
 import { Search, SearchListings } from './search-components';
 import { GameCard, AddGame } from './game-component';
 import { UserNav, UserPage } from './user-components';

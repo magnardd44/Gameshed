@@ -15,13 +15,12 @@ import {
   FormGroup,
 } from './widgets';
 import { NavLink } from 'react-router-dom';
-import { gameService, Game } from './services/game-services';
 import { Genre } from './services/genre-service';
 import { createHashHistory } from 'history';
 import axios from 'axios';
 import { genreService } from './services/genre-service';
 import { history } from './index';
-import { Game2, gameService3 } from './services/game-services';
+import { Game, gameService } from './services/game-services';
 
 type gameType = {
   id: number;
@@ -45,19 +44,19 @@ export class Search extends Component {
   lastInput: string = '';
 
   //games: Game[] = [];
-  filtered: Game2[] = [];
+  filtered: Game[] = [];
 
-  game: Game = {
-    game_id: 0,
-    igdb_id: 0,
-    game_title: '',
-    genre: 0,
-    genres: [],
-    genre_id: 0,
-    platform: 0,
-    platforms: [],
-    game_description: '',
-  };
+  //  game: Game = {
+  //    game_id: 0,
+  //    igdb_id: 0,
+  //    game_title: '',
+  //    genre: 0,
+  //    genres: [],
+  //    genre_id: 0,
+  //    platform: 0,
+  //    platforms: [],
+  //    game_description: '',
+  //  };
 
   render() {
     return (
@@ -72,7 +71,7 @@ export class Search extends Component {
                 onChange={(event) => {
                   this.input = event.currentTarget.value;
                   if (this.input.length > 0) {
-                    gameService3.search_db(this.input);
+                    gameService.search_db(this.input);
                   }
                 }}
                 onKeyUp={(event: { key: string }) => {
@@ -81,7 +80,7 @@ export class Search extends Component {
                   }
                 }}
               />
-              {gameService3.db.concat(gameService3.igdb).map((game, index) => {
+              {gameService.db.concat(gameService.igdb).map((game, index) => {
                 if (this.input != '') {
                   return (
                     <div
@@ -124,14 +123,14 @@ export class Search extends Component {
   }
 
   mounted() {
-    gameService3.clear();
+    gameService.clear();
 
     this.igdbSearcher = setInterval(() => {
       if (this.input != this.lastInput) {
         if (this.input) {
-          gameService3.search_igdb(this.input);
+          gameService.search_igdb(this.input);
         } else {
-          gameService3.igdb = [];
+          gameService.igdb = [];
         }
 
         this.lastInput = this.input;
@@ -147,14 +146,14 @@ export class Search extends Component {
   }
 
   setGame(db_id: number, igdb_id: number) {
-    gameService3.set(db_id, igdb_id);
+    gameService.set(db_id, igdb_id);
     history.push('/games/' + db_id + '/' + igdb_id);
   }
 
   search() {
     if (this.input.length > 0) {
-      gameService3.search_db_and_extra(this.input); // = this.filtered;
-      gameService3.search_igdb(this.input);
+      gameService.search_db_and_extra(this.input); // = this.filtered;
+      gameService.search_igdb(this.input);
       history.push('/results');
     } else {
       Alert.info('Skriv inn et spill å søke etter.');
@@ -191,10 +190,10 @@ export class SearchListings extends Component {
           </FormContainer>
         </Container>
         <Container>
-          {gameService3.db.map((game, index) => (
+          {gameService.db.map((game, index) => (
             <SearchResult game={game} key={index}></SearchResult>
           ))}
-          {gameService3.igdb.map((game, index) => (
+          {gameService.igdb.map((game, index) => (
             <SearchResult game={game} key={index}></SearchResult>
           ))}
         </Container>
@@ -216,7 +215,7 @@ export class SearchListings extends Component {
   }
 }
 
-export class SearchResult extends Component<{ game: Game2 }> {
+export class SearchResult extends Component<{ game: Game }> {
   render() {
     return (
       <Card title={this.props.game.game_title}>

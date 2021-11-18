@@ -17,7 +17,6 @@ import {
   ReviewCard,
 } from './widgets';
 import { NavLink } from 'react-router-dom';
-import { gameService, Game } from './services/game-services';
 import { Genre } from './services/genre-service';
 import { createHashHistory } from 'history';
 import axios from 'axios';
@@ -31,7 +30,6 @@ const history = createHashHistory();
 //Renders overview of published reviews based on genre
 export class Platform extends Component {
   reviews: Review[] = [];
-  games: Game[] = [];
   state = { isHidden: true };
 
   review: Review = {

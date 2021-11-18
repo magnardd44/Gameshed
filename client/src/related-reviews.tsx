@@ -14,8 +14,6 @@ import {
   ReviewCard,
 } from './widgets';
 import { NavLink } from 'react-router-dom';
-import { gameService, Game } from './services/game-services';
-import { gameService2, Game2 } from './services/game-services';
 import { Genre, genreService } from './services/genre-service';
 import { Review, reviewService } from './services/review-service';
 import { createHashHistory } from 'history';
