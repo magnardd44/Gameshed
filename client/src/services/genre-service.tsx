@@ -59,16 +59,16 @@ class GenreService {
       .then((response) => response.data.id);
   }
 
-  stringToId(genre: string) {
-	return this.genres.find((s)=>s.genre_name == genre)?.genre_id || 0;
+  stringToId(genre: string) {
+    return this.genres.find((s) => s.genre_name == genre)?.genre_id || 0;
   }
 
-  idToString(id: number) {
-	return this.genres.find((s)=>s.genre_id == id)?.genre_name || 'None';
+  idToString(id: number) {
+    return this.genres.find((s) => s.genre_id == id)?.genre_name || 'None';
   }
 
   updateGenreMapString(game_id: number, genre: string) {
-	return this.updateGenreMap(game_id, this.stringToId(genre));
+    return this.updateGenreMap(game_id, this.stringToId(genre));
   }
 }
 

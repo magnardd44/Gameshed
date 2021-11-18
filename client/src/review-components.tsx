@@ -17,7 +17,7 @@ import { Link, NavLink, useLocation } from 'react-router-dom';
 import { reviewService } from './services/review-service';
 
 import { createHashHistory } from 'history';
-import { Game2, gameService3 } from './services/game-services';
+import { gameService } from './services/game-services';
 import axios from 'axios';
 import { genreService } from './services/genre-service';
 import { platformService } from './services/platform-service';
@@ -375,15 +375,15 @@ export class AddReview extends Component<{
         <Card title="Skriv anmeldelse">
           <Row>
             <Column width={2}>Spill:</Column>
-            <Column>{gameService3.current.game_title}</Column>
+            <Column>{gameService.current.game_title}</Column>
           </Row>
           <Row>
             <Column width={2}>Sjanger:</Column>
-            <Column>{gameService3.current.genre.join(', ')}</Column>
+            <Column>{gameService.current.genre.join(', ')}</Column>
           </Row>
           <Row>
             <Column width={2}>Plattform:</Column>
-            <Column>{gameService3.current.platform.join(', ')}</Column>
+            <Column>{gameService.current.platform.join(', ')}</Column>
           </Row>
           <FormContainer>
             <FormGroup>
@@ -434,7 +434,9 @@ export class AddReview extends Component<{
         <Column>
           <Button.Danger
             onClick={() => {
-              history.push('/games/' + gameService3.current.game_id + '/' + gameService3.current.igdb);
+              history.push(
+                '/games/' + gameService.current.game_id + '/' + gameService.current.igdb
+              );
             }}
           >
             Tilbake
@@ -451,42 +453,41 @@ export class AddReview extends Component<{
                 Alert.danger('Alle feltene må være fylt ut!');
               } else {
                 if (this.props.match.params.db_id == 0) {
-//                  gameService2.game.genre.map((genre) => {
-//                    genreService
-//                      .getId(genre)
-//                      .then((res) => {
-//                        gameService.game.genres.push(res.genre_id);
-//                      })
-//                      .catch((err) => {
-//                        Alert.danger('Det oppsto en feil ved hentingen av genre_id: ' + err);
-//                      });
-//                  });
-//                  gameService2.game.platform.map((platform) => {
-//                    platformService
-//                      .getId(platform)
-//                      .then((res) => {
-//                        gameService.game.platforms.push(res.platform_id);
-//                      })
-//                      .catch((err) => {
-//                        Alert.danger('Det oppsto en feil ved hentingen av platform_id: ' + err);
-//                      });
-//                  });
+                  //                  gameService2.game.genre.map((genre) => {
+                  //                    genreService
+                  //                      .getId(genre)
+                  //                      .then((res) => {
+                  //                        gameService.game.genres.push(res.genre_id);
+                  //                      })
+                  //                      .catch((err) => {
+                  //                        Alert.danger('Det oppsto en feil ved hentingen av genre_id: ' + err);
+                  //                      });
+                  //                  });
+                  //                  gameService2.game.platform.map((platform) => {
+                  //                    platformService
+                  //                      .getId(platform)
+                  //                      .then((res) => {
+                  //                        gameService.game.platforms.push(res.platform_id);
+                  //                      })
+                  //                      .catch((err) => {
+                  //                        Alert.danger('Det oppsto en feil ved hentingen av platform_id: ' + err);
+                  //                      });
+                  //                  });
 
-                  gameService3
-                    .create(
-						gameService3.current)
-//                      gameService2.game.igdb_id,
-//                      gameService2.game.game_title,
-//                      gameService2.game.game_description
-//                    )
+                  gameService
+                    .create(gameService.current)
+                    //                      gameService2.game.igdb_id,
+                    //                      gameService2.game.game_title,
+                    //                      gameService2.game.game_description
+                    //                    )
                     .then((res) => {
-                      gameService3.current.genre.map((genre) => {
+                      gameService.current.genre.map((genre) => {
                         genreService.updateGenreMapString(res, genre).catch((err) => {
                           Alert.danger('Det oppsto en feil ved oppdateringen av genre_map: ' + err);
                         });
                       });
 
-                      gameService3.current.platform.map((platform) => {
+                      gameService.current.platform.map((platform) => {
                         platformService.updatePlatformMapString(platform, res).catch((err) => {
                           Alert.danger(
                             'Det oppsto en feil ved oppdateringen av platform_map: ' + err
@@ -534,30 +535,31 @@ export class AddReview extends Component<{
     reviewService.review.text = '';
     reviewService.review.rating = 0;
 
-	let db_id = this.props.match.params.db_id
-	let igdb_id = this.props.match.params.igdb_id
+    let db_id = this.props.match.params.db_id;
+    let igdb_id = this.props.match.params.igdb_id;
 
-	gameService3.set(db_id, igdb_id)
-	.then((result) => {
-			//gameService2.game = result;
-			console.log(gameService3.current);
-			})
-	.catch((err) => {
-			console.log('Err: ' + err);
-			});
+    gameService
+      .set(db_id, igdb_id)
+      .then((result) => {
+        //gameService2.game = result;
+        console.log(gameService.current);
+      })
+      .catch((err) => {
+        console.log('Err: ' + err);
+      });
 
-//    gameService.game.igdb_id = this.props.match.params.igdb_id;
-//    if (gameService.game.igdb_id > 0) {
-//      gameService2
-//        .get_igdb(gameService.game.igdb_id)
-//        .then((result) => {
-//          gameService2.game = result;
-//          console.log(gameService2.game);
-//        })
-//        .catch((err) => {
-//          console.log('Err: ' + err);
-//        });
-//    }
+    //    gameService.game.igdb_id = this.props.match.params.igdb_id;
+    //    if (gameService.game.igdb_id > 0) {
+    //      gameService2
+    //        .get_igdb(gameService.game.igdb_id)
+    //        .then((result) => {
+    //          gameService2.game = result;
+    //          console.log(gameService2.game);
+    //        })
+    //        .catch((err) => {
+    //          console.log('Err: ' + err);
+    //        });
+    //    }
   }
 }
 
@@ -569,16 +571,16 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
         <Card title="Anmeldelse til publisering">
           <Row>
             <Column width={2}>Spill:</Column>
-            <Column>{gameService3.current.game_title}</Column>
+            <Column>{gameService.current.game_title}</Column>
           </Row>
 
           <Row>
             <Column width={2}>Sjanger:</Column>
-            <Column>{gameService3.current.genre.join(', ')}</Column>
+            <Column>{gameService.current.genre.join(', ')}</Column>
           </Row>
           <Row>
             <Column width={2}>Plattform:</Column>
-            <Column>{gameService3.current.platform.join(', ')}</Column>
+            <Column>{gameService.current.platform.join(', ')}</Column>
           </Row>
           <Linebreak />
           <Card title="">
@@ -637,7 +639,7 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
                     .delete(reviewService.review.review_id)
                     .then(() => {
                       history.push(
-                        `/games/${gameService3.current.game_id}/${gameService3.current.igdb_id}`
+                        `/games/${gameService.current.game_id}/${gameService.current.igdb_id}`
                       );
                       Alert.success('Review deleted');
                     })
@@ -660,9 +662,9 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
         reviewService.review = review;
         if (review.game_id) {
           //gameService2.get(review.game_id).then((game) => {
-			gameService3.set(review.game_id, 0).then(()=>{
+          gameService.set(review.game_id, 0).then(() => {
             //gameService2.game = game;
-            console.log(gameService3.current);
+            console.log(gameService.current);
           });
         }
       })
@@ -680,16 +682,16 @@ export class EditReview extends Component<{ match: { params: { id: number } } }>
         <Card title="Edit review">
           <Row>
             <Column width={2}>Spill:</Column>
-            <Column>{gameService3.current.game_title}</Column>
+            <Column>{gameService.current.game_title}</Column>
           </Row>
 
           <Row>
             <Column width={2}>Sjanger:</Column>
-            <Column>{gameService3.current.genre.join(', ')}</Column>
+            <Column>{gameService.current.genre.join(', ')}</Column>
           </Row>
           <Row>
             <Column width={2}>Plattform:</Column>
-            <Column>{gameService3.current.platform.join(', ')}</Column>
+            <Column>{gameService.current.platform.join(', ')}</Column>
           </Row>
           <Linebreak />
           <FormContainer>
@@ -769,13 +771,13 @@ export class EditReview extends Component<{ match: { params: { id: number } } }>
         reviewService.review = review;
         if (review.game_id) {
           //gameService.get(review.game_id).then((game) => {
-          gameService3.set(review.game_id, 0).then(() => {
+          gameService.set(review.game_id, 0).then(() => {
             //gameService.game = game;
-            console.log(gameService3.current);
+            console.log(gameService.current);
           });
-//          gameService2.get(review.game_id).then((game) => {
-//            gameService2.game = game;
-//          });
+          //          gameService2.get(review.game_id).then((game) => {
+          //            gameService2.game = game;
+          //          });
         }
       })
       .catch((error) => Alert.danger('Error getting review: ' + error.message));
@@ -799,26 +801,24 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
         <Card title="Anmeldelse">
           <Row>
             <Column width={2}>Spill:</Column>
-            <Column>{gameService3.current.game_title}</Column>
+            <Column>{gameService.current.game_title}</Column>
           </Row>
           <Row>
             <Column width={2}>Sjanger: </Column>
             <Column>
-              {gameService3.current.genre?.reduce((p, c) => (p == '' ? c : p + ', ' + c), '')}
+              {gameService.current.genre?.reduce((p, c) => (p == '' ? c : p + ', ' + c), '')}
             </Column>
           </Row>
           <Row>
             <Column width={2}>Plattform:</Column>
             <Column>
-              {gameService3.current.platform?.reduce((p, c) => (p == '' ? c : p + ', ' + c), '')}
+              {gameService.current.platform?.reduce((p, c) => (p == '' ? c : p + ', ' + c), '')}
             </Column>
           </Row>
           <Row>
             <Column>
               <ThumbNail
-                img={
-                  gameService3.current.igdb?.cover_url ? gameService3.current.igdb.cover_url : ''
-                }
+                img={gameService.current.igdb?.cover_url ? gameService.current.igdb.cover_url : ''}
               ></ThumbNail>
             </Column>
           </Row>
@@ -887,7 +887,7 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
       .get(this.props.match.params.id)
       .then((review) => {
         reviewService.review = review;
-        gameService3.set(reviewService.review.game_id, 0);
+        gameService.set(reviewService.review.game_id, 0);
       })
       .catch((error) => Alert.danger('Error getting review: ' + error.message));
   }
@@ -905,15 +905,15 @@ export class SavedDrafts extends Component<{ match: { params: { id: number } } }
               //gameService.get(draft.game_id).then((res) => {
               //  gameService.game = res;
               //});
-              gameService3.set(draft.game_id, 0);
-			  
+              gameService.set(draft.game_id, 0);
+
               return (
                 <Card title="Mine utkast:" key={i}>
                   <Card title={`Utkast nr: ${(i += 1)}`} key={i}>
                     <Row key={i}>
                       <Column>Spillet anmeldelsen hører til:</Column>
                       <Column>
-                        <b>{gameService3.current.game_title}</b>
+                        <b>{gameService.current.game_title}</b>
                       </Column>
                     </Row>
                     <Linebreak />

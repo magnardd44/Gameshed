@@ -21,7 +21,6 @@ import { createHashHistory } from 'history';
 import axios from 'axios';
 import { genreService } from './services/genre-service';
 import { history } from './index';
-import { Game2, gameService3 } from './services/game-services';
 
 export class Home extends Component {
   render() {

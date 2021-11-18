@@ -5,63 +5,7 @@ import { Platform } from './platform-service';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 
-//export type Game = {
-//  game_id: number;
-//  igdb_id: number;
-//  game_title: string;
-//  genre: number;
-//  genres: number[];
-//  genre_id: number;
-//  platform: number;
-//  platforms: number[];
-//  game_description: string;
-//};
-//
-//class GameService {
-//  game: Game = {
-//    game_id: 0,
-//    igdb_id: 0,
-//    game_title: '',
-//    genre: 0,
-//    genres: [],
-//    genre_id: 0,
-//    platform: 0,
-//    platforms: [],
-//    game_description: '',
-//  };
-//  games: Game[] = [];
-//
-//  /**
-//   * Get game with given id.
-//   */
-//  get(id: number) {
-//    return axios.get<Game>('/games/' + id).then((response) => response.data);
-//  }
-//
-//  /**
-//   * Get all games.
-//   */
-//  getAll() {
-//    return axios.get<Game[]>('/games').then((response) => response.data);
-//  }
-//
-//  /**
-//   * Create new game having the given title.
-//   *
-//   * Resolves the newly created game id.
-//   */
-//  create(igdb_id: number, title: string, description: string) {
-//    return axios
-//      .post<{ id: number }>('/games', {
-//        igdb_id: igdb_id,
-//        game_title: title,
-//        game_description: description,
-//      })
-//      .then((response) => response.data.id);
-//  }
-//}
-
-export type Game2 = {
+export type Game = {
   game_id: number;
   igdb_id: number;
   game_title: string;
@@ -84,56 +28,11 @@ export type id_name_link = {
   name: string;
 };
 
-//class GameService2 {
-//  games: Game2[] = [];
-//
-//  game: Game2 = {
-//    game_id: 0,
-//    igdb_id: 0,
-//    game_title: '',
-//    genre: [],
-//    platform: [],
-//    game_description: '',
-//    igdb: null,
-//  };
-//
-//  /**
-//   * Get game with given id.
-//   */
-//  get(id: number) {
-//    return axios.get<Game2>('/games/' + id).then((response) => response.data);
-//  }
-//
-//  /**
-//   * Get all games.
-//   */
-//  getAll() {
-//    return axios.get<Game[]>('/games').then((response) => response.data);
-//  }
-//
-//  get_igdb(id: number) {
-//    return axios.get<Game2>('search/get_all/' + id).then((response) => response.data);
-//  }
-//
-//  get_igdb_extra(id: number) {
-//    return axios.get<extraIGDB>('search/get_extra/' + id).then((response) => response.data);
-//  }
-//
-//  create(game: Game2) {
-//    return axios
-//      .post<{ id: number }>('/games', {
-//        game_title: game.game_title,
-//        game_description: game.game_description,
-//      })
-//      .then((response) => response.data.id);
-//  }
-//}
+class GameService {
+  db: Game[] = [];
+  igdb: Game[] = [];
 
-class GameService3 {
-  db: Game2[] = [];
-  igdb: Game2[] = [];
-
-  current: Game2 = this.empty();
+  current: Game = this.empty();
 
   empty() {
     return {
@@ -151,7 +50,7 @@ class GameService3 {
    * Get game with given id.
    */
   get(id: number) {
-    return axios.get<Game2>('/games/' + id).then((response) => response.data);
+    return axios.get<Game>('/games/' + id).then((response) => response.data);
   }
 
   /**
@@ -159,7 +58,7 @@ class GameService3 {
    */
   getAll() {
     return axios
-      .get<Game2[]>('/games')
+      .get<Game[]>('/games')
       .then((response) => response.data)
       .then((games) => {
         this.db = [];
@@ -231,7 +130,7 @@ class GameService3 {
       });
     } else {
       //console.log('gameService: No game selected.');
-	  return Promise.reject('gameService: No game selected.');
+      return Promise.reject('gameService: No game selected.');
     }
 
     //  if (db_id > 0) {
@@ -267,14 +166,14 @@ class GameService3 {
   }
 
   get_igdb(id: number) {
-    return axios.get<Game2>('search/get_all/' + id).then((response) => response.data);
+    return axios.get<Game>('search/get_all/' + id).then((response) => response.data);
   }
 
   get_igdb_extra(id: number) {
     return axios.get<extraIGDB>('search/get_extra/' + id).then((response) => response.data);
   }
 
-  create(game: Game2) {
+  create(game: Game) {
     return axios
       .post<{ id: number }>('/games', {
         igdb_id: game.igdb_id,
@@ -301,15 +200,4 @@ class GameService3 {
   search_both(searchString: string) {}
 }
 
-//export type Game4 = {
-//  game_id: number;
-//  igdb_id: number;
-//  game_title: string;
-//  genre: string[];
-//  platform: string[];
-//  game_description: string;
-//};
-//
-//export let gameService = sharedComponentData(new GameService());
-//export let gameService2 = sharedComponentData(new GameService2());
-export let gameService3 = sharedComponentData(new GameService3());
+export let gameService = sharedComponentData(new GameService());
