@@ -75,7 +75,7 @@ export class Container extends Component<{ textalign?: string }> {
 }
  */
 
-export class ThumbNail extends Component<{ small?: boolean; img: string }> {
+export class ThumbNail extends Component<{ small?: boolean; img: string | undefined }> {
   render() {
     return (
       <img
@@ -181,6 +181,59 @@ export class ReviewCard extends Component<{
               </div>
             </ColumnCentre>
           </Row>
+        </div>
+      </div>
+    );
+  }
+}
+
+export class FullReviewCard extends Component<{
+  title: ReactNode;
+  subtitle?: string;
+  text?: string;
+  terningkast?: number;
+  relevanse?: number;
+  img?: string;
+}> {
+  render() {
+    return (
+      <div className="card border-success my-2">
+        <Row>
+          <Column width={2} offset={10} right>
+            <ThumbNail
+              small
+              img={'https://helenaagustsson.github.io/INFT2002-images/images/star.png'}
+            ></ThumbNail>
+
+            {' ' + this.props.relevanse}
+          </Column>
+        </Row>
+        <div className="card-body pt-0">
+          <Row>
+            <ColumnCentre width={11}>
+              <h5 className="card-title">
+                {this.props.title + ' '}
+                <ThumbNail
+                  small
+                  img={
+                    'https://helenaagustsson.github.io/INFT2002-images/images/dice-' +
+                    this.props.terningkast +
+                    '.png'
+                  }
+                ></ThumbNail>
+              </h5>
+              <h6 className="card-subtitle mb-2 text-muted">Spill: {this.props.subtitle}</h6>
+            </ColumnCentre>
+          </Row>
+          <Row>
+            <ColumnCentre width={2}>
+              <ThumbNail img={this.props.img}></ThumbNail>
+            </ColumnCentre>
+            <ColumnCentre width={9}>
+              <div className="card-text">{this.props.text}</div>
+            </ColumnCentre>
+          </Row>
+          {this.props.children}
         </div>
       </div>
     );
