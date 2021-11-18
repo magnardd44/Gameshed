@@ -84,6 +84,8 @@ class ReviewService {
 
   publishedreviews: Review[] = [];
 
+  drafts: Review[] = [];
+
   /**
    * Get review with given id.
    */
@@ -96,6 +98,13 @@ class ReviewService {
    */
   getDraft(review_id: number) {
     return axios.get<Review>('/reviews/' + review_id + '/draft').then((response) => response.data);
+  }
+
+  /**
+   * Get drafts review with given id.
+   */
+  getDrafts(user_id: number | undefined) {
+    return axios.get<Review[]>('/reviews/draft/user/' + user_id).then((response) => response.data);
   }
 
   /**
@@ -165,7 +174,7 @@ class ReviewService {
   }
 
   //Delete review
-  delete(id: number, title: string, text: string, rating: number) {
+  delete(id: number) {
     return axios.delete<Review>('reviews/' + id).then((response) => response.data.review_id);
   }
 }

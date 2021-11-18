@@ -13,7 +13,7 @@ import {
   FormGroup,
   Linebreak,
 } from './widgets';
-import { NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { reviewService } from './services/review-service';
 
 import { createHashHistory } from 'history';
@@ -24,6 +24,7 @@ import { genreService } from './services/genre-service';
 import { platformService } from './services/platform-service';
 
 import { FacebookShareButton, FacebookIcon, EmailShareButton, EmailIcon } from 'react-share';
+import userService from './services/user-service';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
@@ -620,12 +621,7 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
               <Button.Danger
                 onClick={() => {
                   reviewService
-                    .delete(
-                      reviewService.review.review_id,
-                      reviewService.review.review_title,
-                      reviewService.review.text,
-                      reviewService.review.rating
-                    )
+                    .delete(reviewService.review.review_id)
                     .then(() => {
                       history.push(
                         `/games/${gameService.game.game_id}/${gameService.game.igdb_id}`
@@ -763,6 +759,9 @@ export class EditReview extends Component<{ match: { params: { id: number } } }>
             gameService.game = game;
             console.log(gameService.game);
           });
+          gameService2.get(review.game_id).then((game) => {
+            gameService2.game = game;
+          });
         }
       })
       .catch((error) => Alert.danger('Error getting review: ' + error.message));
@@ -877,5 +876,121 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
         gameService3.set(reviewService.review.game_id, 0);
       })
       .catch((error) => Alert.danger('Error getting review: ' + error.message));
+  }
+}
+
+//Renders a draft review with option to edit, delete or publish
+export class SavedDrafts extends Component<{ match: { params: { id: number } } }> {
+  render() {
+    if (userService.token) {
+      if (reviewService.drafts.length > 0) {
+        this.mounted();
+        return (
+          <Container>
+            {reviewService.drafts.map((draft, i) => {
+              gameService.get(draft.game_id).then((res) => {
+                gameService.game = res;
+              });
+              return (
+                <Card title="Mine utkast:" key={i}>
+                  <Card title={`Utkast nr: ${(i += 1)}`} key={i}>
+                    <Row key={i}>
+                      <Column>Spillet anmeldelsen hører til:</Column>
+                      <Column>
+                        <b>{gameService.game.game_title}</b>
+                      </Column>
+                    </Row>
+                    <Linebreak />
+                    <Row key={draft.review_title}>
+                      <Column>Tittel:</Column>
+                      <Column>
+                        <b>{draft.review_title}</b>
+                      </Column>
+                    </Row>
+                    <Linebreak />
+                    <Row key={draft.game_id}>
+                      <Column>Innhold:</Column>
+                      <Column>
+                        <b>{draft.text}</b>
+                      </Column>
+                    </Row>
+                    <Linebreak />
+                    <Row key={draft.genre_id}>
+                      <Column>Terningkast:</Column>
+                      <Column>
+                        <b>{draft.rating}</b>
+                      </Column>
+                    </Row>
+                    <Linebreak />
+                    <Row key={draft.user_id}>
+                      <Column>
+                        <Button.Success
+                          onClick={() => {
+                            reviewService
+                              .publish(draft.review_id)
+                              .then(() => {
+                                reviewService.drafts.splice(i, 1);
+                                this.mounted();
+                                Alert.success('Review published!');
+                              })
+                              .catch((error) =>
+                                Alert.danger('Error editing review: ' + error.message)
+                              );
+                          }}
+                        >
+                          Publiser
+                        </Button.Success>
+                      </Column>
+                      <Column>
+                        <Button.Light
+                          onClick={() => {
+                            history.push('/editReview/' + draft.review_id);
+                          }}
+                        >
+                          Rediger
+                        </Button.Light>
+                      </Column>
+                      <Column>
+                        <Button.Danger
+                          onClick={() => {
+                            reviewService
+                              .delete(draft.review_id)
+                              .then(() => {
+                                reviewService.drafts.splice(i, 1);
+                                this.mounted();
+                                Alert.success('Review deleted');
+                              })
+                              .catch((error) =>
+                                Alert.danger('Error deleting task: ' + error.message)
+                              );
+                          }}
+                        >
+                          Slett ukastet
+                        </Button.Danger>
+                      </Column>
+                    </Row>
+                  </Card>
+                </Card>
+              );
+            })}
+          </Container>
+        );
+      } else {
+        return (
+          <Container>
+            Du har ingen utkast, finn et spill du kan anmelde <Link to="/search"> her:</Link>
+          </Container>
+        );
+      }
+    } else {
+      return <Container>Du er ikke logget inn. Logg inn for å se dine utkast.</Container>;
+    }
+  }
+  mounted() {
+    if (userService.token) {
+      reviewService.getDrafts(userService.token?.id).then((res) => {
+        reviewService.drafts = res;
+      });
+    }
   }
 }
