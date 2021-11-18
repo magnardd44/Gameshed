@@ -11,6 +11,8 @@ import {
   Container,
   ColumnCentre,
   Linebreak,
+  FormContainer,
+  FormGroup,
 } from './widgets';
 import { NavLink } from 'react-router-dom';
 import { gameService, Game, gameService3 } from './services/game-services';
@@ -179,13 +181,12 @@ export class AddGame extends Component {
 
   render() {
     return (
-      <>
+      <Container>
         <Card title="Legg til ett spill">
-          <Row>
-            <Column width={2}>
+          <FormContainer>
+            <FormGroup>
               <Form.Label>Tittel:</Form.Label>
-            </Column>
-            <Column>
+
               <Form.Input
                 placeholder={'Skriv inn tittel'}
                 type="text"
@@ -194,14 +195,9 @@ export class AddGame extends Component {
                   gameService.game.game_title = event.currentTarget.value;
                 }}
               />
-            </Column>
-          </Row>
-          <Linebreak></Linebreak>
-          <Row>
-            <Column width={2}>
+            </FormGroup>
+            <FormGroup>
               <Form.Label>Beskrivelse:</Form.Label>
-            </Column>
-            <Column>
               <Form.Textarea
                 placeholder={'Skriv inn en beskrivelse av spillet'}
                 value={gameService.game.game_description ?? ''}
@@ -209,9 +205,11 @@ export class AddGame extends Component {
                   gameService.game.game_description = event.currentTarget.value;
                 }}
                 rows={10}
+                cols={10}
               />
-            </Column>
-          </Row>
+            </FormGroup>
+            <FormGroup></FormGroup>
+          </FormContainer>
           <Linebreak></Linebreak>
           <Row>
             <Column width={2}>
@@ -305,6 +303,15 @@ export class AddGame extends Component {
           <Alert />
           <Row>
             <Column>
+              <Button.Danger
+                onClick={() => {
+                  history.push('/');
+                }}
+              >
+                Avbryt
+              </Button.Danger>
+            </Column>
+            <Column>
               <Button.Success
                 onClick={() => {
                   const genresCheck = Array.from(new Set(gameService.game.genres));
@@ -360,18 +367,9 @@ export class AddGame extends Component {
                 Lagre
               </Button.Success>
             </Column>
-            <Column>
-              <Button.Danger
-                onClick={() => {
-                  history.push('/');
-                }}
-              >
-                Avbryt
-              </Button.Danger>
-            </Column>
           </Row>
         </Card>
-      </>
+      </Container>
     );
   }
 
