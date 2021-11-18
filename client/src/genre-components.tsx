@@ -15,7 +15,6 @@ import {
   FormGroup,
   CategoryCard,
   ReviewCard,
-  DropDown,
 } from './widgets';
 import { NavLink } from 'react-router-dom';
 import { gameService, Game } from './services/game-services';
@@ -114,29 +113,37 @@ export class Category extends Component {
             </ColumnCentre>
 
             <ColumnCentre>
-              {this.state.isHidden ? null : (
+              {this.state.isHidden ? (
+                ' '
+              ) : (
                 <div className="sticky-top">
                   <div>Resultater:</div>
-                  {this.reviews.map((review, index) => (
-                    <Row key={index}>
-                      <ReviewCard
-                        title={review.review_title}
-                        subtitle={review.game_title}
-                        terningkast={review.rating}
-                        relevanse={review.likes}
-                        text={review.text}
-                      >
-                        <Button.Success
-                          small
-                          onClick={() => {
-                            history.push('/publishedReviews/' + review.review_id);
-                          }}
-                        >
-                          Les mer
-                        </Button.Success>
-                      </ReviewCard>
+                  {this.reviews.length == 0 ? (
+                    <Row>
+                      <Column>Ingen resultater</Column>
                     </Row>
-                  ))}
+                  ) : (
+                    this.reviews.map((review, index) => (
+                      <Row key={index}>
+                        <ReviewCard
+                          title={review.review_title}
+                          subtitle={review.game_title}
+                          terningkast={review.rating}
+                          relevanse={review.likes}
+                          text={review.text}
+                        >
+                          <Button.Success
+                            small
+                            onClick={() => {
+                              history.push('/publishedReviews/' + review.review_id);
+                            }}
+                          >
+                            Les mer
+                          </Button.Success>
+                        </ReviewCard>
+                      </Row>
+                    ))
+                  )}
                 </div>
               )}
             </ColumnCentre>
