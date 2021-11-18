@@ -1,0 +1,471 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Snapshot component tests 1 Snapshot - AddReview draws correctly 1`] = `
+<Container>
+  <Card
+    title="Skriv anmeldelse"
+  >
+    <Row>
+      <Column
+        width={2}
+      >
+        Spill:
+      </Column>
+      <Column />
+    </Row>
+    <Row>
+      <Column
+        width={2}
+      >
+        Sjanger:
+      </Column>
+      <Column />
+    </Row>
+    <Row>
+      <Column
+        width={2}
+      >
+        Plattform:
+      </Column>
+      <Column />
+    </Row>
+    <FormContainer>
+      <FormGroup>
+        <FormLabel>
+          Overskrift:
+        </FormLabel>
+        <FormInput
+          onChange={[Function]}
+          placeholder="Skriv inn overskriften her:"
+          type="text"
+        />
+      </FormGroup>
+      <FormGroup>
+        <FormLabel>
+          Anmeldelse:
+        </FormLabel>
+        <FormTextarea
+          cols={10}
+          onChange={[Function]}
+          placeholder="Skriv inn anmeldelsen her:"
+          rows={10}
+          value=""
+        />
+      </FormGroup>
+      <FormGroup>
+        <FormLabel>
+          Terningkast:
+        </FormLabel>
+        <FormSelect
+          onChange={[Function]}
+          placeholder={
+            <div>
+              Velg terningkast:
+            </div>
+          }
+        >
+          <option
+            key="0"
+            value={1}
+          >
+            1
+          </option>
+          <option
+            key="1"
+            value={2}
+          >
+            2
+          </option>
+          <option
+            key="2"
+            value={3}
+          >
+            3
+          </option>
+          <option
+            key="3"
+            value={4}
+          >
+            4
+          </option>
+          <option
+            key="4"
+            value={5}
+          >
+            5
+          </option>
+          <option
+            key="5"
+            value={6}
+          >
+            6
+          </option>
+        </FormSelect>
+      </FormGroup>
+    </FormContainer>
+  </Card>
+  <Linebreak />
+  <Alert />
+  <Column>
+    <ButtonDanger
+      onClick={[Function]}
+    >
+      Tilbake
+    </ButtonDanger>
+  </Column>
+  <Column
+    right={true}
+  >
+    <ButtonSuccess
+      onClick={[Function]}
+    >
+      Lagre
+    </ButtonSuccess>
+  </Column>
+</Container>
+`;
+
+exports[`Snapshot component tests 2 Snapshot - EditReview draws correctly 1`] = `
+<Container>
+  <Card
+    title="Edit review"
+  >
+    <Row>
+      <Column
+        width={2}
+      >
+        Spill:
+      </Column>
+      <Column />
+    </Row>
+    <Row>
+      <Column
+        width={2}
+      >
+        Sjanger:
+      </Column>
+      <Column />
+    </Row>
+    <Row>
+      <Column
+        width={2}
+      >
+        Plattform:
+      </Column>
+      <Column />
+    </Row>
+    <Linebreak />
+    <FormContainer>
+      <FormGroup>
+        <FormLabel>
+          Title:
+        </FormLabel>
+        <FormInput
+          onChange={[Function]}
+          type="text"
+          value=""
+        />
+      </FormGroup>
+      <FormGroup>
+        <FormLabel>
+          Text:
+        </FormLabel>
+        <FormTextarea
+          onChange={[Function]}
+          rows={10}
+          value=""
+        />
+      </FormGroup>
+      <FormGroup>
+        <FormLabel>
+          Terningkast:
+        </FormLabel>
+        <FormSelect
+          onChange={[Function]}
+          placeholder={
+            <div>
+              Velg terningkast:
+            </div>
+          }
+          value={0}
+        >
+          <option
+            key="0"
+            value={1}
+          >
+            1
+          </option>
+          <option
+            key="1"
+            value={2}
+          >
+            2
+          </option>
+          <option
+            key="2"
+            value={3}
+          >
+            3
+          </option>
+          <option
+            key="3"
+            value={4}
+          >
+            4
+          </option>
+          <option
+            key="4"
+            value={5}
+          >
+            5
+          </option>
+          <option
+            key="5"
+            value={6}
+          >
+            6
+          </option>
+        </FormSelect>
+      </FormGroup>
+    </FormContainer>
+  </Card>
+  <Row>
+    <Column>
+      <Linebreak />
+      <ButtonSuccess
+        onClick={[Function]}
+      >
+        Save
+      </ButtonSuccess>
+    </Column>
+  </Row>
+</Container>
+`;
+
+exports[`Snapshot component tests 3 Snapshot - CompleteReview draws correctly 1`] = `
+<Fragment>
+  <Card
+    title="Anmeldelse"
+  >
+    <Row>
+      <Column
+        width={2}
+      >
+        Spill:
+      </Column>
+      <Column />
+    </Row>
+    <Row>
+      <Column
+        width={2}
+      >
+        Sjanger: 
+      </Column>
+      <Column />
+    </Row>
+    <Row>
+      <Column
+        width={2}
+      >
+        Plattform:
+      </Column>
+      <Column />
+    </Row>
+    <Row>
+      <Column>
+        <ThumbNail
+          img=""
+        />
+      </Column>
+    </Row>
+    <Linebreak />
+    <Row>
+      <Column
+        width={12}
+      >
+        <div>
+          <b />
+        </div>
+      </Column>
+    </Row>
+    <Linebreak />
+    <Row>
+      <Column
+        width={12}
+      >
+        <div />
+      </Column>
+    </Row>
+    <Linebreak />
+    <Row>
+      <Column
+        width={12}
+      >
+        <div>
+          Terningkast: 
+        </div>
+      </Column>
+    </Row>
+    <Linebreak />
+    <Row>
+      <Column
+        width={1}
+      >
+        <ButtonSuccess
+          onClick={[Function]}
+        >
+          Like
+        </ButtonSuccess>
+      </Column>
+      <Column
+        width={1}
+      >
+        0
+      </Column>
+      <Column />
+      <Column
+        width={2}
+      >
+        <div>
+           Del denne anmeldelsen:
+        </div>
+      </Column>
+      <Column
+        width={1}
+      >
+        <ForwardRef(ShareButton-facebook)
+          longtext="Social sharing buttons for React. Use one of the build-in themes or create a custom one from the scratch."
+          network="Facebook"
+          text="Tror du vil like denne anmeldelsen"
+          url="https://localhost:3000/#/publishedReviews/1"
+        >
+          <Icon
+            bgStyle={Object {}}
+            borderRadius={0}
+            iconFillColor="white"
+            round={true}
+            size="40"
+          />
+        </ForwardRef(ShareButton-facebook)>
+      </Column>
+      <Column
+        width={1}
+      >
+        <ForwardRef(ShareButton-email)
+          longtext="Social sharing buttons for React. Use one of the build-in themes or create a custom one from the scratch."
+          network="Facebook"
+          subject="Tror du vil like denne spillanmeldelsen!"
+          text="Tror du vil like denne anmeldelsen"
+          url="https://localhost:3000/#/publishedReviews/1"
+        >
+          <Icon
+            bgStyle={Object {}}
+            borderRadius={0}
+            iconFillColor="white"
+            round={true}
+            size="40"
+          />
+        </ForwardRef(ShareButton-email)>
+      </Column>
+    </Row>
+  </Card>
+</Fragment>
+`;
+
+exports[`Snapshot component tests 4 Snapshot - PublishReview draws correctly 1`] = `
+<Container>
+  <Card
+    title="Anmeldelse til publisering"
+  >
+    <Row>
+      <Column
+        width={2}
+      >
+        Spill:
+      </Column>
+      <Column />
+    </Row>
+    <Row>
+      <Column
+        width={2}
+      >
+        Sjanger:
+      </Column>
+      <Column />
+    </Row>
+    <Row>
+      <Column
+        width={2}
+      >
+        Plattform:
+      </Column>
+      <Column />
+    </Row>
+    <Linebreak />
+    <Card
+      title=""
+    >
+      <Row>
+        <Column
+          width={12}
+        >
+          <div>
+            <b>
+              Tittel: 
+            </b>
+          </div>
+        </Column>
+      </Row>
+      <Linebreak />
+      <Row>
+        <Column
+          width={12}
+        >
+          <div>
+            <b>
+              Innhold: 
+            </b>
+          </div>
+        </Column>
+      </Row>
+      <Linebreak />
+      <Row>
+        <Column
+          width={12}
+        >
+          <div>
+            <b>
+              Terningkast:
+            </b>
+             
+          </div>
+        </Column>
+      </Row>
+    </Card>
+    <Linebreak />
+    <Row>
+      <Column>
+        <ButtonSuccess
+          onClick={[Function]}
+        >
+          Rediger
+        </ButtonSuccess>
+      </Column>
+      <Column>
+        <ButtonSuccess
+          onClick={[Function]}
+        >
+          Publiser
+        </ButtonSuccess>
+      </Column>
+      <Column>
+        <ButtonDanger
+          onClick={[Function]}
+        >
+          Slett
+        </ButtonDanger>
+      </Column>
+    </Row>
+  </Card>
+</Container>
+`;
