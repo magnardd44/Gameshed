@@ -8,7 +8,7 @@ import { gameService } from '../src/services/game-services';
 import { genreService } from '../src/services/genre-service';
 
 // // Since API is not compatible with v1, API version is increased to v2
-axios.defaults.baseURL = 'http://localhost:3001/api/v2';
+axios.defaults.baseURL = 'http://localhost:3002/api/v2';
 
 jest.mock('../src/mysql-pool', () => {
   const mysql = require('mysql');
@@ -90,7 +90,7 @@ const testReviews: Review[] = [
 
 let webServer: any;
 beforeAll((done) => {
-  webServer = app.listen(3001, () => done());
+  webServer = app.listen(3002, () => done());
   // Use separate port for testing
 });
 

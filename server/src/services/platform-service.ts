@@ -75,9 +75,9 @@ class PlatformService {
   /**
    * Create new platform having the given name.
    */
-  create(name: string) {
+  create(platform_name: string) {
     return new Promise<number>((resolve, reject) => {
-      pool.query('INSERT INTO platforms SET platform_name=?', [name], (error, results) => {
+      pool.query('INSERT INTO platforms SET platform_name=?', [platform_name], (error, results) => {
         if (error) return reject(error);
 
         resolve(Number(results.insertId));
@@ -89,14 +89,14 @@ class PlatformService {
    * Create new mapping platform.
    */
   updatePlatformMap(platform_id: number, game_id: number) {
-    return new Promise<void>((resolve, reject) => {
+    return new Promise<number>((resolve, reject) => {
       pool.query(
-        'INSERT INTO mapping_platform SET p_mapping_id=NULL, platform_id=?, game_id=?',
+        'INSERT INTO mapping_platform SET platform_id=?, game_id=?',
         [platform_id, game_id],
         (error, results) => {
           if (error) return reject(error);
 
-          resolve();
+          resolve(Number(results.insertId));
         }
       );
     });

@@ -3,12 +3,12 @@ import pool from '../src/mysql-pool';
 import app from '../src/app';
 import userService, { Token } from '../src/services/user-service';
 
-axios.defaults.baseURL = 'http://localhost:3001/api/v2';
+axios.defaults.baseURL = 'http://localhost:3003/api/v2';
 
 let webServer: any;
 beforeAll((done) => {
   // Use separate port for testing
-  webServer = app.listen(3001, () => done());
+  webServer = app.listen(3003, () => done());
 });
 
 beforeEach((done) => {

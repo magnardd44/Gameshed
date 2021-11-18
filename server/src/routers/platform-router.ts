@@ -10,7 +10,7 @@ const platformRouter = express.Router();
 //Update mapping_platform
 platformRouter.post('/map', (request, response) => {
   const data = request.body;
-  if (data)
+  if (typeof data.platform_id == 'number' && typeof data.game_id == 'number')
     platformService
       .updatePlatformMap(data.platform_id, data.game_id)
       .then((id) => response.send({ id: id }))
@@ -30,13 +30,13 @@ platformRouter.get('/platforms/:id', (request, response) => {
 
 platformRouter.get('/:name', (request, response) => {
   const name = request.params.name;
-
-  platformService
-    .getId(name)
-    .then((platform) =>
-      platform ? response.send(platform) : response.status(404).send('Platform not found')
-    )
-    .catch((error) => response.status(500).send(error));
+  if (typeof name == 'string')
+    platformService
+      .getId(name)
+      .then((platform) =>
+        platform ? response.send(platform) : response.status(404).send('Platform not found')
+      )
+      .catch((error) => response.status(500).send(error));
 });
 
 platformRouter.get('/', (_request, response) => {
@@ -50,22 +50,27 @@ platformRouter.get('/', (_request, response) => {
     });
 });
 
-platformRouter.post('/', (_request, response) => {
+platformRouter.post('/', (request, response) => {
   const data = request.body;
-  if (data && data.platform_name.length != 0)
+
+  if (!data.hasOwnProperty('platform_name')) {
+    response.status(400).send('A platform needs the following property: platform__name.');
+  } else {
     platformService
       .create(data.platform_name)
-
-      .then((id) => response.send({ id: id }))
+      .then((id) => {
+        response.status(201);
+        response.send({ id: id });
+      })
       .catch((error) => response.status(500).send(error));
-  else response.status(400).send('Missing platform name');
+  }
 });
 
 platformRouter.delete('/:id', (request, response) => {
   const id = Number(request.params.id);
-  genreService
-    .get(id)
-    .then((_result) => response.send())
+  platformService
+    .delete(id)
+    .then((result) => response.status(200).send())
     .catch((error) => response.status(500).send(error));
 });
 
