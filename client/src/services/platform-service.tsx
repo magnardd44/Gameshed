@@ -63,7 +63,7 @@ class PlatformService {
   }
 
   updatePlatformMapString(platform: string, game_id: number) {
-	this.updatePlatformMap(this.stringToId(platform), game_id);
+	return this.updatePlatformMap(this.stringToId(platform), game_id);
   }
 }
 

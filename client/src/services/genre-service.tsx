@@ -68,7 +68,7 @@ class GenreService {
   }
 
   updateGenreMapString(game_id: number, genre: string) {
-	this.updateGenreMap(game_id, this.stringToId(genre));
+	return this.updateGenreMap(game_id, this.stringToId(genre));
   }
 }
 

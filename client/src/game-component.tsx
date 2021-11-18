@@ -13,8 +13,6 @@ import {
   Linebreak,
 } from './widgets';
 import { NavLink } from 'react-router-dom';
-//import { gameService, Game, gameService3 } from './services/game-services';
-//import { gameService2, Game2 } from './services/game-services';
 import { gameService3, Game2 } from './services/game-services';
 import { Genre, genreService } from './services/genre-service';
 import { createHashHistory } from 'history';
