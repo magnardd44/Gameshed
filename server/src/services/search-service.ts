@@ -35,9 +35,11 @@ class SearchService {
           this.token.access_token = res.data.access_token;
           this.token.expire_time = res.data.expires_in * 1000 + Date.now();
           this.token.token_type = res.data.token_type;
-          console.log('Update token');
+          //console.log('Update token');
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          //console.log(err)
+        });
       return this.token;
     }
   }
@@ -77,7 +79,8 @@ class SearchService {
         });
       })
       .catch((err) => {
-        console.error(err);
+        //console.error(err);
+        throw err;
       });
   }
 
@@ -98,14 +101,15 @@ class SearchService {
           game_id: 0,
           igdb_id: response.data[0].id,
           game_title: response.data[0].name,
-          genre: response.data[0].genres.map((e: any) => e.name),
-          platform: response.data[0].platforms.map((e: any) => e.name),
+          genre: response.data[0].genres?.map((e: any) => e.name),
+          platform: response.data[0].platforms?.map((e: any) => e.name),
           game_description: response.data[0].summary,
           igdb: null,
         };
       })
       .catch((err) => {
-        console.error(err);
+        //console.error(err);
+        throw err;
       });
   }
 
@@ -125,16 +129,17 @@ class SearchService {
         return {
           cover_url: 'http:' + response.data[0].cover.url,
           aggregated_rating: response.data[0].aggregated_rating,
-          screenshots_url: response.data[0].screenshots.map(
+          screenshots_url: response.data[0].screenshots?.map(
             (e: any) =>
               'https://images.igdb.com/igdb/image/upload/t_original/' + e.image_id + '.jpg'
           ),
-          similar_games: response.data[0].similar_games.map((e: any) => e),
+          similar_games: response.data[0].similar_games?.map((e: any) => e),
           release_date: response.data[0].first_release_date,
         };
       })
       .catch((err) => {
-        console.error(err);
+        //console.error(err);
+        throw err;
       });
   }
 
@@ -156,8 +161,8 @@ class SearchService {
           game_id: 0,
           igdb_id: response.data[0].id,
           game_title: response.data[0].name,
-          genre: response.data[0].genres.map((e: any) => e.name),
-          platform: response.data[0].platforms.map((e: any) => e.name),
+          genre: response.data[0].genres?.map((e: any) => e.name),
+          platform: response.data[0].platforms?.map((e: any) => e.name),
           game_description: response.data[0].summary,
           igdb: {
             cover_url: 'http:' + response.data[0].cover.url,
@@ -166,15 +171,57 @@ class SearchService {
               (e: any) =>
                 'https://images.igdb.com/igdb/image/upload/t_original/' + e.image_id + '.jpg'
             ),
-            similar_games: response.data[0].similar_games.map((e: any) => e),
+            similar_games: response.data[0].similar_games?.map((e: any) => e),
             release_date: response.data[0].first_release_date,
           },
         };
       })
       .catch((err) => {
-        console.error(err);
+        //console.error(err);
+        throw err;
       });
   }
+
+  //  async get_platform_logos2() {
+  //    await this.get_token();
+  //    return await axios({
+  //      url: 'https://api.igdb.com/v4/release_dates',
+  //      method: 'POST',
+  //      headers: {
+  //        Accept: 'application/json',
+  //        'Client-ID': process.env.IGDB_CLIENT_ID,
+  //        Authorization: this.token.token_type + ' ' + this.token.access_token,
+  //      },
+  //      data:
+  //        'fields *,platform.name,platform.platform_logo.url; where game.platforms = 48;'
+  //    })
+  //      //.then((response) => response.data.map((p:any)=>p.platforms.name))
+  //      .then((response) => response.data)
+  //      .catch((err) => {
+  //        console.error(err);
+  //      });
+  //  }
+
+  //  async get_platform_logos(id: number) {
+  //    await this.get_token();
+  //    return await axios({
+  //      url: 'https://api.igdb.com/v4/platforms',
+  //      method: 'POST',
+  //      headers: {
+  //        Accept: 'application/json',
+  //        'Client-ID': process.env.IGDB_CLIENT_ID,
+  //        Authorization: this.token.token_type + ' ' + this.token.access_token,
+  //      },
+  //      data:
+  //        //'fields platforms.platform_logo.url; where platforms.id = 119;'
+  //        'fields *; where id = ' + id +';'
+  //    })
+  //      //.then((response) => response.data.map((p:any)=>p.platforms.name))
+  //      .then((response) => response.data)
+  //      .catch((err) => {
+  //        console.error(err);
+  //      });
+  //  }
 }
 
 const searchService = new SearchService();
