@@ -7,6 +7,9 @@ variables:
   MYSQL_PASSWORD: test # Default root password is empty string
   MYSQL_DATABASE: test
 
+  IGDB_CLIENT_ID: 'jggwkki694bcpccn7nwz0d5uoi1dn4';
+  IGDB_CLIENT_SECRET: 'pysekvcpf8zhkqdzjyrzygy7a3wpv5';
+
 stages:
   - build # Jobs placed in build stage will run first
   - test # Jobs placed in test stage will run after build jobs
@@ -46,40 +49,43 @@ test:
         - apt-get update
         - apt-get -y upgrade
         - apt-get -y install default-mysql-server
-        - service mysql start
+        - service mariadb start
         # Workaround from https://github.com/mysqljs/mysql/issues/1507#issuecomment-242885003
-        - echo "UPDATE user SET authentication_string=password(''), plugin='mysql_native_password' WHERE
-          user='root';" | mysql mysql
-        - mysqladmin create $MYSQL_DATABASE
+        #        - echo "UPDATE user SET authentication_string=password(''), plugin='mysql_native_password' WHERE
+        #          user='root';" | mysql mysql
         # Create database tables
+        #
+        - mysqladmin create $MYSQL_DATABASE
+        - mysql $MYSQL_DATABASE < database.sql
 
-        - echo "CREATE TABLE games (game_id INT NOT NULL AUTO_INCREMENT, igdb_id INT NOT NULL, game_title TEXT
-          NOT NULL, game_description TEXT NOT NULL, PRIMARY KEY(game_id));" | mysql $MYSQL_DATABASE
+          #        - echo "CREATE TABLE games (game_id INT NOT NULL AUTO_INCREMENT, igdb_id INT NOT NULL, game_title TEXT
+          #          NOT NULL, game_description TEXT NOT NULL, PRIMARY KEY(game_id));" | mysql $MYSQL_DATABASE
+          #
+          #        - echo "CREATE TABLE genres (genre_id INT NOT NULL AUTO_INCREMENT, genre_name TEXT NOT NULL, genre_img TEXT, PRIMARY KEY(genre_id));" | mysql $MYSQL_DATABASE
+          #
+          #        - echo "CREATE TABLE mapping_genre (g_mapping_id INT NOT NULL AUTO_INCREMENT, game_id INT NOT NULL, genre_id INT
+          #          NOT NULL, PRIMARY KEY(g_mapping_id));" | mysql $MYSQL_DATABASE
+          #
+          #        - echo "CREATE TABLE mapping_platform (p_mapping_id INT NOT NULL AUTO_INCREMENT, platform_id INT NOT NULL, game_id INT NOT NULL, PRIMARY KEY(p_mapping_id));" | mysql $MYSQL_DATABASE
+          #
+          #        - echo "CREATE TABLE mapping_relevant (relevant_id INT NOT NULL AUTO_INCREMENT, user_id INT NOT NULL, review_id INT NOT NULL, PRIMARY KEY(relevant_id));" | mysql $MYSQL_DATABASE
+          #
+          #        - echo "CREATE TABLE platforms (platform_id INT NOT NULL AUTO_INCREMENT, platform_name TEXT NOT NULL, PRIMARY KEY(platform_id));" | mysql $MYSQL_DATABASE
+          #                  
+          #        - echo "CREATE TABLE reviews (review_id INT NOT NULL AUTO_INCREMENT, game_id INT NOT NULL, review_title TEXT NOT NULL, text TEXT NOT NULL, user_id INT NOT NULL, rating INT NOT NULL, published bool DEFAULT false
+          #          DEFAULT false, PRIMARY KEY(review_id));" | mysql $MYSQL_DATABASE
+          #
+          #        - echo "CREATE TABLE users (user_id INT NOT NULL AUTO_INCREMENT, user_nickname VARCHAR(50), user_about VARCHAR(500), email VARCHAR(50) NOT NULL, salt VARCHAR(16) NOT NULL, hash VARCHAR(64) NOT NULL
+          #          DEFAULT false, PRIMARY KEY(user_id));" | mysql $MYSQL_DATABASE
+          #
+        - > 
+          echo "CREATE USER '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD'; GRANT ALL PRIVILEGES ON
+          $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%'; FLUSH PRIVILEGES;" | mysql
 
-        - echo "CREATE TABLE genres (genre_id INT NOT NULL AUTO_INCREMENT, genre_name TEXT NOT NULL, genre_img TEXT, PRIMARY KEY(genre_id));" | mysql $MYSQL_DATABASE
-
-        - echo "CREATE TABLE mapping_genre (g_mapping_id INT NOT NULL AUTO_INCREMENT, game_id INT NOT NULL, genre_id INT
-          NOT NULL, PRIMARY KEY(g_mapping_id));" | mysql $MYSQL_DATABASE
-
-        - echo "CREATE TABLE mapping_platform (p_mapping_id INT NOT NULL AUTO_INCREMENT, platform_id INT NOT NULL, game_id INT NOT NULL, PRIMARY KEY(p_mapping_id));" | mysql $MYSQL_DATABASE
-
-        - echo "CREATE TABLE mapping_relevant (relevant_id INT NOT NULL AUTO_INCREMENT, user_id INT NOT NULL, review_id INT NOT NULL, PRIMARY KEY(relevant_id));" | mysql $MYSQL_DATABASE
-
-        - echo "CREATE TABLE platforms (platform_id INT NOT NULL AUTO_INCREMENT, platform_name TEXT NOT NULL, PRIMARY KEY(platform_id));" | mysql $MYSQL_DATABASE
-                  
-        - echo "CREATE TABLE reviews (review_id INT NOT NULL AUTO_INCREMENT, game_id INT NOT NULL, review_title TEXT NOT NULL, text TEXT NOT NULL, user_id INT NOT NULL, rating INT NOT NULL, published bool DEFAULT false
-          DEFAULT false, PRIMARY KEY(review_id));" | mysql $MYSQL_DATABASE
-
-        - echo "CREATE TABLE users (user_id INT NOT NULL AUTO_INCREMENT, user_nickname VARCHAR(50), user_about VARCHAR(500), email VARCHAR(50) NOT NULL, salt VARCHAR(16) NOT NULL, hash VARCHAR(64) NOT NULL
-          DEFAULT false, PRIMARY KEY(user_id));" | mysql $MYSQL_DATABASE
-
-
-        echo "CREATE USER '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD'; GRANT ALL PRIVILEGES ON
-        $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%'; FLUSH PRIVILEGES;" | mysql
-          - cd server
-          - echo "" > test/config.ts # Create empty config.ts to avoid error on npm test
-          # Workaround for strange gitlab ci bug
-          - export MYSQL_HOST=127.0.0.1
-          - npm test
-          - cd ../client
-          - npm test
+        - cd server
+        - echo "" > test/config.ts # Create empty config.ts to avoid error on npm test
+        # Workaround for strange gitlab ci bug
+        - export MYSQL_HOST=127.0.0.1
+        - npm test
+        - cd ../client
+        - npm test
