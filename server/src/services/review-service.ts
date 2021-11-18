@@ -92,6 +92,23 @@ class ReviewService {
   }
 
   /**
+   * Get all drafts based on user ID
+   */
+  getDrafts(userId: number) {
+    return new Promise<Review[]>((resolve, reject) => {
+      pool.query(
+        'SELECT * FROM reviews WHERE published=0 AND user_id = ?',
+        [userId],
+        (error, results) => {
+          if (error) return reject(error);
+
+          resolve(results);
+        }
+      );
+    });
+  }
+
+  /**
    * Get single complete review based on ID
    */
   get(review_id: number) {

@@ -72,6 +72,17 @@ reviewRouter.get('/:review_id/draft', (request, response) => {
     .catch((error) => response.status(500).send(error));
 });
 
+//Fetch all drafts for a specific user
+reviewRouter.get('/draft/user/:user_id', (request, response) => {
+  const user_id = Number(request.params.user_id);
+  reviewService
+    .getDrafts(user_id)
+    .then((reviews) =>
+      reviews ? response.send(reviews) : response.status(404).send('Reviews not found')
+    )
+    .catch((error) => response.status(500).send(error));
+});
+
 //Fetch published review
 reviewRouter.get('/:review_id', (request, response) => {
   const id = Number(request.params.review_id);

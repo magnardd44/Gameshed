@@ -26,6 +26,7 @@ import {
   GenreReviews,
   CompleteReview,
   PlatformReviews,
+  SavedDrafts,
 } from './review-components';
 
 import { Hash } from 'crypto';
@@ -37,6 +38,7 @@ import { UserNav, UserPage } from './user-components';
 import { Category } from './genre-components';
 import { Platform } from './platform-components';
 import { Home, ReviewHome } from './home-components';
+import userService from './services/user-service';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 
@@ -66,6 +68,7 @@ class NavHeader extends Component {
           <NavBarLink to="/search">Søk spill</NavBarLink>
           <NavBarLink to="/reviews">Anmeldelser</NavBarLink>
           <NavBarLink to="/addGame">Legg til spill</NavBarLink>
+          {userService.token ? <NavBarLink to={'/reviews/drafts'}>Mine utkast</NavBarLink> : ''}
         </JustifiedNavBar>
         <Row>
           <Heading header></Heading>
@@ -92,6 +95,7 @@ ReactDOM.render(
       <Route exact path="/publishReview/:id" component={PublishReview} />
 
       <Route exact path="/editReview/:id" component={EditReview} />
+      <Route exact path="/reviews/drafts" component={SavedDrafts} />
       <Route exact path="/genreReviews" component={GenreReviews} />
       <Route exact path="/reviews-by-genre" component={Category}></Route>
       <Route exact path="/reviews-by-platform" component={Platform}></Route>
