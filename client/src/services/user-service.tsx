@@ -137,7 +137,10 @@ class UserService {
           this.about = '';
           this.email = '';
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+          throw err;
+        });
     }
   }
 }

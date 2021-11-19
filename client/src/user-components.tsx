@@ -190,7 +190,8 @@ export class UserRegister extends Component {
             if (newPassword?.length) {
               userService
                 .register(userService.email, newPassword)
-                .then(() => Alert.success(<>Ny bruker registrert</>));
+                .then(() => Alert.success(<>Ny bruker registrert</>))
+                .catch(() => Alert.danger(<>Bruker eksisterer allerede.</>));
             } else {
               Alert.info(<>Skriv inn passord</>);
             }
