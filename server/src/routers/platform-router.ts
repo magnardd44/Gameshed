@@ -1,6 +1,7 @@
 import express, { request, response } from 'express';
 import { genreService } from '../services/genre-service';
 import { platformService } from '../services/platform-service';
+import userService from '../services/user-service';
 
 /**
  * Express router containing platform methods.
@@ -11,8 +12,13 @@ const platformRouter = express.Router();
 platformRouter.post('/map', (request, response) => {
   const data = request.body;
   if (typeof data.platform_id == 'number' && typeof data.game_id == 'number')
-    platformService
-      .updatePlatformMap(data.platform_id, data.game_id)
+    userService
+      .verify(request.headers.authorization)
+      .catch((err) => {
+        response.status(401).send(err);
+        throw err;
+      })
+      .then((userId) => platformService.updatePlatformMap(data.platform_id, data.game_id))
       .then((id) => response.send({ id: id }))
       .catch((error) => response.status(500).send(error));
   else response.status(400).send('Missing platform');
@@ -56,8 +62,13 @@ platformRouter.post('/', (request, response) => {
   if (!data.hasOwnProperty('platform_name')) {
     response.status(400).send('A platform needs the following property: platform__name.');
   } else {
-    platformService
-      .create(data.platform_name)
+    userService
+      .verify(request.headers.authorization)
+      .catch((err) => {
+        response.status(401).send(err);
+        throw err;
+      })
+      .then((userId) => platformService.create(data.platform_name))
       .then((id) => {
         response.status(201);
         response.send({ id: id });
@@ -68,8 +79,13 @@ platformRouter.post('/', (request, response) => {
 
 platformRouter.delete('/:id', (request, response) => {
   const id = Number(request.params.id);
-  platformService
-    .delete(id)
+  userService
+    .verify(request.headers.authorization)
+    .catch((err) => {
+      response.status(401).send(err);
+      throw err;
+    })
+    .then((userId) => platformService.delete(id))
     .then((result) => response.status(200).send())
     .catch((error) => response.status(500).send(error));
 });

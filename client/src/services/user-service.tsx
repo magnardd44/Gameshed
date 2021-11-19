@@ -13,6 +13,7 @@ class UserService {
   email: string = '';
 
   token: Token | null = null;
+  storage: any;
 
   axios;
 
@@ -36,12 +37,15 @@ class UserService {
         return Promise.reject(error);
       }
     );
-  }
 
-  async test() {
-    this.axios.get('/test').then(function (response) {
-      console.log(response.data);
-    });
+    if (typeof Storage !== 'undefined') {
+      this.storage = localStorage;
+    }
+
+    let token = this.storage?.getItem('userToken');
+    if (token) {
+      this.token = JSON.parse(token);
+    }
   }
 
   login(email: String, password: String) {
@@ -49,6 +53,7 @@ class UserService {
       .post('user/login', { email: email, password: password })
       .then((response) => {
         this.token = response.data;
+        localStorage.setItem('userToken', JSON.stringify(this.token));
       })
       .catch((err) => {
         //console.log(err);
@@ -62,6 +67,7 @@ class UserService {
         .post('user/logout')
         .then(() => {
           this.token = null;
+          localStorage.removeItem('userToken');
           this.name = '';
           this.about = '';
           this.email = '';
@@ -111,6 +117,7 @@ class UserService {
       .post('user/add', { email: email, password: password })
       .then((response) => {
         this.token = response.data;
+        localStorage.setItem('userToken', JSON.stringify(this.token));
         this.get_user();
       })
       .catch((err) => {
@@ -125,6 +132,7 @@ class UserService {
         .delete('user')
         .then((response) => {
           this.token = null;
+          localStorage.removeItem('userToken');
           this.name = 'Anonym';
           this.about = '';
           this.email = '';

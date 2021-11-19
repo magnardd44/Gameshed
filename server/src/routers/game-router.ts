@@ -1,5 +1,6 @@
 import express, { request, response } from 'express';
 import { gameService } from '../services/game-services';
+import userService from '../services/user-service';
 
 /**
  * Express router containing game methods.
@@ -43,8 +44,13 @@ gameRouter.post('/', (request, response) => {
   const data = request.body;
 
   if (data && data.game_title.length != 0 && data.game_description.length != 0)
-    gameService
-      .create(data.igdb_id, data.game_title, data.game_description)
+    userService
+      .verify(request.headers.authorization)
+      .catch((err) => {
+        response.status(401).send(err);
+        throw err;
+      })
+      .then((userId) => gameService.create(data.igdb_id, data.game_title, data.game_description))
       .then((id) => response.send({ id: id }))
       .catch((error) => response.status(500).send(error));
   else response.status(400).send('Missing review title');

@@ -2,6 +2,7 @@ import axios from 'axios';
 import { sharedComponentData } from 'react-simplified';
 import { Genre } from './genre-service';
 import { Platform } from './platform-service';
+import userService from './user-service';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 
@@ -174,7 +175,7 @@ class GameService {
   }
 
   create(game: Game) {
-    return axios
+    return userService.axios
       .post<{ id: number }>('/games', {
         igdb_id: game.igdb_id,
         game_title: game.game_title,

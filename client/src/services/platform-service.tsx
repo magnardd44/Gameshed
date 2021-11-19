@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { sharedComponentData } from 'react-simplified';
+import userService from './user-service';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 
@@ -35,7 +36,7 @@ class PlatformService {
    * Resolves the newly created platform id.
    */
   create(name: string) {
-    return axios
+    return userService.axios
       .post<{ id: number }>('/platforms', {
         name: name,
       })
@@ -48,7 +49,7 @@ class PlatformService {
    * Resolves the newly created platform id.
    */
   updatePlatformMap(platform_id: number, game_id: number) {
-    return axios.post<{ id: number }>('/platforms/map', {
+    return userService.axios.post<{ id: number }>('/platforms/map', {
       platform_id: platform_id,
       game_id: game_id,
     });

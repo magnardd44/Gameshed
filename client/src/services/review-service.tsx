@@ -90,28 +90,32 @@ class ReviewService {
    * Get review with given id.
    */
   getComplete(review_id: number, published: boolean) {
-    return axios.get<Review>('/reviews/' + review_id).then((response) => response.data);
+    return userService.axios.get<Review>('/reviews/' + review_id).then((response) => response.data);
   }
 
   /**
    * Get draft review with given id.
    */
   getDraft(review_id: number) {
-    return axios.get<Review>('/reviews/' + review_id + '/draft').then((response) => response.data);
+    return userService.axios
+      .get<Review>('/reviews/' + review_id + '/draft')
+      .then((response) => response.data);
   }
 
   /**
    * Get drafts review with given id.
    */
   getDrafts(user_id: number | undefined) {
-    return axios.get<Review[]>('/reviews/draft/user/' + user_id).then((response) => response.data);
+    return userService.axios
+      .get<Review[]>('/reviews/draft/user/' + user_id)
+      .then((response) => response.data);
   }
 
   /**
    * Get review with given id.
    */
   get(id: number) {
-    return axios.get<Review>('/reviews/' + id).then((response) => response.data);
+    return userService.axios.get<Review>('/reviews/' + id).then((response) => response.data);
   }
 
   /**
@@ -158,7 +162,7 @@ class ReviewService {
   }
   //Add like to review
   like(review_id: number, user_id: number, relevant: number) {
-    return axios
+    return userService.axios
       .patch<Review>('/reviews/' + review_id + '/relevant', {
         relevant: relevant,
         user_id: user_id,
@@ -175,7 +179,10 @@ class ReviewService {
 
   //Delete review
   delete(id: number) {
-    return axios.delete<Review>('reviews/' + id).then((response) => response.data.review_id);
+    return userService.axios
+      .delete<Review>('reviews/' + id)
+      .then((response) => response.data.review_id);
   }
 }
+
 export let reviewService = sharedComponentData(new ReviewService());

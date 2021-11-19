@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { sharedComponentData } from 'react-simplified';
+import userService from './user-service';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 
@@ -44,14 +45,14 @@ class GenreService {
    * Resolves the newly created genre id.
    */
   create(name: string) {
-    return axios
+    return userService.axios
       .post<{ id: number }>('/genres', {
         name: name,
       })
       .then((response) => response.data.id);
   }
   updateGenreMap(game_id: number, genre_id: number) {
-    return axios
+    return userService.axios
       .post<{ id: number }>('/genres/map', {
         game_id: game_id,
         genre_id: genre_id,
