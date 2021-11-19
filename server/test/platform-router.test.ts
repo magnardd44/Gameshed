@@ -3,6 +3,7 @@ import pool from '../src/mysql-pool';
 import app from '../src/app';
 
 import { Platform, platformService } from '../src/services/platform-service';
+import userService from '../src/services/user-service';
 
 /*
 jest.mock('../src/mysql-pool', () => {
@@ -48,6 +49,12 @@ const testPlatform: Platform[] = [
 
 // Since API is not compatible with v1, API version is increased to v2
 axios.defaults.baseURL = 'http://localhost:3001/api/v2';
+
+userService.verify = jest.fn(() => {
+  return new Promise((resolve: any, reject: any) => {
+    resolve(1);
+  });
+});
 
 let webServer: any;
 beforeAll((done) => {
