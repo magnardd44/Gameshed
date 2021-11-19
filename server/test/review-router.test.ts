@@ -96,85 +96,113 @@ beforeAll((done) => {
 
 //Create test user, test game and test reviews. Delete previous test reviews
 beforeEach((done) => {
-  pool.query("INSERT INTO genres (genre_name) VALUES ('zool_adventure')", (error, results) => {
+  pool.query("INSERT INTO platforms (platform_name) VALUES ('zool_platform')", (error, results) => {
     if (error) throw error;
     testReviews.forEach((element) => {
-      element.genre_id = results.insertId;
+      element.platform_id = results.insertId;
     });
-    pool.query("INSERT INTO games (game_title) VALUES ('zool_game')", (error, results) => {
+    pool.query("INSERT INTO genres (genre_name) VALUES ('zool_adventure')", (error, results) => {
       if (error) throw error;
       testReviews.forEach((element) => {
-        element.game_id = results.insertId;
+        element.genre_id = results.insertId;
       });
-      pool.query(
-        'INSERT INTO mapping_genre (game_id, genre_id ) VALUES (?, ?)',
-        [testReviews[0].game_id, testReviews[0].genre_id],
-        (error, results) => {
-          if (error) throw error;
+      pool.query("INSERT INTO games (game_title) VALUES ('zool_game')", (error, results) => {
+        if (error) throw error;
+        testReviews.forEach((element) => {
+          element.game_id = results.insertId;
+        });
 
-          pool.query("INSERT INTO users (email) VALUES ('zool@zool.no')", (error, results) => {
+        pool.query(
+          'INSERT INTO mapping_platform (game_id, platform_id ) VALUES (?, ?)',
+          [testReviews[0].game_id, testReviews[0].platform_id],
+          (error, results) => {
             if (error) throw error;
-            testReviews.forEach((element) => {
-              element.user_id = results.insertId;
-            });
+            pool.query(
+              'INSERT INTO mapping_genre (game_id, genre_id ) VALUES (?, ?)',
+              [testReviews[0].game_id, testReviews[0].genre_id],
+              (error, results) => {
+                if (error) throw error;
 
-            pool.query('DELETE FROM reviews', (error) => {
-              if (error) return done.fail(error);
-              // Create testTasks sequentially in order to set correct id, and call done() when finished
-              reviewService
-                .create(
-                  testReviews[0].game_id,
-                  testReviews[0].review_title,
-                  testReviews[0].text,
-                  testReviews[0].rating,
-                  testReviews[0].user_id,
-                  testReviews[0].published
-                ) // Create testReview[1] after testReview[0] has been created
-                .then((review_id: number) => {
-                  testReviews[0].review_id = review_id;
-                  return reviewService.create(
-                    testReviews[1].game_id,
-                    testReviews[1].review_title,
-                    testReviews[1].text,
-                    testReviews[1].rating,
-                    testReviews[1].user_id,
-                    testReviews[1].published
-                  );
-                }) // Create testReview[2] after testReview[1] has been created
-                .then(() =>
-                  reviewService.create(
-                    testReviews[2].game_id,
-                    testReviews[2].review_title,
-                    testReviews[2].text,
-                    testReviews[2].rating,
-                    testReviews[2].user_id,
-                    testReviews[2].published
-                  )
-                ) // Create testREview[3] after testReview[2] has been created
-                .then(() =>
-                  reviewService.create(
-                    testReviews[3].game_id,
-                    testReviews[3].review_title,
-                    testReviews[3].text,
-                    testReviews[3].rating,
-                    testReviews[3].user_id,
-                    testReviews[3].published
-                  )
-                )
-                .then(() => done());
-            });
-          });
-        }
-      );
+                pool.query(
+                  "INSERT INTO users (email) VALUES ('zool@zool.no')",
+                  (error, results) => {
+                    if (error) throw error;
+                    testReviews.forEach((element) => {
+                      element.user_id = results.insertId;
+                    });
+
+                    pool.query('DELETE FROM reviews', (error) => {
+                      if (error) return done.fail(error);
+                      // Create testTasks sequentially in order to set correct id, and call done() when finished
+                      reviewService
+                        .create(
+                          testReviews[0].game_id,
+                          testReviews[0].review_title,
+                          testReviews[0].text,
+                          testReviews[0].rating,
+                          testReviews[0].user_id,
+                          testReviews[0].published
+                        ) // Create testReview[1] after testReview[0] has been created
+                        .then((review_id: number) => {
+                          testReviews[0].review_id = review_id;
+                          return reviewService.create(
+                            testReviews[1].game_id,
+                            testReviews[1].review_title,
+                            testReviews[1].text,
+                            testReviews[1].rating,
+                            testReviews[1].user_id,
+                            testReviews[1].published
+                          );
+                        }) // Create testReview[2] after testReview[1] has been created
+                        .then((review_id: number) => {
+                          testReviews[1].review_id = review_id;
+
+                          return reviewService.create(
+                            testReviews[2].game_id,
+                            testReviews[2].review_title,
+                            testReviews[2].text,
+                            testReviews[2].rating,
+                            testReviews[2].user_id,
+                            testReviews[2].published
+                          );
+                        }) // Create testREview[3] after testReview[2] has been created
+                        .then((review_id: number) => {
+                          testReviews[2].review_id = review_id;
+                          return reviewService.create(
+                            testReviews[3].game_id,
+                            testReviews[3].review_title,
+                            testReviews[3].text,
+                            testReviews[3].rating,
+                            testReviews[3].user_id,
+                            testReviews[3].published
+                          );
+                        })
+                        .then((review_id: number) => {
+                          testReviews[3].review_id = review_id;
+                        })
+
+                        .then(() => done());
+                    });
+                  }
+                );
+              }
+            );
+          }
+        );
+      });
     });
   });
 });
 //Delet user and game
 afterEach((done) => {
-  pool.query("DELETE FROM users WHERE email = 'zool@zool.no'", () => {
-    pool.query("DELETE FROM games WHERE game_title = 'zool_game'", () => {
-      pool.query("DELETE FROM genres WHERE genre_name = 'zool_adventure'", () => {
-        done();
+  pool.query('DELETE FROM mapping_relevant', () => {
+    pool.query('DELETE FROM reviews', () => {
+      pool.query("DELETE FROM users WHERE email = 'zool@zool.no'", () => {
+        pool.query("DELETE FROM games WHERE game_title = 'zool_game'", () => {
+          pool.query("DELETE FROM genres WHERE genre_name = 'zool_adventure'", () => {
+            done();
+          });
+        });
       });
     });
   });
@@ -218,12 +246,33 @@ describe('Fetch  reviews (GET)', () => {
     });
   });
 
+  test('Fetch reviews by platform (200 OK)', (done) => {
+    axios.get('/reviews/platform/' + testReviews[0].platform_id).then((response) => {
+      expect(response.status).toEqual(200);
+
+      expect(
+        response.data.filter((t: any) => t.review_title == testReviews[0].review_title).length
+      ).toEqual(1);
+
+      done();
+    });
+  });
+
   //Test getting a single complete review
 
   test('Fetch complete (200 OK)', (done) => {
     axios.get('/reviews/' + testReviews[0].review_id).then((response) => {
       expect(response.status).toEqual(200);
       expect(response.data.review_title).toEqual(testReviews[0].review_title);
+      done();
+    });
+  });
+
+  test('Fetch draft (200 OK)', (done) => {
+    axios.get('/reviews/' + testReviews[3].review_id + '/draft').then((response) => {
+      expect(response.status).toEqual(200);
+
+      expect(response.data.review_title).toEqual(testReviews[3].review_title);
       done();
     });
   });
@@ -268,7 +317,7 @@ describe('Delete review (DELETE)', () => {
 });
 
 // //Test Edit review
-describe('Update review(PATCH)', () => {
+describe('Update review (PATCH)', () => {
   test('Update review', (done) => {
     axios
       .patch('/reviews/' + testReviews[0].review_id, {
@@ -284,4 +333,38 @@ describe('Update review(PATCH)', () => {
         console.log(err);
       });
   });
+  test('Publish review', (done) => {
+    axios
+      .patch('/reviews/' + testReviews[0].review_id + '/publish', {})
+      .then((response) => {
+        expect(response.status).toEqual(200);
+        done();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+  test('Like review', (done) => {
+    axios
+      .patch('/reviews/' + testReviews[0].review_id + '/relevant', {
+        relevant: 1,
+        user_id: testReviews[0].user_id,
+      })
+      .then((response) => {
+        expect(response.status).toEqual(200);
+        done();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
 });
+
+//Add like to review
+// reviewRouter.patch('/:id/relevant', (request, response) => {
+//   const data = request.body;
+//   reviewService
+//     .relevant(Number(request.params.id), data.user_id, data.relevant)
+//     .then((id) => response.send({ id: id }))
+//     .catch((error) => response.status(500).send(error));
+// });

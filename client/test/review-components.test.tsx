@@ -235,7 +235,7 @@ describe('Review components tests', () => {
     });
   });
 
-  test.skip('x addReview correctly sets path on create', (done) => {
+  test('x addReview correctly sets path on create', (done) => {
     //@ts-ignore
     const wrapper = shallow(<AddReview match={{ params: { db_id: 1 } }} />);
 
