@@ -24,6 +24,21 @@ platformRouter.post('/map', (request, response) => {
   else response.status(400).send('Missing platform');
 });
 
+platformRouter.post('/map/string', (request, response) => {
+  const data = request.body;
+  if (typeof data.platform == 'string' && typeof data.game_id == 'number')
+    userService
+      .verify(request.headers.authorization)
+      .catch((err) => {
+        response.status(401).send(err);
+        throw err;
+      })
+      .then((userId) => platformService.updatePlatformMapString(data.platform, data.game_id))
+      .then((id) => response.send({ id: id }))
+      .catch((error) => response.status(500).send(error));
+  else response.status(400).send('Missing platform');
+});
+
 /*
 platformRouter.get('/platforms/:id', (request, response) => {
   const id = Number(request.params.id);

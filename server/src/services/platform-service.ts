@@ -101,6 +101,20 @@ class PlatformService {
       );
     });
   }
+
+  updatePlatformMapString(platform: string, game_id: number) {
+    return new Promise<number>((resolve, reject) => {
+      pool.query(
+        'INSERT INTO mapping_platform(game_id, platform_id) SELECT ?, platform_id FROM platforms WHERE platform_name=?',
+        [game_id, platform],
+        (error, results) => {
+          if (error) return reject(error);
+
+          resolve(Number(results.insertId));
+        }
+      );
+    });
+  }
 }
 
 export const platformService = new PlatformService();

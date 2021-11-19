@@ -23,6 +23,21 @@ genreRouter.post('/map', (request, response) => {
   else response.status(400).send('Missing genre');
 });
 
+genreRouter.post('/map/string', (request, response) => {
+  const data = request.body;
+  if (typeof data.genre == 'string' && typeof data.game_id == 'number')
+    userService
+      .verify(request.headers.authorization)
+      .catch((err) => {
+        response.status(401).send(err);
+        throw err;
+      })
+      .then((userId) => genreService.updateGenreMapString(data.game_id, data.genre))
+      .then((id) => response.send({ id: id }))
+      .catch((error) => response.status(500).send(error));
+  else response.status(400).send('Missing genre');
+});
+
 genreRouter.get('/:id', (request, response) => {
   const id = Number(request.params.id);
   genreService

@@ -69,7 +69,12 @@ class GenreService {
   }
 
   updateGenreMapString(game_id: number, genre: string) {
-    return this.updateGenreMap(game_id, this.stringToId(genre));
+    return userService.axios
+      .post<{ id: number }>('/genres/map/string', {
+        game_id: game_id,
+        genre: genre,
+      })
+      .then((response) => response.data.id);
   }
 }
 

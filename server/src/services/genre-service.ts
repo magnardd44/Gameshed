@@ -97,6 +97,20 @@ class GenreService {
       );
     });
   }
+
+  updateGenreMapString(game_id: number, genre: string) {
+    return new Promise<void>((resolve, reject) => {
+      pool.query(
+        'INSERT INTO mapping_genre(game_id, genre_id) SELECT ?, genre_id FROM genres WHERE genre_name=?',
+        [game_id, genre],
+        (error, results) => {
+          if (error) return reject(error);
+
+          resolve();
+        }
+      );
+    });
+  }
 }
 
 export const genreService = new GenreService();

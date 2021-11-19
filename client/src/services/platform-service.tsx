@@ -64,7 +64,12 @@ class PlatformService {
   }
 
   updatePlatformMapString(platform: string, game_id: number) {
-    return this.updatePlatformMap(this.stringToId(platform), game_id);
+    return userService.axios
+      .post<{ id: number }>('/platforms/map/string', {
+        game_id: game_id,
+        platform: platform,
+      })
+      .then((response) => response.data.id);
   }
 }
 

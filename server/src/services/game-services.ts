@@ -81,7 +81,7 @@ class GameService {
     return new Promise<number>((resolve, reject) => {
       pool.query(
         'INSERT INTO games SET igdb_id=?, game_title=?, game_description=?',
-        [igdb_id, title, description],
+        [igdb_id > 0 ? igdb_id : null, title, description],
         (error, results) => {
           if (error) return reject(error);
 
