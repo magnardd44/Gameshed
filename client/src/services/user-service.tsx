@@ -118,7 +118,7 @@ class UserService {
       .then((response) => {
         this.token = response.data;
         localStorage.setItem('userToken', JSON.stringify(this.token));
-        this.get_user();
+        this.set_user().then(() => this.get_user());
       })
       .catch((err) => {
         console.log(err);
