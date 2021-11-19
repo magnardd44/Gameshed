@@ -74,7 +74,9 @@ userRouter.post('/logout', (request, response) => {
       userService.logout(id);
       response.send();
     })
-    .catch((err) => response.status(500).send(err));
+    .catch((err) => {
+      if (response.statusCode != 401) response.status(500).send(err);
+    });
   //} else response.status(400).send('Manglar token');
 });
 
