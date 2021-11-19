@@ -1,6 +1,6 @@
 # Welcome to Gameshed!
 
-!(/client/src/images/logo.png)
+![logo](/client/src/images/logo.png)
 
 _Created by Gruppe 4 Webutvikling: Helena Fawn Agustsson, Magnar Dybwad Dæhli, Stein Eggum, Solveig
 Oterhals Landsvik_
@@ -21,8 +21,7 @@ You can acces the app through our gitlab repository
 ## 2 Setup database connections
 
 You need to create two configuration files that will contain the database connection details. These
-files are not in the git repository, and they have therefore been added to .gitignore. The
-connection details are as follows:
+files are not in the git repository. The connection details are as follows:
 
 `server/config.ts`:
 
@@ -54,22 +53,7 @@ npm install
 npm start
 ```
 
-## 4
-
-Access the app by opening the path http://localhost:3000/#/ To be able to create reviews you have to
-be logged in, so creating a new user is a good way to start.
-
-## Testing
-
-## Run server tests:
-
-We have included a set of unit tests to make sure our
-
-```sh
-npm test
-```
-
-## Bundle client files to be served through server
+## 4 Bundle client files to be served through server
 
 Install dependencies and bundle client files:
 
@@ -79,8 +63,27 @@ npm install
 npm start
 ```
 
+## 5 You are now ready to start using the app
+
+Access the app by opening the path http://localhost:3000/#/ To be able to create reviews you have to
+be logged in, so creating a new user is a good way to start. For more information about how to use
+the app, please see our instruction video.
+
+## 6 Testing
+
+We have included a set of unit tests to make sure our application stays robust at all times. The
+tests are developed using the jest framework.
+
+#### Run server tests:
+
+```sh
+cd server
+npm test
+```
+
 ### Run client tests:
 
 ```sh
+cd client
 npm test
 ```
