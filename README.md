@@ -61,6 +61,8 @@ be logged in, so creating a new user is a good way to start.
 
 ## Run server tests:
 
+We have included a set of unit tests to make sure our
+
 ```sh
 npm test
 ```
