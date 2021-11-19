@@ -19,7 +19,7 @@ import { Link, NavLink, useLocation } from 'react-router-dom';
 import { reviewService } from './services/review-service';
 
 import { createHashHistory } from 'history';
-import { gameService } from './services/game-services';
+import { gameService } from './services/game-service';
 import axios from 'axios';
 import { genreService } from './services/genre-service';
 import { platformService } from './services/platform-service';
@@ -357,6 +357,18 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
               >
                 Slett
               </Button.Danger>
+            </Column>
+            <Column>
+              <Button.Light
+                onClick={() => {
+                  Alert.success(
+                    'Anmeldelsen er lagret som utkast, og du finner den under "Mine utkast"'
+                  );
+                  history.push('/search');
+                }}
+              >
+                Lagre som utkast
+              </Button.Light>
             </Column>
           </Row>
         </Card>

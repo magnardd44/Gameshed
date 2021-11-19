@@ -15,7 +15,7 @@ import {
   FormGroup,
 } from './widgets';
 import { NavLink } from 'react-router-dom';
-import { gameService } from './services/game-services';
+import { gameService } from './services/game-service';
 import { Genre, genreService } from './services/genre-service';
 import { createHashHistory } from 'history';
 import { platform } from 'os';
@@ -188,6 +188,7 @@ export class AddGame extends Component {
               <Form.Label>Tittel:</Form.Label>
 
               <Form.Input
+                id="titleInput"
                 placeholder={'Skriv inn tittel'}
                 type="text"
                 value={gameService.current.game_title}
@@ -199,6 +200,7 @@ export class AddGame extends Component {
             <FormGroup>
               <Form.Label>Beskrivelse:</Form.Label>
               <Form.Textarea
+                id="descriptionInput"
                 placeholder={'Skriv inn en beskrivelse av spillet'}
                 value={gameService.current.game_description ?? ''}
                 onChange={(event) => {
@@ -362,7 +364,7 @@ export class AddGame extends Component {
                         }
                       })
                       .then((id) => {
-                        alert('Spillet er lagret');
+                        Alert.success('Spillet er lagret!');
                         history.push('/games/' + id);
                       })
                       .catch((error) => Alert.danger('Error creating game: ' + error.message));
@@ -405,6 +407,7 @@ export class AddGame extends Component {
             <Row key={i}>
               <Column>
                 <Form.Select
+                  id="genreSel"
                   key={i}
                   value={this.genreEl[i]}
                   onChange={(event) => {
@@ -440,6 +443,7 @@ export class AddGame extends Component {
             <Row key={i}>
               <Column>
                 <Form.Select
+                  id="platformSel"
                   key={i}
                   value={this.platformEl[i]}
                   onChange={(event) => {

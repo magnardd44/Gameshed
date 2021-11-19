@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { sharedComponentData } from 'react-simplified';
 import { Genre } from './genre-service';
 import { Platform } from './platform-service';
@@ -73,7 +73,6 @@ class GameService {
             igdb: null,
           });
         });
-        console.log(this.db);
       })
       .catch((err) => console.log(err));
   }

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { sharedComponentData } from 'react-simplified';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v2';
@@ -14,6 +14,14 @@ class PlatformService {
     platform_name: '',
   };
   platforms: Platform[] = [];
+
+  axios!: AxiosInstance;
+
+  async test() {
+    this.axios.get('/test').then(function (response) {
+      console.log(response.data);
+    });
+  }
 
   /**
    * Get platform id with given name.

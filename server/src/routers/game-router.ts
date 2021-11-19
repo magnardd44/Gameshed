@@ -1,5 +1,5 @@
 import express, { request, response } from 'express';
-import { gameService } from '../services/game-services';
+import { gameService } from '../services/game-service';
 
 /**
  * Express router containing game methods.

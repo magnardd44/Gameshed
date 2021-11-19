@@ -20,7 +20,7 @@ import { createHashHistory } from 'history';
 import axios from 'axios';
 import { genreService } from './services/genre-service';
 import { history } from './index';
-import { Game, gameService } from './services/game-services';
+import { Game, gameService } from './services/game-service';
 
 type gameType = {
   id: number;
