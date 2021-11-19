@@ -94,6 +94,12 @@ userRouter.delete('/', (request, response) => {
 });
 
 //// DEBUG ///
+//userRouter.get('/test', (request, response) => {
+//  userService
+//	.test()
+//    .then((res) => response.send(res))
+//    .catch((err) => response.status(500).send(err));
+//});
 //userRouter.post('/verify', (request, response) => {
 //  const data = request.body;
 //

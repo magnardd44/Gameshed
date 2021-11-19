@@ -11,21 +11,45 @@ export type Token = {
   token: string;
 };
 
-// TODO: passportjs + bcrypt
+// TODO?: passportjs
 
 class UserService {
+  bcrypt = require('bcrypt');
+  saltRounds = 10;
+
   users_logged_in: Token[] = [];
   axios: any;
 
-  create_hash(password: string, salt: string) {
-    let hashed: string = salt + password;
-    if (hashed.length > 32) hashed = hashed.slice(0, 32);
-
-    return hashed;
+  create_hash(password: string) {
+    return new Promise<string>((resolve, reject) =>
+      this.bcrypt.hash(password, this.saltRounds, function (err: any, hash: string) {
+        resolve(hash);
+      })
+    );
   }
 
+  compare_hash(password: string, hash: string) {
+    return new Promise<void>((resolve, reject) =>
+      this.bcrypt.compare(password, hash, function (err: any, result: boolean) {
+        result ? resolve() : reject();
+      })
+    );
+  }
+
+  //create_hash(password: string, salt: string) {
+  //  let hashed: string = salt + password;
+  //  if (hashed.length > 32) hashed = hashed.slice(0, 32);
+
+  //  return hashed;
+  //}
+
   create_token(id: number) {
-    return { id: id, token: 'randomstring' };
+    //return { id: id, token: 'randomstring' };
+    return new Promise<Token>((resolve, reject) =>
+      this.bcrypt.hash('token' + id, this.saltRounds, function (err: any, hash: string) {
+        resolve({ id: id, token: hash });
+      })
+    );
   }
 
   get(id: Number) {
@@ -69,41 +93,75 @@ class UserService {
 
   add(email: string, password: string) {
     return new Promise<Token>((resolve, reject) => {
-      let salt: string = 'random';
-      let hashed: string = this.create_hash(password, salt);
+      //let salt: string = 'random';
+      //let hashed: string = this.create_hash(password, salt);
 
-      pool.query(
-        'INSERT INTO users SET email=?, salt=?, hash=?',
-        [email, salt, hashed],
-        (error, results) => {
+      this.create_hash(password).then((hash) => {
+        pool.query('INSERT INTO users SET email=?, hash=?', [email, hash], (error, results) => {
           if (error) return reject(error);
 
-          let new_token: Token = this.create_token(results.insertId);
+          this.create_token(results.insertId).then((token) => {
+            this.users_logged_in.push(token);
+            resolve(token);
+          });
+        });
+      });
 
-          this.users_logged_in.push(new_token);
-          resolve(new_token);
-        }
-      );
+      //      pool.query(
+      //        'INSERT INTO users SET email=?, salt=?, hash=?',
+      //        [email, salt, hashed],
+      //        (error, results) => {
+      //          if (error) return reject(error);
+      //
+      //          let new_token: Token = this.create_token(results.insertId);
+      //
+      //          this.users_logged_in.push(new_token);
+      //          resolve(new_token);
+      //        }
+      //      );
     });
   }
 
   // Login and get token
+  //  login(email: string, password: string) {
+  //    let salt: string = 'random';
+  //    let hashed: string = this.create_hash(password, salt);
+  //
+  //    return new Promise<Token>((resolve, reject) => {
+  //      pool.query('SELECT * FROM users WHERE email=?', [email], (error, results) => {
+  //        if (error) return reject(error);
+  //        if (results[0]?.hash == this.create_hash(password, results[0]?.salt)) {
+  //          let new_token: Token = this.create_token(results[0].user_id);
+  //
+  //          // Log out any old token and add new token
+  //          this.logout(new_token.id);
+  //          this.users_logged_in.push(new_token);
+  //
+  //          return resolve(new_token);
+  //        } else return reject('No user or wrong password');
+  //      });
+  //    });
+  //  }
+
   login(email: string, password: string) {
     let salt: string = 'random';
-    let hashed: string = this.create_hash(password, salt);
+    //let hashed: string = this.create_hash(password, salt);
 
     return new Promise<Token>((resolve, reject) => {
       pool.query('SELECT * FROM users WHERE email=?', [email], (error, results) => {
         if (error) return reject(error);
-        if (results[0]?.hash == this.create_hash(password, results[0]?.salt)) {
-          let new_token: Token = this.create_token(results[0].user_id);
 
-          // Log out any old token and add new token
-          this.logout(new_token.id);
-          this.users_logged_in.push(new_token);
+        this.compare_hash(password, results[0]?.hash)
+          .then(() => {
+            this.create_token(results[0].user_id).then((token) => {
+              // Log out any old token and add new token
+              this.logout(token.id);
+              this.users_logged_in.push(token);
 
-          return resolve(new_token);
-        } else return reject('No user or wrong password');
+              return resolve(token);
+            });
+          })
+          .catch(() => reject('No users or wrong password'));
       });
     });
   }
@@ -114,11 +172,25 @@ class UserService {
   }
 
   // Check if user token is valid and logged in
+  //  verify(authorization: string | undefined) {
+  //    let token = JSON.parse(authorization || '{"id":0, "token":""}');
+  //    return new Promise<number>((resolve, reject) => {
+  //      let index: number = this.users_logged_in.findIndex(
+  //        (t) => t.id == token?.id && token?.token == t.token
+  //      );
+  //
+  //      if (index < 0) {
+  //        reject();
+  //      }
+  //      resolve(token.id);
+  //    });
+  //  }
   verify(authorization: string | undefined) {
     let token = JSON.parse(authorization || '{"id":0, "token":""}');
+
     return new Promise<number>((resolve, reject) => {
       let index: number = this.users_logged_in.findIndex(
-        (t) => t.id == token?.id && token?.token == t.token
+        (t) => t.id == token.id && t.token == token.token
       );
 
       if (index < 0) {
@@ -154,6 +226,33 @@ class UserService {
   //          about: results[0].user_about,
   //          email: results[0].email,
   //        });
+  //      });
+  //    });
+  //  }
+  //
+
+  //  test() {
+  //    return new Promise<User[]>((resolve, reject) => {
+  //      pool.query('SELECT * FROM users', (error, results) => {
+  //        if (error) return reject(error);
+  //		//@ts-ignore
+  //		results.map(u=>{
+  //			console.log(u.user_id);
+  //			if(typeof(u.hash) == 'string' && u.hash.toString().startsWith('random')) {
+  //				let password = u.hash.substring(6);
+  //
+  //				this.create_hash(password).then((hash)=>{
+  //				pool.query('UPDATE users SET salt=?, hash=? WHERE user_id=?', [password, hash, u.user_id], (error, results) => {
+  //					if (error) console.log(error)
+  //					console.log(results)
+  //				})});
+  ////				this.create_hash(u.hash.substring(6)).then((hash)=>{
+  ////					console.log('gammel: ' + u.hash.substring(6));
+  ////					console.log(hash);
+  ////				});
+  //			}
+  //		});
+  //        resolve(results);
   //      });
   //    });
   //  }

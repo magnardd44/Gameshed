@@ -66,20 +66,20 @@ class UserService {
       this.axios
         .post('user/logout')
         .then(() => {
-          this.token = null;
-          localStorage.removeItem('userToken');
-          this.name = '';
-          this.about = '';
-          this.email = '';
+          //      this.token = null;
+          //      localStorage.removeItem('userToken');
+          //      this.name = '';
+          //      this.about = '';
+          //      this.email = '';
         })
         .catch((err) => console.log(err));
     }
 
-    // Logg ut alltid uansett?
-    // this.token = null;
-    // this.name = 'Anonym'
-    // this.about = ''
-    // this.email = ''
+    this.token = null;
+    localStorage.removeItem('userToken');
+    this.name = '';
+    this.about = '';
+    this.email = '';
   }
 
   get_user() {
