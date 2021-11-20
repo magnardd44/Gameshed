@@ -354,7 +354,10 @@ class ButtonDanger extends Component<{ small?: boolean; onClick: () => void }> {
  * Renders a light button using Bootstrap styles.
  *
  * Properties: small, onClick
- * class ButtonLight extends Component<{ small?: boolean; onClick: () => void }> {
+ * 
+ */
+
+ class ButtonLight extends Component<{ small?: boolean; onClick: () => void }> {
   render() {
     return (
       <button
@@ -376,19 +379,16 @@ class ButtonDanger extends Component<{ small?: boolean; onClick: () => void }> {
     );
   }
 }
- */
-
-
 /**
  * Renders a button using Bootstrap styles.
  *
  * Properties: onClick
- *  static Light = ButtonLight;
+ *  
  */
 export class Button {
   static Success = ButtonSuccess;
   static Danger = ButtonDanger;
- 
+  static Light = ButtonLight;
 }
 
 /**

@@ -23,9 +23,9 @@ import {
   EditReview,
   PublishedReviews,
   PublishReview,
-  GenreReviews,
+
   CompleteReview,
-  PlatformReviews,
+
   MyReviews,
 } from './review-components';
 
@@ -95,10 +95,10 @@ ReactDOM.render(
 
       <Route exact path="/editReview/:id" component={EditReview} />
       <Route exact path="/myReviews" component={MyReviews} />
-      <Route exact path="/genreReviews" component={GenreReviews} />
+  
       <Route exact path="/reviews-by-genre" component={Category}></Route>
       <Route exact path="/reviews-by-platform" component={Platform}></Route>
-      <Route exact path="/platformReviews" component={PlatformReviews} />
+
       <Route exact path="/user" component={UserPage} />
     </div>
   </HashRouter>,
