@@ -364,7 +364,7 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
               <Button.Light
                 onClick={() => {
                   Alert.success(
-                    'Anmeldelsen er lagret som utkast, og du finner den under "Mine utkast"'
+                    'Anmeldelsen er lagret som utkast, og du finner den under "Mine anmeldelser"'
                   );
                   history.push('/search');
                 }}
