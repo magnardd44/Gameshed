@@ -48,6 +48,8 @@ const testGameEmpty = {
   igdb: null,
 };
 
+const testGameNone = {};
+
 const testGames = [{ game_id: 1, igdb_id: 10, game_title: 'Zelda' }];
 const testGames2 = [{ game_id: 2, igdb_id: 22, game_title: 'Mario' }];
 
@@ -338,6 +340,26 @@ describe('SearchListings component', () => {
     //@ts-ignore
     expect(wrapper.instance().year).toEqual(1900);
 
+    wrapper
+      .find(Form.Select)
+      .at(0)
+      .simulate('change', { currentTarget: { value: 'alle' } });
+    wrapper
+      .find(Form.Select)
+      .at(1)
+      .simulate('change', { currentTarget: { value: 'alle' } });
+    wrapper
+      .find(Form.Select)
+      .at(2)
+      .simulate('change', { currentTarget: { value: 'alle' } });
+
+    //@ts-ignore
+    expect(wrapper.instance().genre).toEqual('alle');
+    //@ts-ignore
+    expect(wrapper.instance().platform).toEqual('alle');
+    //@ts-ignore
+    expect(wrapper.instance().year).toEqual(0);
+
     done();
   });
 
@@ -354,6 +376,93 @@ describe('SearchListings component', () => {
     setTimeout(() => {
       expect(history.push).toBeCalled();
       spy.mockRestore();
+      done();
+    });
+  });
+
+  test('Filter when games are incomplete', (done) => {
+    const wrapper = shallow(<SearchListings />);
+
+    //@ts-ignore
+    gameService.db = [testGameNone];
+    //@ts-ignore
+    gameService.igdb = [testGameNone];
+
+    setTimeout(() => {
+      //Three Form.Select with only the option 'alle' each
+      expect(wrapper.find('option')).toHaveLength(3);
+      done();
+    });
+  });
+
+  test('Filter is sorting on year', (done) => {
+    const wrapper = shallow(<SearchListings />);
+
+    gameService.db = [
+      //@ts-ignore
+      { igdb: { release_date: new Date('1980').valueOf() / 1000 } }, //@ts-ignore
+      { igdb: { release_date: new Date('2010').valueOf() / 1000 } }, //@ts-ignore
+      { igdb: { release_date: new Date('1990').valueOf() / 1000 } },
+    ];
+
+    gameService.igdb = [
+      //@ts-ignore
+      { igdb: { release_date: new Date('2020').valueOf() / 1000 } }, //@ts-ignore
+      { igdb: { release_date: new Date('1960').valueOf() / 1000 } }, //@ts-ignore
+      { igdb: { release_date: new Date('1990').valueOf() / 1000 } },
+    ];
+
+    setTimeout(() => {
+      expect(wrapper.find('option')).toHaveLength(8);
+      expect(
+        wrapper
+          .find('option')
+          .at(0)
+          .matchesElement(<option>alle</option>)
+      ).toBe(true);
+      expect(
+        wrapper
+          .find('option')
+          .at(1)
+          .matchesElement(<option>alle</option>)
+      ).toBe(true);
+      expect(
+        wrapper
+          .find('option')
+          .at(2)
+          .matchesElement(<option>alle</option>)
+      ).toBe(true);
+      expect(
+        wrapper
+          .find('option')
+          .at(3)
+          .matchesElement(<option>1960</option>)
+      ).toBe(true);
+      expect(
+        wrapper
+          .find('option')
+          .at(4)
+          .matchesElement(<option>1980</option>)
+      ).toBe(true);
+      expect(
+        wrapper
+          .find('option')
+          .at(5)
+          .matchesElement(<option>1990</option>)
+      ).toBe(true);
+      expect(
+        wrapper
+          .find('option')
+          .at(6)
+          .matchesElement(<option>2010</option>)
+      ).toBe(true);
+      expect(
+        wrapper
+          .find('option')
+          .at(7)
+          .matchesElement(<option>2020</option>)
+      ).toBe(true);
+
       done();
     });
   });
