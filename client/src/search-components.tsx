@@ -289,8 +289,8 @@ export class SearchListings extends Component {
         <Container>
           {gameService.db.concat(gameService.igdb).map((game, index) => {
             if (
-              (this.genre == 'alle' || game.genre.find((g) => g == this.genre)) &&
-              (this.platform == 'alle' || game.platform.find((p) => p == this.platform)) &&
+              (this.genre == 'alle' || game.genre?.find((g) => g == this.genre)) &&
+              (this.platform == 'alle' || game.platform?.find((p) => p == this.platform)) &&
               (this.year == 0 ||
                 new Date((game.igdb?.release_date || 0) * 1000).getFullYear() == this.year)
             )
