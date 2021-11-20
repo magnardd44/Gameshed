@@ -9,7 +9,7 @@ import {
   Column,
   Button,
   JustifiedNavBar,
-  NavBar,
+  
   NavBarLink,
   Container,
   ColumnCentre,
