@@ -230,7 +230,11 @@ export class FullReviewCard extends Component<{
               <ThumbNail img={this.props.img}></ThumbNail>
             </ColumnCentre>
             <ColumnCentre width={9}>
-              <div className="card-text">{this.props.text}</div>
+              <div className="card-text">
+                <b>
+                  <i>{this.props.text}</i>
+                </b>
+              </div>
             </ColumnCentre>
           </Row>
           {this.props.children}
@@ -354,10 +358,10 @@ class ButtonDanger extends Component<{ small?: boolean; onClick: () => void }> {
  * Renders a light button using Bootstrap styles.
  *
  * Properties: small, onClick
- * 
+ *
  */
 
- class ButtonLight extends Component<{ small?: boolean; onClick: () => void }> {
+class ButtonLight extends Component<{ small?: boolean; onClick: () => void }> {
   render() {
     return (
       <button
@@ -383,7 +387,7 @@ class ButtonDanger extends Component<{ small?: boolean; onClick: () => void }> {
  * Renders a button using Bootstrap styles.
  *
  * Properties: onClick
- *  
+ *
  */
 export class Button {
   static Success = ButtonSuccess;
@@ -463,8 +467,6 @@ export class JustifiedNavBar extends Component<{ brand?: ReactNode; justify?: st
   }
 }
 
-
-
 /**
  *  FORM WIDGETS
  */
@@ -491,7 +493,7 @@ class FormLabel extends Component {
 }
 
 /**
- * Renders a form input using Bootstrap styles.  
+ * Renders a form input using Bootstrap styles.
  */
 class FormInput extends Component<{
   type: string;
@@ -555,7 +557,6 @@ class FormTextarea extends React.Component<{
 }
  */
 
-
 /**
  * Renders a form select using Bootstrap styles.
  */
@@ -585,7 +586,7 @@ export class Form {
   static Label = FormLabel;
   static Input = FormInput;
   static Textarea = FormTextarea;
-  
+
   static Select = FormSelect;
 }
 

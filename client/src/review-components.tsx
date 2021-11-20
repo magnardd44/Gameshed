@@ -742,7 +742,7 @@ export class MyReviews extends Component<{ match: { params: { id: number } } }> 
         })
         .then(() => {
           reviewService.reviews.map((review, i) => {
-            reviewService.getComplete(review.review_id).then((res) => {
+            reviewService.get(review.review_id).then((res) => {
               reviewService.reviews[i] = res;
             });
           });

@@ -89,39 +89,14 @@ class ReviewService {
   /**
    * Get review with given id.
    */
-  getComplete(review_id: number) {
-    return userService.axios.get<Review>('/reviews/' + review_id).then((response) => response.data);
-  }
-
-  /**
-   * Get draft review with given id.
-   */
-  getDraft(review_id: number) {
-    return userService.axios
-      .get<Review>('/reviews/' + review_id + '/draft')
-      .then((response) => response.data);
-  }
-
-  /**
-   * Get drafts review with given id.
-   */
-  getDrafts(user_id: number | undefined) {
-    return userService.axios
-      .get<Review[]>('/reviews/draft/user/' + user_id)
-      .then((response) => response.data);
-  }
-
-  /**
-   * Get review with given id.
-   */
   get(id: number) {
-    return userService.axios.get<Review>('/reviews/' + id).then((response) => response.data);
+    return userService.axios.get<Review>('/reviews/review/' + id).then((response) => response.data);
   }
 
   /**
    * Get review with given id.
    */
-   getAllByGameId(id: number) {
+  getAllByGameId(id: number) {
     return userService.axios.get<Review>('/reviews/' + id).then((response) => response.data);
   }
 

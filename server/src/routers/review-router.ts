@@ -69,22 +69,6 @@ reviewRouter.get('/platform/:platform_id', (request, response) => {
     .catch((error) => response.status(500).send(error));
 });
 
-//Fetch individual drafts after it has been added and saved
-reviewRouter.get('/:review_id/draft', (request, response) => {
-  const id = Number(request.params.review_id);
-  userService
-    .verify(request.headers.authorization)
-    .catch((err) => {
-      response.status(401).send(err);
-      throw err;
-    })
-    .then((userId) => reviewService.getDraft(userId))
-    .then((review) =>
-      review ? response.send(review) : response.status(404).send('Review not found')
-    )
-    .catch((error) => response.status(500).send(error));
-});
-
 //Fetch all reviews for a specific user
 reviewRouter.get('/users/:user_id', (request, response) => {
   const user_id = Number(request.params.user_id);
@@ -98,10 +82,10 @@ reviewRouter.get('/users/:user_id', (request, response) => {
 });
 
 //Fetch review
-reviewRouter.get('/:review_id', (request, response) => {
+reviewRouter.get('/review/:review_id', (request, response) => {
   const id = Number(request.params.review_id);
   reviewService
-    .getSingleReview(id)
+    .get(id)
     .then((review) =>
       review ? response.send(review) : response.status(404).send('Review not found')
     )

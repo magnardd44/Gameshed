@@ -75,23 +75,6 @@ class ReviewService {
   }
 
   /**
-   * Get unpublished review based on ID
-   */
-  getDraft(review_id: number) {
-    return new Promise<Review | undefined>((resolve, reject) => {
-      pool.query(
-        'SELECT * FROM reviews WHERE PUBLISHED=0 AND review_id = ?',
-        [review_id],
-        (error, results) => {
-          if (error) return reject(error);
-
-          resolve(results[0]);
-        }
-      );
-    });
-  }
-
-  /**
    * Get all reviews
    */
   getAll() {
@@ -117,27 +100,13 @@ class ReviewService {
     });
   }
 
-  getSingleReview(review_id: number) {
-    return new Promise<Review | undefined>((resolve, reject) => {
-      pool.query(
-        'SELECT * FROM reviews LEFT JOIN games on reviews.game_id = games.game_id WHERE review_id = ?',
-        [review_id],
-        (error, results) => {
-          if (error) return reject(error);
-
-          resolve(results[0]);
-        }
-      );
-    });
-  }
-
   /**
    * Get single complete review based on ID
    */
   get(review_id: number) {
     return new Promise<Review | undefined>((resolve, reject) => {
       pool.query(
-        `SELECT *, (SELECT COUNT(*) FROM mapping_relevant WHERE review_id = r.review_id) AS likes FROM reviews r WHERE PUBLISHED=1 AND review_id = ?`,
+        `SELECT *, (SELECT COUNT(*) FROM mapping_relevant WHERE review_id = r.review_id) AS likes FROM reviews r LEFT JOIN games g ON r.game_id = g.game_id WHERE r.review_id = ?`,
         [review_id],
         (error, results) => {
           if (error) return reject(error);
