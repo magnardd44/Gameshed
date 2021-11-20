@@ -1,6 +1,6 @@
-# Welcome to Gameshed!
-
 ![logo](/client/src/images/logo.png)
+
+# Welcome to Gameshed!
 
 _Created by Gruppe 4 Webutvikling: Helena Fawn Agustsson, Magnar Dybwad Dæhli, Stein Eggum, Solveig
 Oterhals Landsvik_
@@ -16,7 +16,7 @@ started.
 
 ## 1 Download the project folder and save it to your computer
 
-You can acces the app through our gitlab repository
+You can also acces the app through our gitlab repository "Gruppe 4 Webutvikling".
 
 ## 2 Setup database connections
 

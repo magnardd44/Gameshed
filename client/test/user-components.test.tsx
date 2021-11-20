@@ -159,6 +159,7 @@ describe('UserRegister component', () => {
   test('Register new ', (done) => {
     userService.email = 'email';
     mockAdapter.onPost('user/add').reply(200, { id: 0, token: 'token' });
+    mockAdapter.onPut('user').reply(200);
     mockAdapter.onGet('user').reply(200, { nick: 'abc', about: 'def', email: 'ghi' });
 
     const wrapper = shallow(<UserRegister />);
