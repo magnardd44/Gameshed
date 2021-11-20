@@ -62,13 +62,15 @@ export class PublishedReviews extends Component {
 
   mounted() {
     console.log(reviewService);
-    reviewService
-      .getPublishedReviews()
-      .then((reviews) => {
-        reviewService.reviews = reviews;
-        console.log(reviews);
-      })
-      .catch((error) => Alert.danger('Error getting reviews: ' + error.message));
+    reviewService.getAll().then(() => {
+      reviewService
+        .getPublishedReviews()
+        .then((reviews) => {
+          reviewService.reviews = reviews;
+          console.log(reviews);
+        })
+        .catch((error) => Alert.danger('Error getting reviews: ' + error.message));
+    });
   }
 }
 
@@ -358,6 +360,16 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
                 Slett
               </Button.Danger>
             </Column>
+            <Column>
+              <Button.Success
+                onClick={() => {
+                  Alert.info('Anmeldelsen er lagret som utkast!');
+                  history.push('/');
+                }}
+              >
+                Lagre som utkast
+              </Button.Success>
+            </Column>
           </Row>
         </Card>
       </Container>
@@ -366,7 +378,7 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
 
   mounted() {
     reviewService
-      .getDraft(this.props.match.params.id)
+      .get(this.props.match.params.id)
       .then((review) => {
         reviewService.review = review;
         if (review.game_id) {
@@ -475,7 +487,7 @@ export class EditReview extends Component<{ match: { params: { id: number } } }>
 
   mounted() {
     reviewService
-      .getDraft(this.props.match.params.id)
+      .get(this.props.match.params.id)
       .then((review) => {
         reviewService.review = review;
         if (review.game_id) {
@@ -579,98 +591,128 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
 }
 
 //Renders a draft review with option to edit, delete or publish
-export class SavedDrafts extends Component<{ match: { params: { id: number } } }> {
+export class MyReviews extends Component<{ match: { params: { id: number } } }> {
   render() {
     if (userService.token) {
-      if (reviewService.drafts.length > 0) {
-        this.mounted();
+      this.render();
+      if (reviewService.reviews.length > 0) {
         return (
           <Container>
-            {reviewService.drafts.map((draft, i) => {
-              //gameService.get(draft.game_id).then((res) => {
-              //  gameService.game = res;
-              //});
-              gameService.set(draft.game_id, 0);
+            {reviewService.reviews.map((review, i) => {
+              //gameService.set(review.game_id, 0);
 
               return (
-                <Card title="Mine utkast:" key={i}>
-                  <Card title={`Utkast nr: ${(i += 1)}`} key={i}>
-                    <Row key={i}>
-                      <Column>Spillet anmeldelsen hører til:</Column>
+                <Card title={`Anmeldelse nr: ${(i += 1)}`} key={i}>
+                  <Linebreak />
+                  <Row>
+                    <Column>Spillet anmeldelsen hører til:</Column>
+                    <Column>
+                      <b>{review.game_title}</b>
+                    </Column>
+                  </Row>
+                  <Linebreak />
+                  <Row key={review.review_title}>
+                    <Column>Tittel:</Column>
+                    <Column>
+                      <b>{review.review_title}</b>
+                    </Column>
+                  </Row>
+                  <Linebreak />
+                  <Row key={review.game_id}>
+                    <Column>Innhold:</Column>
+                    <Column>
+                      <b>{review.text}</b>
+                    </Column>
+                  </Row>
+                  <Linebreak />
+                  <Row key={review.genre_id}>
+                    <Column>Terningkast:</Column>
+                    <Column>
+                      <b>{review.rating}</b>
+                    </Column>
+                  </Row>
+                  <Linebreak />
+                  {review.published ? (
+                    <Row>
+                      <Column>Status:</Column>
                       <Column>
-                        <b>{gameService.current.game_title}</b>
+                        <b>Publisert</b>
                       </Column>
                     </Row>
-                    <Linebreak />
-                    <Row key={draft.review_title}>
-                      <Column>Tittel:</Column>
+                  ) : (
+                    <Row>
+                      <Column>Status:</Column>
                       <Column>
-                        <b>{draft.review_title}</b>
+                        <b>Ikke publisert</b>
                       </Column>
                     </Row>
-                    <Linebreak />
-                    <Row key={draft.game_id}>
-                      <Column>Innhold:</Column>
-                      <Column>
-                        <b>{draft.text}</b>
-                      </Column>
-                    </Row>
-                    <Linebreak />
-                    <Row key={draft.genre_id}>
-                      <Column>Terningkast:</Column>
-                      <Column>
-                        <b>{draft.rating}</b>
-                      </Column>
-                    </Row>
-                    <Linebreak />
-                    <Row key={draft.user_id}>
+                  )}
+                  <Linebreak />
+                  <Row key={review.user_id}>
+                    {review.published ? (
                       <Column>
                         <Button.Success
                           onClick={() => {
-                            reviewService
-                              .publish(draft.review_id)
-                              .then(() => {
-                                reviewService.drafts.splice(i, 1);
-                                this.mounted();
-                                Alert.success('Review published!');
-                              })
-                              .catch((error) =>
-                                Alert.danger('Error editing review: ' + error.message)
-                              );
+                            history.push('/publishedReviews/' + review.review_id);
                           }}
                         >
-                          Publiser
+                          Ta meg til anmeldelsen
                         </Button.Success>
                       </Column>
-                      <Column>
-                        <Button.Light
-                          onClick={() => {
-                            history.push('/editReview/' + draft.review_id);
-                          }}
-                        >
-                          Rediger
-                        </Button.Light>
-                      </Column>
-                      <Column>
-                        <Button.Danger
-                          onClick={() => {
-                            reviewService
-                              .delete(draft.review_id)
-                              .then(() => {
-                                reviewService.drafts.splice(i, 1);
-                                this.mounted();
-                                Alert.success('Review deleted');
-                              })
-                              .catch((error) =>
-                                Alert.danger('Error deleting task: ' + error.message)
-                              );
-                          }}
-                        >
-                          Slett ukastet
-                        </Button.Danger>
-                      </Column>
-                    </Row>
-                  </Card>
+                    ) : (
+                      <>
+                        <Column>
+                          <Button.Success
+                            onClick={() => {
+                              reviewService
+                                .publish(review.review_id)
+                                .then(() => {
+                                  reviewService.reviews.splice(i, 1);
+                                  Alert.success('Review published!');
+                                })
+                                .catch((error) =>
+                                  Alert.danger(
+                                    'Det oppsto en feil når anmeldelsen: ' + error.message
+                                  )
+                                );
+                            }}
+                          >
+                            Publiser
+                          </Button.Success>
+                        </Column>
+
+                        <Column>
+                          <Button.Light
+                            onClick={() => {
+                              history.push('/editReview/' + review.review_id);
+                            }}
+                          >
+                            Rediger
+                          </Button.Light>
+                        </Column>
+                      </>
+                    )}
+
+                    <Column>
+                      <Button.Danger
+                        onClick={() => {
+                          reviewService
+                            .delete(review.review_id)
+                            .then(() => {
+                              reviewService.reviews.splice(i, 1);
+                              Alert.success('Anmeldelse slettet');
+                            })
+                            .catch((error) =>
+                              Alert.danger(
+                                'Det oppsto en feil ved sletting av anmeldelse: ' + error.message
+                              )
+                            );
+                        }}
+                      >
+                        Slett
+                      </Button.Danger>
+                    </Column>
+                  </Row>
                 </Card>
               );
             })}
@@ -679,19 +721,34 @@ export class SavedDrafts extends Component<{ match: { params: { id: number } } }
       } else {
         return (
           <Container>
-            Du har ingen utkast, finn et spill du kan anmelde <Link to="/search"> her:</Link>
+            Du har ingen anmeldelser, finn et spill du kan anmelde <Link to="/search"> her:</Link>
           </Container>
         );
       }
     } else {
-      return <Container>Du er ikke logget inn. Logg inn for å se dine utkast.</Container>;
+      return <Container>Du er ikke logget inn. Logg inn for å se dine anmeldelser.</Container>;
     }
   }
   mounted() {
     if (userService.token) {
-      reviewService.getDrafts(userService.token?.id).then((res) => {
-        reviewService.drafts = res;
-      });
+      reviewService
+        .getAllById(userService.token.id)
+        .then((res) => {
+          reviewService.reviews = res;
+          reviewService.reviews.sort((a, b) => (a.published > b.published ? 1 : -1));
+          console.log(reviewService.reviews);
+        })
+        .then(() => {
+          reviewService.reviews.map((review, i) => {
+            reviewService.getComplete(review.review_id).then((res) => {
+              reviewService.reviews[i] = res;
+            });
+          });
+        })
+
+        .catch((err) => {
+          Alert.info('Det oppsto et problem ved henting av anmeldelsene: ' + err);
+        });
     }
   }
 }

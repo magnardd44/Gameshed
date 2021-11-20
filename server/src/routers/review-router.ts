@@ -36,6 +36,14 @@ reviewRouter.post('/', (request, response) => {
 });
 
 //Show published reviews
+reviewRouter.get('/', (request, response) => {
+  reviewService
+    .getAll()
+    .then((rows) => response.send(rows))
+    .catch((error) => response.status(500).send(error));
+});
+
+//Show published reviews
 reviewRouter.get('/published', (request, response) => {
   reviewService
     .getPublished()
@@ -70,34 +78,30 @@ reviewRouter.get('/:review_id/draft', (request, response) => {
       response.status(401).send(err);
       throw err;
     })
-    .then((userId) => reviewService.getDraft(id))
+    .then((userId) => reviewService.getDraft(userId))
     .then((review) =>
       review ? response.send(review) : response.status(404).send('Review not found')
     )
     .catch((error) => response.status(500).send(error));
 });
 
-//Fetch all drafts for a specific user
-reviewRouter.get('/draft/user/:user_id', (request, response) => {
-  //const user_id = Number(request.params.user_id);
-  userService
-    .verify(request.headers.authorization)
-    .catch((err) => {
-      response.status(401).send(err);
-      throw err;
-    })
-    .then((userId) => reviewService.getDrafts(userId))
+//Fetch all reviews for a specific user
+reviewRouter.get('/users/:user_id', (request, response) => {
+  const user_id = Number(request.params.user_id);
+
+  reviewService
+    .getAllById(user_id)
     .then((reviews) =>
       reviews ? response.send(reviews) : response.status(404).send('Reviews not found')
     )
     .catch((error) => response.status(500).send(error));
 });
 
-//Fetch published review
+//Fetch review
 reviewRouter.get('/:review_id', (request, response) => {
   const id = Number(request.params.review_id);
   reviewService
-    .get(id)
+    .getSingleReview(id)
     .then((review) =>
       review ? response.send(review) : response.status(404).send('Review not found')
     )

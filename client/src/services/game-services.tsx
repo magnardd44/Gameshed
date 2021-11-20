@@ -35,6 +35,15 @@ class GameService {
 
   current: Game = this.empty();
 
+  game: Game = {
+    game_id: 0,
+    igdb_id: 0,
+    game_title: '',
+    genre: [],
+    platform: [],
+    game_description: '',
+  };
+
   empty() {
     return {
       game_id: 0,

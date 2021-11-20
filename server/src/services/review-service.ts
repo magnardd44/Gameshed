@@ -92,17 +92,40 @@ class ReviewService {
   }
 
   /**
-   * Get all drafts based on user ID
+   * Get all reviews
    */
-  getDrafts(userId: number) {
+  getAll() {
     return new Promise<Review[]>((resolve, reject) => {
+      pool.query('SELECT * FROM reviews', (error, results) => {
+        if (error) return reject(error);
+
+        resolve(results);
+      });
+    });
+  }
+
+  /**
+   * Get all reviews based on user ID
+   */
+  getAllById(user_id: number) {
+    return new Promise<Review[]>((resolve, reject) => {
+      pool.query('SELECT * FROM reviews WHERE user_id = ?', [user_id], (error, results) => {
+        if (error) return reject(error);
+
+        resolve(results);
+      });
+    });
+  }
+
+  getSingleReview(review_id: number) {
+    return new Promise<Review | undefined>((resolve, reject) => {
       pool.query(
-        'SELECT * FROM reviews WHERE published=0 AND user_id = ?',
-        [userId],
+        'SELECT * FROM reviews LEFT JOIN games on reviews.game_id = games.game_id WHERE review_id = ?',
+        [review_id],
         (error, results) => {
           if (error) return reject(error);
 
-          resolve(results);
+          resolve(results[0]);
         }
       );
     });

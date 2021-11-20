@@ -26,7 +26,7 @@ import {
   GenreReviews,
   CompleteReview,
   PlatformReviews,
-  SavedDrafts,
+  MyReviews,
 } from './review-components';
 
 import { Hash } from 'crypto';
@@ -67,7 +67,7 @@ class NavHeader extends Component {
           <NavBarLink to="/search">Søk spill</NavBarLink>
           <NavBarLink to="/reviews">Anmeldelser</NavBarLink>
           <NavBarLink to="/addGame">Legg til spill</NavBarLink>
-          {userService.token ? <NavBarLink to={'/reviews/drafts'}>Mine utkast</NavBarLink> : ''}
+          {userService.token ? <NavBarLink to={'/myReviews'}>Mine anmeldelser</NavBarLink> : ''}
         </JustifiedNavBar>
         <Row>
           <Heading header></Heading>
@@ -94,7 +94,7 @@ ReactDOM.render(
       <Route exact path="/publishReview/:id" component={PublishReview} />
 
       <Route exact path="/editReview/:id" component={EditReview} />
-      <Route exact path="/reviews/drafts" component={SavedDrafts} />
+      <Route exact path="/myReviews" component={MyReviews} />
       <Route exact path="/genreReviews" component={GenreReviews} />
       <Route exact path="/reviews-by-genre" component={Category}></Route>
       <Route exact path="/reviews-by-platform" component={Platform}></Route>

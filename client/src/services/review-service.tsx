@@ -89,7 +89,7 @@ class ReviewService {
   /**
    * Get review with given id.
    */
-  getComplete(review_id: number, published: boolean) {
+  getComplete(review_id: number) {
     return userService.axios.get<Review>('/reviews/' + review_id).then((response) => response.data);
   }
 
@@ -116,6 +116,20 @@ class ReviewService {
    */
   get(id: number) {
     return userService.axios.get<Review>('/reviews/' + id).then((response) => response.data);
+  }
+
+  /**
+   * Get reviews with given id.
+   */
+  getAllById(user_id: number) {
+    return axios.get<Review[]>('/reviews/users/' + user_id).then((response) => response.data);
+  }
+
+  /**
+   * Get reviews with given id.
+   */
+  getAll() {
+    return axios.get<Review[]>('/reviews/').then((response) => response.data);
   }
 
   /**
