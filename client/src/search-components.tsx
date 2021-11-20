@@ -19,23 +19,60 @@ import { Genre } from './services/genre-service';
 import { createHashHistory } from 'history';
 import axios from 'axios';
 import { genreService } from './services/genre-service';
-import { history } from './index';
+import { platformService } from './services/platform-service';
 import { Game, gameService } from './services/game-service';
 
-type gameType = {
-  id: number;
-  name: string;
-};
+export const history = createHashHistory();
 
-class SharedGame {
-  game: gameType = {
-    id: 0,
-    name: '',
-  };
-  games: gameType[] = [];
-}
+//type gameType = {
+//  id: number;
+//  name: string;
+//};
+//
+//class SharedGame {
+//  game: gameType = {
+//    id: 0,
+//    name: '',
+//  };
+//  games: gameType[] = [];
+//}
 
 //let shared = sharedComponentData(new SharedGame());
+
+//key={index}
+//onClick={(event) => {
+////                        this.input = event.currentTarget.innerHTML;
+////                        this.game = game;
+//this.setGame(game.game_id, game.igdb_id);
+//}}
+
+export class SearchHotBar extends Component<{
+  onClick: () => void;
+  [prop: string]: any;
+}> {
+  //game: Game;
+  render() {
+    const { onClick, ...rest } = this.props;
+    return (
+      <div
+        //id={game.game_id.toString()}
+        {...rest}
+        role="option"
+        className=" option"
+        style={{
+          borderRadius: '5px',
+          border: '1px solid black',
+          cursor: 'pointer',
+          marginTop: '10px',
+          backgroundColor: 'lightgray',
+        }}
+        onClick={onClick}
+      >
+        {this.props.children}
+      </div>
+    );
+  }
+}
 
 export class Search extends Component {
   igdbSearcher: ReturnType<typeof setInterval> | null = null;
@@ -44,7 +81,7 @@ export class Search extends Component {
   lastInput: string = '';
 
   //games: Game[] = [];
-  filtered: Game[] = [];
+  //filtered: Game[] = [];
 
   //  game: Game = {
   //    game_id: 0,
@@ -83,26 +120,32 @@ export class Search extends Component {
               {gameService.db.concat(gameService.igdb).map((game, index) => {
                 if (this.input != '') {
                   return (
-                    <div
-                      //id={game.game_id.toString()}
+                    <SearchHotBar
                       key={index}
-                      role="option"
-                      className=" option"
-                      style={{
-                        borderRadius: '5px',
-                        border: '1px solid black',
-                        cursor: 'pointer',
-                        marginTop: '10px',
-                        backgroundColor: 'lightgray',
-                      }}
-                      onClick={(event) => {
-                        //                        this.input = event.currentTarget.innerHTML;
-                        //                        this.game = game;
-                        this.setGame(game.game_id, game.igdb_id);
-                      }}
+                      onClick={() => this.setGame(game.game_id, game.igdb_id)}
                     >
                       {game.game_title}
-                    </div>
+                    </SearchHotBar>
+                    //                    <div
+                    //                      //id={game.game_id.toString()}
+                    //                      key={index}
+                    //                      role="option"
+                    //                      className=" option"
+                    //                      style={{
+                    //                        borderRadius: '5px',
+                    //                        border: '1px solid black',
+                    //                        cursor: 'pointer',
+                    //                        marginTop: '10px',
+                    //                        backgroundColor: 'lightgray',
+                    //                      }}
+                    //                      onClick={(event) => {
+                    //                        //                        this.input = event.currentTarget.innerHTML;
+                    //                        //                        this.game = game;
+                    //                        this.setGame(game.game_id, game.igdb_id);
+                    //                      }}
+                    //                    >
+                    //                      {game.game_title}
+                    //                    </div>
                   );
                 }
               })}
@@ -162,7 +205,10 @@ export class Search extends Component {
 }
 
 export class SearchListings extends Component {
-  genres: Genre[] = [];
+  genre: string = '';
+  platform: string = '';
+  year: number = 0;
+
   render() {
     return (
       <>
@@ -171,19 +217,30 @@ export class SearchListings extends Component {
           <FormContainer>
             <FormGroup>
               <Form.Label>Sjanger: </Form.Label>
-              <Form.Select value={'Adventure'} onChange={() => console.log('sjanger')}>
-                {this.genres.map((genre) => (
-                  <option key={genre.genre_id}>{genre.genre_name}</option>
+              <Form.Select
+                value={this.genre}
+                onChange={(event) => (this.genre = event.currentTarget.value)}
+              >
+                {genreService.genres.map((genre, index) => (
+                  <option key={index}>{genre.genre_name}</option>
                 ))}
               </Form.Select>
 
               <Form.Label>Platform: </Form.Label>
-              <Form.Select value={'Adventure'} onChange={() => console.log('sjanger')}>
-                <option value="1">Playstation</option>
+              <Form.Select
+                value={this.platform}
+                onChange={(event) => (this.platform = event.currentTarget.value)}
+              >
+                {platformService.platforms.map((platform, index) => (
+                  <option key={index}>{platform.platform_name}</option>
+                ))}
               </Form.Select>
 
               <Form.Label>År: </Form.Label>
-              <Form.Select value={'Adventure'} onChange={() => console.log('sjanger')}>
+              <Form.Select
+                value={this.year}
+                onChange={(event) => (this.year = Number(event.currentTarget.value))}
+              >
                 <option value="1">2020</option>
               </Form.Select>
             </FormGroup>
@@ -210,7 +267,10 @@ export class SearchListings extends Component {
   }
   mounted() {
     genreService.getAll().then((results) => {
-      this.genres = results;
+      genreService.genres = results;
+    });
+    platformService.getAll().then((results) => {
+      platformService.platforms = results;
     });
   }
 }
@@ -246,14 +306,10 @@ export class SearchResult extends Component<{ game: Game }> {
             </Button.Success>
           </Column>
         </Row>
+        <Row>Sjanger: {this.props.game.genre?.join(', ')}</Row>
+        <Row>Platformer: {this.props.game.platform?.join(', ')}</Row>
         <Row>
-          Sjanger: {this.props.game.genre?.reduce((p, c) => (p == '' ? c : p + ', ' + c), '')}
-        </Row>
-        <Row>
-          Platform: {this.props.game.platform?.reduce((p, c) => (p == '' ? c : p + ', ' + c), '')}
-        </Row>
-        <Row>
-          År:{' '}
+          Utgivelsesår:{' '}
           {this.props.game.igdb
             ? new Date(this.props.game.igdb?.release_date * 1000).getFullYear()
             : ''}{' '}
