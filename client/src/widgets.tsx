@@ -354,8 +354,7 @@ class ButtonDanger extends Component<{ small?: boolean; onClick: () => void }> {
  * Renders a light button using Bootstrap styles.
  *
  * Properties: small, onClick
- */
-class ButtonLight extends Component<{ small?: boolean; onClick: () => void }> {
+ * class ButtonLight extends Component<{ small?: boolean; onClick: () => void }> {
   render() {
     return (
       <button
@@ -377,16 +376,19 @@ class ButtonLight extends Component<{ small?: boolean; onClick: () => void }> {
     );
   }
 }
+ */
+
 
 /**
  * Renders a button using Bootstrap styles.
  *
  * Properties: onClick
+ *  static Light = ButtonLight;
  */
 export class Button {
   static Success = ButtonSuccess;
   static Danger = ButtonDanger;
-  static Light = ButtonLight;
+ 
 }
 
 /**
@@ -412,6 +414,23 @@ export class NavBarLink extends Component<{ to: string }> {
  * Renders a NavBar using Bootstrap classes.
  *
  * Properties: brand
+ * 
+ * export class NavBar extends Component<{ brand: ReactNode; justify?: string }> {
+  static Link = NavBarLink;
+
+  render() {
+    return (
+      <nav className="navbar navbar-expand-sm navbar-light bg-light">
+        <div className="container-fluid justify-content-start">
+          <NavLink className="navbar-brand" activeClassName="active" exact to="/">
+            {this.props.brand}
+          </NavLink>
+          <div className="navbar-nav">{this.props.children}</div>
+        </div>
+      </nav>
+    );
+  }
+}
  */
 export class JustifiedNavBar extends Component<{ brand?: ReactNode; justify?: string }> {
   static Link = NavBarLink;
@@ -444,22 +463,7 @@ export class JustifiedNavBar extends Component<{ brand?: ReactNode; justify?: st
   }
 }
 
-export class NavBar extends Component<{ brand: ReactNode; justify?: string }> {
-  static Link = NavBarLink;
 
-  render() {
-    return (
-      <nav className="navbar navbar-expand-sm navbar-light bg-light">
-        <div className="container-fluid justify-content-start">
-          <NavLink className="navbar-brand" activeClassName="active" exact to="/">
-            {this.props.brand}
-          </NavLink>
-          <div className="navbar-nav">{this.props.children}</div>
-        </div>
-      </nav>
-    );
-  }
-}
 
 /**
  *  FORM WIDGETS
@@ -487,7 +491,7 @@ class FormLabel extends Component {
 }
 
 /**
- * Renders a form input using Bootstrap styles.
+ * Renders a form input using Bootstrap styles.  
  */
 class FormInput extends Component<{
   type: string;
@@ -529,8 +533,7 @@ class FormTextarea extends React.Component<{
 
 /**
  * Renders a form checkbox using Bootstrap styles.
- */
-class FormCheckbox extends Component<{
+ * class FormCheckbox extends Component<{
   checked: boolean;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   [prop: string]: any;
@@ -550,6 +553,8 @@ class FormCheckbox extends Component<{
     );
   }
 }
+ */
+
 
 /**
  * Renders a form select using Bootstrap styles.
@@ -574,12 +579,13 @@ class FormSelect extends Component<{
 
 /**
  * Renders form components using Bootstrap styles.
+ * static Checkbox = FormCheckbox;
  */
 export class Form {
   static Label = FormLabel;
   static Input = FormInput;
   static Textarea = FormTextarea;
-  static Checkbox = FormCheckbox;
+  
   static Select = FormSelect;
 }
 
