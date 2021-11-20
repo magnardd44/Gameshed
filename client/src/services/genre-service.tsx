@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { sharedComponentData } from 'react-simplified';
 import userService from './user-service';
 
@@ -17,6 +17,14 @@ class GenreService {
     genre_img: '',
   };
   genres: Genre[] = [];
+
+  axios!: AxiosInstance;
+
+  async test() {
+    this.axios.get('/test').then(function (response) {
+      console.log(response.data);
+    });
+  }
 
   /**
    * Get genre with given id.

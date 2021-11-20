@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { sharedComponentData } from 'react-simplified';
 import userService from './user-service';
 
@@ -15,6 +15,14 @@ class PlatformService {
     platform_name: '',
   };
   platforms: Platform[] = [];
+
+  axios!: AxiosInstance;
+
+  async test() {
+    this.axios.get('/test').then(function (response) {
+      console.log(response.data);
+    });
+  }
 
   /**
    * Get platform id with given name.
