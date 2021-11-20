@@ -119,6 +119,13 @@ class ReviewService {
   }
 
   /**
+   * Get review with given id.
+   */
+   getAllByGameId(id: number) {
+    return userService.axios.get<Review>('/reviews/' + id).then((response) => response.data);
+  }
+
+  /**
    * Get reviews with given id.
    */
   getAllById(user_id: number) {
