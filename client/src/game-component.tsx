@@ -13,6 +13,7 @@ import {
   Linebreak,
   FormContainer,
   FormGroup,
+  ReviewCard
 } from './widgets';
 import { NavLink } from 'react-router-dom';
 import { gameService } from './services/game-service';
@@ -22,11 +23,13 @@ import { platform } from 'os';
 import { Platform, platformService } from './services/platform-service';
 import axios from 'axios';
 import { RelatedReviews } from './related-reviews';
+import { reviewService, Review } from './services/review-service';
 // import Select from 'react-select';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
 export class GameCard extends Component<{ match: { params: { igdb_id: number; db_id: number } } }> {
+  
   render() {
     return (
       <>
@@ -35,14 +38,15 @@ export class GameCard extends Component<{ match: { params: { igdb_id: number; db
             <h6 className="card-subtitle mb-2 text-muted">
               <ColumnCentre key={0}>
                 Terningkast:
-                <ThumbNail
+                {gameService.current.igdb?.aggregated_rating != undefined ? <ThumbNail
                   small
                   img={
                     'https://helenaagustsson.github.io/INFT2002-images/images/dice-' +
                     this.rating() +
                     '.png'
                   }
-                ></ThumbNail>
+                ></ThumbNail>:'Ikke tilgjengelig' }
+                
               </ColumnCentre>
             </h6>
             <Row>
@@ -112,9 +116,9 @@ export class GameCard extends Component<{ match: { params: { igdb_id: number; db
             </Column>
           </Row>
         </Container>
-        <Container>
-          <RelatedReviews genre_id={1}></RelatedReviews>
-        </Container>
+        
+        
+         
       </>
     );
   }
@@ -158,15 +162,20 @@ export class GameCard extends Component<{ match: { params: { igdb_id: number; db
     //        })
     //        .catch();
     //    }
+    
   }
   addReview() {
     history.push(`/addReview/${gameService.current.game_id}/${gameService.current.igdb_id}`);
   }
   rating() {
-    let terningkast = gameService.current.igdb
+    
+      let terningkast = gameService.current.igdb
+      
       ? Math.ceil((gameService.current.igdb?.aggregated_rating * 6) / 100)
       : '';
     return terningkast;
+    
+   
   }
 }
 
