@@ -691,7 +691,7 @@ export class MyReviews extends Component<{ match: { params: { id: number } } }> 
                                   .publish(review.review_id)
                                   .then(() => {
                                     reviewService.reviews.splice(i, 1);
-                                    Alert.success('Review published!');
+                                    Alert.success('Anmeldelse publisert!');
                                     this.mounted();
                                     this.render();
                                   })

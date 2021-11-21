@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Category component Category component default 1`] = `
+<Fragment>
+  <Container>
+    <h3
+      className="text-center"
+    >
+      Her kan du søke anmeldelser etter sjanger
+    </h3>
+    <div
+      className="text-center"
+    >
+      <ButtonSuccess
+        onClick={[Function]}
+        small={true}
+      >
+        Klikk her
+      </ButtonSuccess>
+       
+      for å søke etter plattform
+    </div>
+    <Linebreak />
+    <h5>
+      Velg sjanger:
+    </h5>
+    <Row>
+      <ColumnCentre
+        mdwidth={2}
+        smwidth={4}
+        width={6}
+      />
+      <ColumnCentre>
+        <div
+          className="sticky-top"
+        >
+          <div>
+            Resultater:
+          </div>
+          <Row>
+            <Column>
+              Ingen resultater
+            </Column>
+          </Row>
+        </div>
+      </ColumnCentre>
+    </Row>
+  </Container>
+</Fragment>
+`;

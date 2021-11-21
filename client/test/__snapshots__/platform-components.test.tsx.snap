@@ -1,0 +1,140 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Platform component Platform component default 1`] = `
+<Fragment>
+  <Container>
+    <h3
+      className="text-center"
+    >
+      Her kan du søke anmeldelser etter platform
+    </h3>
+    <div
+      className="text-center"
+    >
+      <ButtonSuccess
+        onClick={[Function]}
+        small={true}
+      >
+        Klikk her
+      </ButtonSuccess>
+       
+      for å søke etter sjanger
+    </div>
+    <Linebreak />
+    <h5>
+      Velg platform:
+    </h5>
+    <Row>
+      <ColumnCentre
+        mdwidth={2}
+        smwidth={4}
+        width={6}
+      >
+        <Card
+          title="Play Station 4"
+        >
+          <ButtonSuccess
+            onClick={[Function]}
+          >
+            Vis
+          </ButtonSuccess>
+        </Card>
+        <Card
+          title="Play Station 5"
+        >
+          <ButtonSuccess
+            onClick={[Function]}
+          >
+            Vis
+          </ButtonSuccess>
+        </Card>
+        <Card
+          title="Nintendo Switch"
+        >
+          <ButtonSuccess
+            onClick={[Function]}
+          >
+            Vis
+          </ButtonSuccess>
+        </Card>
+        <Card
+          title="XBox One"
+        >
+          <ButtonSuccess
+            onClick={[Function]}
+          >
+            Vis
+          </ButtonSuccess>
+        </Card>
+        <Card
+          title="XBox 360"
+        >
+          <ButtonSuccess
+            onClick={[Function]}
+          >
+            Vis
+          </ButtonSuccess>
+        </Card>
+        <Card
+          title="PC - Microsoft"
+        >
+          <ButtonSuccess
+            onClick={[Function]}
+          >
+            Vis
+          </ButtonSuccess>
+        </Card>
+        <Card
+          title="Gameboy"
+        >
+          <ButtonSuccess
+            onClick={[Function]}
+          >
+            Vis
+          </ButtonSuccess>
+        </Card>
+        <Card
+          title="Mac"
+        >
+          <ButtonSuccess
+            onClick={[Function]}
+          >
+            Vis
+          </ButtonSuccess>
+        </Card>
+        <Card
+          title="IOS"
+        >
+          <ButtonSuccess
+            onClick={[Function]}
+          >
+            Vis
+          </ButtonSuccess>
+        </Card>
+        <Card
+          title="Nintendo DS"
+        >
+          <ButtonSuccess
+            onClick={[Function]}
+          >
+            Vis
+          </ButtonSuccess>
+        </Card>
+        <Card
+          title="Andre"
+        >
+          <ButtonSuccess
+            onClick={[Function]}
+          >
+            Vis
+          </ButtonSuccess>
+        </Card>
+      </ColumnCentre>
+      <ColumnCentre>
+         
+         
+      </ColumnCentre>
+    </Row>
+  </Container>
+</Fragment>
+`;

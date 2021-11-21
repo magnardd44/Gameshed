@@ -111,22 +111,12 @@ Alert.warning = jest.fn(() => {});
 Alert.success = jest.fn(() => {});
 
 describe('AddGame component', () => {
-  test('AddGame default', (done) => {
+  test('AddGame default', () => {
     const wrapper = shallow(<AddGame />);
 
     // Wait for events to complete
     setTimeout(() => {
-      expect(
-        wrapper.containsMatchingElement(
-          // @ts-ignore
-          <div>
-            Legg til ett spill
-            <input type="text" placeholder="Skriv inn tittel" />
-            <textarea placeholder="Skriv inn en beskrivelse av spillet"></textarea>
-          </div>
-        )
-      ).toEqual(true);
-      done();
+      expect(wrapper).toMatchSnapshot();
     });
   });
 
@@ -138,7 +128,8 @@ describe('AddGame component', () => {
     wrapper.find('#genreSel').simulate('change', { currentTarget: { value: 'Puzzle' } });
     wrapper.find('#platformSel').simulate('change', { currentTarget: { value: 'Mac' } });
 
-    wrapper.find({ children: 'Lagre' }).simulate('click');
+    // @ts-ignore
+    wrapper.find(<Button.Success>Lagre</Button.Success>).simulate('click');
 
     // Wait for events to complete
     //
