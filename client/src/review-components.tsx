@@ -485,7 +485,7 @@ export class EditReview extends Component<{ match: { params: { id: number } } }>
           //gameService.get(review.game_id).then((game) => {
           gameService.set(review.game_id, 0).then(() => {
             //gameService.game = game;
-            console.log(gameService.current);
+            //console.log(gameService.current);
           });
           //          gameService2.get(review.game_id).then((game) => {
           //            gameService2.game = game;
@@ -577,7 +577,7 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
       .then((review) => {
         reviewService.review = review;
         gameService.set(reviewService.review.game_id, 0);
-        console.log(reviewService.review);
+        // console.log(reviewService.review);
       })
       .catch((error) => Alert.danger('Error getting review: ' + error.message));
   }

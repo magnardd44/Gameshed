@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
-import { useHistory } from 'react-router';
+import { history, Home, ReviewHome } from '../src/home-components';
 import { Card, Row, Column, Form, Button } from '../src/widgets';
 import {
   AddReview,
@@ -156,21 +156,28 @@ describe('Review components tests', () => {
 
   test('edit button in PublishReview calls history.push method when clicked', (done) => {
     //@ts-ignore
-    const spy = jest.spyOn(history, 'push');
-
-    //@ts-ignore
     let newReview = new PublishReview();
     //@ts-ignore
     const wrapper = shallow(<PublishReview match={{ params: { review_id: 1 } }} />);
-    wrapper.find(Button.Success).at(0).simulate('click');
-    setTimeout(() => {
-      //@ts-ignore
-      expect(history.push).toHaveBeenCalled();
-      spy.mockRestore();
 
-      done();
-    });
+    const spy = jest.spyOn(history, 'push');
+
+    wrapper.find(Button.Success).at(0).simulate('click');
+
+    expect(spy).toHaveBeenCalledWith('/editReview');
+
+    done();
   });
+
+  // test('Button add game', () => {
+  //   const wrapper = shallow(<Home />);
+
+  //   const spy = jest.spyOn(history, 'push');
+
+  //   wrapper.find({ children: 'Legg til spill' }).simulate('click');
+
+  //   expect(spy).toBeCalledWith('/addGame');
+  // });
 
   test('save button in EditReview calls edit method when clicked', (done) => {
     //@ts-ignore
@@ -248,20 +255,10 @@ describe('Review components tests', () => {
     };
     //@ts-ignore
     const wrapper = shallow(<CompleteReview match={{ params: { review_id: 1 } }} />);
-    console.log(wrapper.debug());
 
     // Wait for events to complete
     setTimeout(() => {
-      expect(
-        wrapper
-          .find(
-            'ForwardRef(ShareButton-facebook)'
-            // <FacebookShareButton {...shareButtonProps}>
-            //   <FacebookIcon size="40" round />
-            // </FacebookShareButton>
-          )
-          .exists()
-      ).toEqual(true);
+      expect(wrapper.find('ForwardRef(ShareButton-facebook)').exists()).toEqual(true);
       done();
     });
   });
@@ -276,7 +273,6 @@ describe('Review components tests', () => {
     };
     //@ts-ignore
     const wrapper = shallow(<CompleteReview match={{ params: { review_id: 1 } }} />);
-    console.log(wrapper.debug());
 
     // Wait for events to complete
     setTimeout(() => {
