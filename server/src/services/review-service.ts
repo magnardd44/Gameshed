@@ -224,6 +224,40 @@ class ReviewService {
       });
     });
   }
+
+  getTopTen() {
+    return new Promise<void>((resolve, reject) => {
+      pool.query(
+        `SELECT * FROM reviews
+		  INNER JOIN (SELECT review_id, COUNT(*) AS likes FROM mapping_relevant
+					  GROUP BY review_id) derived USING(review_id)
+		  LEFT JOIN (SELECT game_title, game_id FROM games) g USING (game_id)
+		  WHERE published = 1 ORDER BY likes DESC LIMIT 10`,
+        (error, results) => {
+          if (error) return reject(error);
+
+          resolve(results);
+        }
+      );
+    });
+  }
+
+  getLastTen() {
+    return new Promise<void>((resolve, reject) => {
+      pool.query(
+        `SELECT * FROM reviews
+		  INNER JOIN (SELECT review_id, COUNT(*) AS likes FROM mapping_relevant
+					  GROUP BY review_id) derived USING(review_id)
+		  LEFT JOIN (SELECT game_title, game_id FROM games) g USING (game_id)
+		  WHERE published = 1 ORDER BY review_id DESC LIMIT 10`,
+        (error, results) => {
+          if (error) return reject(error);
+
+          resolve(results);
+        }
+      );
+    });
+  }
 }
 
 export const reviewService = new ReviewService();
