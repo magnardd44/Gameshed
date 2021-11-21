@@ -142,7 +142,6 @@ export class AddReview extends Component<{
           </FormContainer>
         </Card>
         <Linebreak />
-        <Alert />
         <Column>
           <Button.Danger
             onClick={() => {
