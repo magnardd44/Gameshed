@@ -18,10 +18,9 @@ started.
 
 You can also acces the app through our gitlab repository "Gruppe 4 Webutvikling".
 
-## 2 Setup database connections
+## 2 Setup database connections and IGDB api key
 
-You need to create two configuration files that will contain the database connection details. These
-files are not in the git repository. The connection details are as follows:
+You need to create two configuration files that will contain the database connection details and IGDB client id and client secret. These files are not in the git repository and if you wish to use your own database or client feel free to substitute the values. The connection details for our current database and IGDB client are as follows:
 
 `server/config.ts`:
 
@@ -30,6 +29,9 @@ process.env.MYSQL_HOST = 'mysql.stud.ntnu.no';
 process.env.MYSQL_USER = 'solveol_gameshed';
 process.env.MYSQL_PASSWORD = 'gameshed';
 process.env.MYSQL_DATABASE = 'solveol_gameshed';
+
+process.env.IGDB_CLIENT_ID = 'jggwkki694bcpccn7nwz0d5uoi1dn4';
+process.env.IGDB_CLIENT_SECRET = 'pysekvcpf8zhkqdzjyrzygy7a3wpv5';
 ```
 
 `server/test/config.ts`:
@@ -39,9 +41,12 @@ process.env.MYSQL_HOST = 'mysql.stud.ntnu.no';
 process.env.MYSQL_USER = 'solveol_gameshed';
 process.env.MYSQL_PASSWORD = 'gameshed';
 process.env.MYSQL_DATABASE = 'solveol_test';
+
+process.env.IGDB_CLIENT_ID = 'jggwkki694bcpccn7nwz0d5uoi1dn4';
+process.env.IGDB_CLIENT_SECRET = 'pysekvcpf8zhkqdzjyrzygy7a3wpv5';
 ```
 
-These environment variables will be used in the `server/src/mysql-pool.ts` file.
+These environment variables will be used in the `server/src/mysql-pool.ts` and `server/src/services/search-service.ts` server files.
 
 ## 3 Start server
 
