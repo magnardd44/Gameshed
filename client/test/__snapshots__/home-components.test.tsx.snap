@@ -1,0 +1,145 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Home component Home component default 1`] = `
+<Container
+  textalign="center"
+>
+  <Row>
+    <ColumnCentre
+      width={6}
+    >
+      <Card
+        title="Søk etter spill"
+      >
+        <ButtonSuccess
+          onClick={[Function]}
+        >
+          Søk
+        </ButtonSuccess>
+      </Card>
+    </ColumnCentre>
+    <ColumnCentre
+      width={6}
+    >
+      <Card
+        title="Søk etter anmeldelser"
+      >
+        <ButtonSuccess
+          onClick={[Function]}
+        >
+          Søk
+        </ButtonSuccess>
+      </Card>
+    </ColumnCentre>
+  </Row>
+  <Linebreak />
+  <Row>
+    <ColumnCentre
+      width={6}
+    >
+      <Card
+        title="Legg til nytt spill"
+      >
+        <ButtonSuccess
+          onClick={[Function]}
+        >
+          Legg til spill
+        </ButtonSuccess>
+      </Card>
+    </ColumnCentre>
+    <ColumnCentre
+      width={6}
+    >
+      <Card
+        title="Registrer ny konto"
+      >
+        <ButtonSuccess
+          onClick={[Function]}
+        >
+          Registrer deg
+        </ButtonSuccess>
+      </Card>
+    </ColumnCentre>
+  </Row>
+</Container>
+`;
+
+exports[`ReviewHome component ReviewHome component default 1`] = `
+<Container
+  textalign="center"
+>
+  <Row>
+    <ColumnCentre
+      width={6}
+    >
+      <Card
+        title="Sorter etter sjanger"
+      >
+        <ButtonSuccess
+          onClick={[Function]}
+        >
+          Søk
+        </ButtonSuccess>
+      </Card>
+    </ColumnCentre>
+    <ColumnCentre
+      width={6}
+    >
+      <Card
+        title="Sorter etter plattform"
+      >
+        <ButtonSuccess
+          onClick={[Function]}
+        >
+          Søk
+        </ButtonSuccess>
+      </Card>
+    </ColumnCentre>
+  </Row>
+  <Linebreak />
+  <Row>
+    <ColumnCentre
+      width={6}
+    >
+      <Card
+        title="Topp ti anmeldelser"
+      >
+        <ButtonSuccess
+          onClick={[Function]}
+        >
+          Søk
+        </ButtonSuccess>
+      </Card>
+    </ColumnCentre>
+    <ColumnCentre
+      width={6}
+    >
+      <Card
+        title="Siste ti anmeldelser?"
+      >
+        <ButtonSuccess
+          onClick={[Function]}
+        >
+          Søk
+        </ButtonSuccess>
+      </Card>
+    </ColumnCentre>
+  </Row>
+  <Linebreak />
+  <Row>
+    <ColumnCentre
+      width={12}
+    >
+      <Card
+        title="Alle anmeldelser"
+      >
+        <ButtonSuccess
+          onClick={[Function]}
+        >
+          Alle anmeldelser
+        </ButtonSuccess>
+      </Card>
+    </ColumnCentre>
+  </Row>
+</Container>
+`;

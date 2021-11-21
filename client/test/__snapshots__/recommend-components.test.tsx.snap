@@ -1,0 +1,202 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LastTen component LastTen default 1`] = `
+<Fragment>
+  <Container>
+    <h3
+      className="text-center"
+    >
+      Her kan du se de siste publiserte anmeldelsene
+    </h3>
+    <Linebreak />
+    <Row>
+      <ColumnCentre>
+        <ReviewList
+          reviews={Array []}
+        />
+      </ColumnCentre>
+    </Row>
+  </Container>
+</Fragment>
+`;
+
+exports[`LastTen component LastTen with reviews 1`] = `
+<Fragment>
+  <Container>
+    <h3
+      className="text-center"
+    >
+      Her kan du se de siste publiserte anmeldelsene
+    </h3>
+    <Linebreak />
+    <Row>
+      <ColumnCentre>
+        <ReviewList
+          reviews={
+            Array [
+              Object {
+                "game_id": 1,
+                "game_title": "abc",
+                "genre_id": 1,
+                "likes": 1,
+                "platform_id": 1,
+                "published": 1,
+                "rating": 4,
+                "relevant": 1,
+                "review_id": 1,
+                "review_title": "def",
+                "text": "ghi",
+                "user_id": 1,
+                "user_nickname": "jkl",
+              },
+              Object {
+                "game_id": 2,
+                "game_title": "abc",
+                "genre_id": 2,
+                "likes": 2,
+                "platform_id": 2,
+                "published": 1,
+                "rating": 2,
+                "relevant": 1,
+                "review_id": 2,
+                "review_title": "def",
+                "text": "ghi",
+                "user_id": 2,
+                "user_nickname": "jkl",
+              },
+            ]
+          }
+        />
+      </ColumnCentre>
+    </Row>
+  </Container>
+</Fragment>
+`;
+
+exports[`ReviewList component ReviewList default 1`] = `
+<div
+  className="sticky-top"
+>
+  <Row>
+    <Column>
+      Ingen resultater
+    </Column>
+  </Row>
+</div>
+`;
+
+exports[`ReviewList component ReviewList with reviews 1`] = `
+<div
+  className="sticky-top"
+>
+  <Row
+    key="0"
+  >
+    <ReviewCard
+      relevanse={1}
+      subtitle="abc"
+      terningkast={4}
+      text="ghi"
+      title="def"
+    >
+      <ButtonSuccess
+        onClick={[Function]}
+        small={true}
+      >
+        Les mer
+      </ButtonSuccess>
+    </ReviewCard>
+  </Row>
+  <Row
+    key="1"
+  >
+    <ReviewCard
+      relevanse={2}
+      subtitle="abc"
+      terningkast={2}
+      text="ghi"
+      title="def"
+    >
+      <ButtonSuccess
+        onClick={[Function]}
+        small={true}
+      >
+        Les mer
+      </ButtonSuccess>
+    </ReviewCard>
+  </Row>
+</div>
+`;
+
+exports[`TopTenStars component TopTenStars default 1`] = `
+<Fragment>
+  <Container>
+    <h3
+      className="text-center"
+    >
+      Her kan du se de best likte anmeldelsene
+    </h3>
+    <Linebreak />
+    <Row>
+      <ColumnCentre>
+        <ReviewList
+          reviews={Array []}
+        />
+      </ColumnCentre>
+    </Row>
+  </Container>
+</Fragment>
+`;
+
+exports[`TopTenStars component TopTenStars with reviews 1`] = `
+<Fragment>
+  <Container>
+    <h3
+      className="text-center"
+    >
+      Her kan du se de best likte anmeldelsene
+    </h3>
+    <Linebreak />
+    <Row>
+      <ColumnCentre>
+        <ReviewList
+          reviews={
+            Array [
+              Object {
+                "game_id": 1,
+                "game_title": "abc",
+                "genre_id": 1,
+                "likes": 1,
+                "platform_id": 1,
+                "published": 1,
+                "rating": 4,
+                "relevant": 1,
+                "review_id": 1,
+                "review_title": "def",
+                "text": "ghi",
+                "user_id": 1,
+                "user_nickname": "jkl",
+              },
+              Object {
+                "game_id": 2,
+                "game_title": "abc",
+                "genre_id": 2,
+                "likes": 2,
+                "platform_id": 2,
+                "published": 1,
+                "rating": 2,
+                "relevant": 1,
+                "review_id": 2,
+                "review_title": "def",
+                "text": "ghi",
+                "user_id": 2,
+                "user_nickname": "jkl",
+              },
+            ]
+          }
+        />
+      </ColumnCentre>
+    </Row>
+  </Container>
+</Fragment>
+`;
