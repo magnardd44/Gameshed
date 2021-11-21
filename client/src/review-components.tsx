@@ -164,33 +164,9 @@ export class AddReview extends Component<{
                 Alert.danger('Alle feltene må være fylt ut!');
               } else {
                 if (this.props.match.params.db_id == 0) {
-                  //                  gameService2.game.genre.map((genre) => {
-                  //                    genreService
-                  //                      .getId(genre)
-                  //                      .then((res) => {
-                  //                        gameService.game.genres.push(res.genre_id);
-                  //                      })
-                  //                      .catch((err) => {
-                  //                        Alert.danger('Det oppsto en feil ved hentingen av genre_id: ' + err);
-                  //                      });
-                  //                  });
-                  //                  gameService2.game.platform.map((platform) => {
-                  //                    platformService
-                  //                      .getId(platform)
-                  //                      .then((res) => {
-                  //                        gameService.game.platforms.push(res.platform_id);
-                  //                      })
-                  //                      .catch((err) => {
-                  //                        Alert.danger('Det oppsto en feil ved hentingen av platform_id: ' + err);
-                  //                      });
-                  //                  });
-
                   gameService
                     .create(gameService.current)
-                    //                      gameService2.game.igdb_id,
-                    //                      gameService2.game.game_title,
-                    //                      gameService2.game.game_description
-                    //                    )
+
                     .then((res) => {
                       gameService.current.genre.map((genre) => {
                         genreService.updateGenreMapString(res, genre).catch((err) => {
@@ -509,7 +485,7 @@ export class EditReview extends Component<{ match: { params: { id: number } } }>
           //gameService.get(review.game_id).then((game) => {
           gameService.set(review.game_id, 0).then(() => {
             //gameService.game = game;
-            console.log(gameService.current);
+            //console.log(gameService.current);
           });
           //          gameService2.get(review.game_id).then((game) => {
           //            gameService2.game = game;
@@ -601,7 +577,7 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
       .then((review) => {
         reviewService.review = review;
         gameService.set(reviewService.review.game_id, 0);
-        console.log(reviewService.review);
+        // console.log(reviewService.review);
       })
       .catch((error) => Alert.danger('Error getting review: ' + error.message));
   }
