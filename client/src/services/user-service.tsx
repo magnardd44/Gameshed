@@ -34,7 +34,8 @@ class UserService {
       (response) => response,
       (error) => {
         if (error.response.status == 401) {
-          Alert.info('Vennligst logg inn.');
+          if (this.token) Alert.warning('Ugyldig token');
+          else Alert.info('Vennligst logg inn.');
         }
         return Promise.reject(error);
       }
@@ -75,7 +76,14 @@ class UserService {
           this.about = '';
           this.email = '';
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          this.token = null;
+          localStorage.removeItem('userToken');
+          this.name = '';
+          this.about = '';
+          this.email = '';
+          console.log(err);
+        });
     }
   }
 

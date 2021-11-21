@@ -344,7 +344,7 @@ describe('UserPersonal component', () => {
     wrapper.find({ children: 'Slett meg' }).simulate('click');
 
     setTimeout(() => {
-      expect(Alert.warning).toBeCalledTimes(2);
+      expect(Alert.warning).toBeCalledTimes(3);
       spy.mockRestore();
       done();
     });

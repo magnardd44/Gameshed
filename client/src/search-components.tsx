@@ -324,7 +324,19 @@ export class SearchResult extends Component<{ game: Game }> {
       <Card title={this.props.game.game_title}>
         <h6 className="card-subtitle mb-2 text-muted">
           Terningkast:
-          <ThumbNail small img="https://cdn-icons-png.flaticon.com/512/220/220725.png"></ThumbNail>
+          {gameService.current.igdb?.aggregated_rating != undefined ? (
+            <ThumbNail
+              small
+              img={
+                'https://helenaagustsson.github.io/INFT2002-images/images/dice-' +
+                gameService.current.igdb
+                  ? Math.ceil((gameService.current.igdb?.aggregated_rating * 6) / 100).toString()
+                  : '' + '.png'
+              }
+            ></ThumbNail>
+          ) : (
+            'Ikke tilgjengelig'
+          )}
         </h6>
         <Row>
           <Column width={2}>
