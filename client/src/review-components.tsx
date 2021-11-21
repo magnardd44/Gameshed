@@ -465,7 +465,7 @@ export class EditReview extends Component<{ match: { params: { id: number } } }>
                   .catch((error) => Alert.danger('Error editing review: ' + error.message));
               }}
             >
-              Save
+              Lagre
             </Button.Success>
           </Column>
         </Row>
