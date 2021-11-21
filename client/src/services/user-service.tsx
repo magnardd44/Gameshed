@@ -18,6 +18,8 @@ class UserService {
   axios;
 
   constructor() {
+    //Create personal axios object that automatically
+    //inserts token into header and alerts on bad token
     this.axios = axios.create({
       baseURL: 'http://localhost:3000/api/v2',
     });
@@ -32,12 +34,14 @@ class UserService {
       (response) => response,
       (error) => {
         if (error.response.status == 401) {
-          Alert.info('Vennligst logg inn.');
+          if (this.token) Alert.warning('Ugyldig token');
+          else Alert.info('Vennligst logg inn.');
         }
         return Promise.reject(error);
       }
     );
 
+    //Recovers stored token for persistant login
     if (typeof Storage !== 'undefined') {
       this.storage = localStorage;
     }
@@ -66,20 +70,21 @@ class UserService {
       this.axios
         .post('user/logout')
         .then(() => {
-          //      this.token = null;
-          //      localStorage.removeItem('userToken');
-          //      this.name = '';
-          //      this.about = '';
-          //      this.email = '';
+          this.token = null;
+          localStorage.removeItem('userToken');
+          this.name = '';
+          this.about = '';
+          this.email = '';
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          this.token = null;
+          localStorage.removeItem('userToken');
+          this.name = '';
+          this.about = '';
+          this.email = '';
+          console.log(err);
+        });
     }
-
-    this.token = null;
-    localStorage.removeItem('userToken');
-    this.name = '';
-    this.about = '';
-    this.email = '';
   }
 
   get_user() {
@@ -95,7 +100,7 @@ class UserService {
           console.log(err);
         });
     } else {
-      return Promise.reject();
+      return Promise.reject('No token');
     }
   }
 
@@ -104,11 +109,11 @@ class UserService {
       let user = { nick: this.name, email: this.email, about: this.about };
 
       return this.axios.put('user', { user: user }).catch((err) => {
-        console.log(err);
+        //console.log(err);
         throw err;
       });
     } else {
-      return Promise.reject();
+      return Promise.reject('No token');
     }
   }
 
@@ -121,14 +126,14 @@ class UserService {
         this.set_user().then(() => this.get_user());
       })
       .catch((err) => {
-        console.log(err);
+        //console.log(err);
         throw err;
       });
   }
 
   delete() {
     if (this.token) {
-      this.axios
+      return this.axios
         .delete('user')
         .then((response) => {
           this.token = null;
@@ -138,9 +143,11 @@ class UserService {
           this.email = '';
         })
         .catch((err) => {
-          console.log(err);
+          //console.log(err);
           throw err;
         });
+    } else {
+      return Promise.reject('No token');
     }
   }
 }

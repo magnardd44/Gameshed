@@ -201,6 +201,14 @@ class ReviewService {
       .delete<Review>('reviews/' + id)
       .then((response) => response.data.review_id);
   }
+
+  getTopTen() {
+    return axios.get<Review[]>('/reviews/topTen/').then((response) => response.data);
+  }
+
+  getLastTen() {
+    return axios.get<Review[]>('/reviews/lastTen/').then((response) => response.data);
+  }
 }
 
 export let reviewService = sharedComponentData(new ReviewService());

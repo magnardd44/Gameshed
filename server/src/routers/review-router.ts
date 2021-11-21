@@ -189,4 +189,22 @@ reviewRouter.delete('/:id', (request, response) => {
     .catch((error) => response.status(500).send(error));
 });
 
+//Get most popular reviews
+
+reviewRouter.get('/topTen', (request, response) => {
+  reviewService
+    .getTopTen()
+    .then((rows) => response.send(rows))
+    .catch((error) => response.status(500).send(error));
+});
+
+//Get latest reviews
+
+reviewRouter.get('/lastTen', (request, response) => {
+  reviewService
+    .getLastTen()
+    .then((rows) => response.send(rows))
+    .catch((error) => response.status(500).send(error));
+});
+
 export default reviewRouter;

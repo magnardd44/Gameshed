@@ -35,6 +35,7 @@ import { Category } from './genre-components';
 import { Platform } from './platform-components';
 import { Home, ReviewHome } from './home-components';
 import userService from './services/user-service';
+import { TopTenStars, LastTen } from './recommend-components';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 
@@ -95,6 +96,8 @@ ReactDOM.render(
 
       <Route exact path="/reviews-by-genre" component={Category}></Route>
       <Route exact path="/reviews-by-platform" component={Platform}></Route>
+      <Route exact path="/reviews-by-stars" component={TopTenStars}></Route>
+      <Route exact path="/reviews-by-date" component={LastTen}></Route>
 
       <Route exact path="/user" component={UserPage} />
     </div>

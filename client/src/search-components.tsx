@@ -205,8 +205,8 @@ export class Search extends Component {
 }
 
 export class SearchListings extends Component {
-  genre: string = '';
-  platform: string = '';
+  genre: string = 'alle';
+  platform: string = 'alle';
   year: number = 0;
 
   render() {
@@ -221,38 +221,81 @@ export class SearchListings extends Component {
                 value={this.genre}
                 onChange={(event) => (this.genre = event.currentTarget.value)}
               >
-                {genreService.genres.map((genre, index) => (
-                  <option key={index}>{genre.genre_name}</option>
-                ))}
+                {
+                  //Get all unique genres from games i gameService
+                  [<option key={-1}>alle</option>].concat(
+                    [
+                      ...new Set(
+                        gameService.db
+                          .concat(gameService.igdb)
+                          .reduce((set, game) => set.concat(game.genre || []), new Array())
+                      ),
+                    ].map((genre, index) => <option key={index}>{genre}</option>)
+                  )
+                }
               </Form.Select>
-
               <Form.Label>Platform: </Form.Label>
               <Form.Select
                 value={this.platform}
                 onChange={(event) => (this.platform = event.currentTarget.value)}
               >
-                {platformService.platforms.map((platform, index) => (
-                  <option key={index}>{platform.platform_name}</option>
-                ))}
+                {
+                  //Get all unique platforms from games i gameService
+                  [<option key={-1}>alle</option>].concat(
+                    [
+                      ...new Set(
+                        gameService.db
+                          .concat(gameService.igdb)
+                          .reduce((set, game) => set.concat(game.platform || []), new Array())
+                      ),
+                    ].map((platform, index) => <option key={index}>{platform}</option>)
+                  )
+                }
               </Form.Select>
-
-              <Form.Label>År: </Form.Label>
+              )<Form.Label>År: </Form.Label>
               <Form.Select
                 value={this.year}
-                onChange={(event) => (this.year = Number(event.currentTarget.value))}
+                onChange={(event) => {
+                  this.year =
+                    event.currentTarget.value == 'alle' ? 0 : Number(event.currentTarget.value);
+                }}
               >
-                <option value="1">2020</option>
+                {
+                  //Get all unique years from games i gameService
+                  [<option key={-1}>alle</option>].concat(
+                    [
+                      ...new Set(
+                        gameService.db
+                          .concat(gameService.igdb)
+                          .reduce(
+                            (set, game) =>
+                              set.concat(
+                                game.igdb?.release_date
+                                  ? new Date(game.igdb?.release_date * 1000).getFullYear()
+                                  : []
+                              ),
+                            new Array()
+                          )
+                      ),
+                    ]
+                      .sort((a, b) => a - b)
+                      .map((year, index) => <option key={year}>{year.toString()}</option>)
+                  )
+                }
               </Form.Select>
             </FormGroup>
           </FormContainer>
         </Container>
         <Container>
-          {gameService.db.map((game, index) => (
-            <SearchResult game={game} key={index}></SearchResult>
-          ))}
-          {gameService.igdb.map((game, index) => (
-            <SearchResult game={game} key={index}></SearchResult>
-          ))}
+          {gameService.db.concat(gameService.igdb).map((game, index) => {
+            if (
+              (this.genre == 'alle' || game.genre?.find((g) => g == this.genre)) &&
+              (this.platform == 'alle' || game.platform?.find((p) => p == this.platform)) &&
+              (this.year == 0 ||
+                new Date((game.igdb?.release_date || 0) * 1000).getFullYear() == this.year)
+            )
+              return <SearchResult game={game} key={index}></SearchResult>;
+          })}
         </Container>
 
         <Container>
@@ -266,12 +309,12 @@ export class SearchListings extends Component {
     );
   }
   mounted() {
-    genreService.getAll().then((results) => {
-      genreService.genres = results;
-    });
-    platformService.getAll().then((results) => {
-      platformService.platforms = results;
-    });
+    //    genreService.getAll().then((results) => {
+    //      genreService.genres = results;
+    //    });
+    //    platformService.getAll().then((results) => {
+    //      platformService.platforms = results;
+    //    });
   }
 }
 
@@ -281,7 +324,19 @@ export class SearchResult extends Component<{ game: Game }> {
       <Card title={this.props.game.game_title}>
         <h6 className="card-subtitle mb-2 text-muted">
           Terningkast:
-          <ThumbNail small img="https://cdn-icons-png.flaticon.com/512/220/220725.png"></ThumbNail>
+          {gameService.current.igdb?.aggregated_rating != undefined ? (
+            <ThumbNail
+              small
+              img={
+                'https://helenaagustsson.github.io/INFT2002-images/images/dice-' +
+                gameService.current.igdb
+                  ? Math.ceil((gameService.current.igdb?.aggregated_rating * 6) / 100).toString()
+                  : '' + '.png'
+              }
+            ></ThumbNail>
+          ) : (
+            'Ikke tilgjengelig'
+          )}
         </h6>
         <Row>
           <Column width={2}>

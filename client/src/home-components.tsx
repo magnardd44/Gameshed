@@ -115,6 +115,31 @@ export class ReviewHome extends Component {
         </Row>
         <Linebreak></Linebreak>
         <Row>
+          <ColumnCentre width={6}>
+            <Card title={'Topp ti anmeldelser'}>
+              <Button.Success
+                onClick={() => {
+                  history.push('/reviews-by-stars');
+                }}
+              >
+                Søk
+              </Button.Success>
+            </Card>
+          </ColumnCentre>
+          <ColumnCentre width={6}>
+            <Card title={'Siste ti anmeldelser?'}>
+              <Button.Success
+                onClick={() => {
+                  history.push('/reviews-by-date');
+                }}
+              >
+                Søk
+              </Button.Success>
+            </Card>
+          </ColumnCentre>
+        </Row>
+        <Linebreak></Linebreak>
+        <Row>
           <ColumnCentre width={12}>
             <Card title={'Alle anmeldelser'}>
               <Button.Success
