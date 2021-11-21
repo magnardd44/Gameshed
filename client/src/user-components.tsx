@@ -95,13 +95,8 @@ export class UserData extends Component {
   render() {
     return (
       <Card title="Brukerdata">
-<<<<<<< HEAD
-        <Form.Label>
-          Brukernavn
-=======
         <FormGroup>
-          <Form.Label>Brukarnavn</Form.Label>
->>>>>>> 6e37260777619b0224b896420c7d8f38b795d270
+          <Form.Label>Brukernavn</Form.Label>
           <Form.Input
             id="inputName"
             type="text"
