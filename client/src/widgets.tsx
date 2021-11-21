@@ -615,15 +615,16 @@ export class Alert extends Component {
 
   render() {
     return (
-      <div>
+      <div
+        style={{
+          position: 'fixed',
+          top: '0px',
+          zIndex: 100,
+          width: document.documentElement.clientWidth,
+        }}
+      >
         {this.alerts.map((alert, i) => (
           <div
-            style={{
-              position: 'fixed',
-              top: '0px',
-              zIndex: 100,
-              width: document.documentElement.clientWidth,
-            }}
             key={alert.id}
             className={'alert alert-dismissible alert-' + alert.type}
             role="alert"

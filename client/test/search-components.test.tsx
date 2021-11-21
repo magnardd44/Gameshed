@@ -1,5 +1,4 @@
 import * as React from 'react';
-import ReactDOM from 'react-dom';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 

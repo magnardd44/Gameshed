@@ -24,7 +24,7 @@ import { genreService } from './services/genre-service';
 import { Review, reviewService } from './services/review-service';
 import { RelatedReviews } from './related-reviews';
 
-const history = createHashHistory();
+export const history = createHashHistory();
 
 export class TopTenStars extends Component {
   reviews: Review[] = [];

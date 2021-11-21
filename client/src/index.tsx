@@ -54,7 +54,7 @@ export const history = createHashHistory();
         </div>
  * 
  */
-class NavHeader extends Component {
+export class NavHeader extends Component {
   render() {
     return (
       <>

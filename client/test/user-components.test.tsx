@@ -241,7 +241,10 @@ describe('UserData component', () => {
 
 describe('UserRegister component', () => {
   test('Register new ', (done) => {
-    userService.email = 'email';
+    const spy = jest.spyOn(Alert, 'success');
+    userService.name = 'abc';
+    userService.email = 'ghi';
+    userService.about = 'def';
     mockAdapter.onPost('user/add').reply(201, { id: 0, token: 'token' });
     mockAdapter.onPut('user').reply(200);
     mockAdapter.onGet('user').reply(200, { nick: 'abc', about: 'def', email: 'ghi' });
@@ -251,37 +254,60 @@ describe('UserRegister component', () => {
     wrapper.find({ children: 'Registrer ny bruker' }).simulate('click');
     setTimeout(() => {
       expect(userService.name).toEqual('abc');
+      expect(spy).toBeCalled();
+      done();
+    });
+  });
+
+  test('Empty input fields', (done) => {
+    const wrapper = shallow(<UserRegister />);
+
+    const spy = jest.spyOn(Alert, 'warning');
+
+    wrapper.find({ children: 'Registrer ny bruker' }).simulate('click');
+    setTimeout(() => {
+      expect(spy).toBeCalled();
       done();
     });
   });
 
   test('Empty password', (done) => {
+    const wrapper = shallow(<UserRegister />);
+
+    const spy = jest.spyOn(Alert, 'warning');
+
+    userService.name = 'name';
+    userService.email = 'email';
+    userService.about = 'text';
+
     window.prompt = jest.fn(() => {
       return '';
     });
 
-    const wrapper = shallow(<UserRegister />);
-
     wrapper.find({ children: 'Registrer ny bruker' }).simulate('click');
     setTimeout(() => {
-      expect(Alert.info).toBeCalled();
+      expect(spy).toBeCalled();
       done();
     });
   });
 
   test('User already exists', (done) => {
+    const wrapper = shallow(<UserRegister />);
+
+    const spy = jest.spyOn(Alert, 'danger');
+
+    userService.name = 'name';
     userService.email = 'email';
+    userService.about = 'text';
     window.prompt = jest.fn(() => {
       return 'password';
     });
 
     mockAdapter.onPost('user/add').reply(400, { id: 0, token: 'token' });
 
-    const wrapper = shallow(<UserRegister />);
-
     wrapper.find({ children: 'Registrer ny bruker' }).simulate('click');
     setTimeout(() => {
-      expect(Alert.danger).toBeCalled();
+      expect(spy).toBeCalled();
       done();
     });
   });

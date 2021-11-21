@@ -96,7 +96,7 @@ export class UserData extends Component {
     return (
       <Card title="Brukerdata">
         <FormGroup>
-          Brukernavn
+          <Form.Label>Brukernavn</Form.Label>
           <Form.Input
             id="inputName"
             type="text"
@@ -187,7 +187,7 @@ export class UserRegister extends Component {
         <Button.Success
           onClick={() => {
             if (userService.name == '' || userService.email == '' || userService.about == '') {
-              Alert.danger('Fyll inn alle feltene!');
+              Alert.warning('Fyll inn alle feltene!');
             } else {
               let newPassword = prompt('Skriv inn passord');
               if (newPassword?.length) {
@@ -196,7 +196,7 @@ export class UserRegister extends Component {
                   .then(() => Alert.success(<>Ny bruker registrert</>))
                   .catch(() => Alert.danger(<>Bruker eksisterer allerede.</>));
               } else {
-                Alert.info(<>Skriv inn passord</>);
+                Alert.warning(<>Skriv inn passord</>);
               }
             }
           }}

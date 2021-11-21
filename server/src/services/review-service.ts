@@ -196,7 +196,7 @@ class ReviewService {
       pool.query(
         `SELECT game_title, review_id, review_title, rating, (SELECT COUNT(*) FROM mapping_relevant WHERE review_id = r.review_id) AS likes 
         FROM games g INNER JOIN reviews r ON g.game_id = r.game_id 
-        WHERE published = 1 ORDER BY game_title, review_title;`,
+        WHERE published = 1 ORDER BY likes DESC;`,
         (error, results) => {
           if (error) return reject(error);
 
@@ -240,7 +240,8 @@ class ReviewService {
         INNER JOIN games g ON g.game_id = r.game_id
         INNER JOIN mapping_platform mp ON mp.game_id = g.game_id
         INNER JOIN platforms p ON mp.platform_id = p.platform_id
-        WHERE p.platform_id = ?`,
+        WHERE published=1 AND p.platform_id = ?
+        ORDER BY likes DESC`,
         [platform_id],
         (error, results) => {
           if (error) return reject(error);

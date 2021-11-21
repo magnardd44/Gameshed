@@ -25,7 +25,7 @@ import { platformService } from './services/platform-service';
 import { Review, reviewService } from './services/review-service';
 import { RelatedReviews } from './related-reviews';
 
-const history = createHashHistory();
+export const history = createHashHistory();
 
 //Renders overview of published reviews based on genre
 export class Platform extends Component {
