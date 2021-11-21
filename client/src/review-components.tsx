@@ -499,6 +499,7 @@ export class EditReview extends Component<{ match: { params: { id: number } } }>
 //Renders Single complete review with option to "like"
 export class CompleteReview extends Component<{ match: { params: { id: number } } }> {
   counter: number = 0;
+
   render() {
     const shareButtonProps = {
       url: 'https://localhost:3000/#/publishedReviews/' + reviewService.review.review_id,
@@ -537,11 +538,16 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
               <Button.Success
                 onClick={() => {
                   this.counter = this.counter == 0 ? 1 : 0;
-                  reviewService.like(
-                    reviewService.review.review_id,
-                    reviewService.review.user_id,
-                    this.counter
-                  );
+
+                  reviewService
+                    .like(
+                      reviewService.review.review_id,
+
+                      this.counter
+                    )
+                    .then(() => {
+                      this.setState(() => {});
+                    });
                 }}
               >
                 Like
@@ -577,7 +583,13 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
       .then((review) => {
         reviewService.review = review;
         gameService.set(reviewService.review.game_id, 0);
-        // console.log(reviewService.review);
+        reviewService.isLiked(this.props.match.params.id).then((relevant) => {
+          if (relevant) {
+            this.counter = 1;
+          } else {
+            this.counter = 0;
+          }
+        });
       })
       .catch((error) => Alert.danger('Error getting review: ' + error.message));
   }

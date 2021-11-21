@@ -188,6 +188,20 @@ class ReviewService {
     });
   }
 
+  isRelevant(review_id: number, user_id: number) {
+    return new Promise<boolean>((resolve, reject) => {
+      pool.query(
+        `SELECT COUNT(1) AS relevant_count FROM mapping_relevant WHERE review_id=? AND user_id=? `,
+        [review_id, user_id],
+        (error, results) => {
+          if (error) return reject(error);
+          console.log(results[0]);
+          resolve(results && results.length > 0 && results[0].relevant_count > 0);
+        }
+      );
+    });
+  }
+
   /**
    * Get published reviews
    */

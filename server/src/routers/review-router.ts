@@ -168,10 +168,21 @@ reviewRouter.patch('/:id/relevant', (request, response) => {
       response.status(401).send(err);
       throw err;
     })
-    .then((userId) =>
-      reviewService.relevant(Number(request.params.id), data.user_id, data.relevant)
-    )
+    .then((userId) => reviewService.relevant(Number(request.params.id), userId, data.relevant))
     .then((id) => response.send({ id: id }))
+    .catch((error) => response.status(500).send(error));
+});
+
+//get like from review
+reviewRouter.get('/:id/relevant', (request, response) => {
+  userService
+    .verify(request.headers.authorization)
+    .catch((err) => {
+      response.status(401).send(err);
+      throw err;
+    })
+    .then((userId) => reviewService.isRelevant(Number(request.params.id), userId))
+    .then((relevant) => response.send({ id: Number(request.params.id), relevant: relevant }))
     .catch((error) => response.status(500).send(error));
 });
 
