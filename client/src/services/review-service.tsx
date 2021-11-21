@@ -179,13 +179,17 @@ class ReviewService {
       .then((response) => response.data.review_id);
   }
   //Add like to review
-  like(review_id: number, user_id: number, relevant: number) {
+  like(review_id: number, relevant: number) {
     return userService.axios
       .patch<Review>('/reviews/' + review_id + '/relevant', {
         relevant: relevant,
-        user_id: user_id,
       })
       .then((response) => response.data);
+  }
+  isLiked(review_id: number) {
+    return userService.axios
+      .get<{ id: number; relevant: boolean }>('/reviews/' + review_id + '/relevant')
+      .then((response) => response.data.relevant);
   }
 
   //Edit review before publishing
