@@ -21,7 +21,7 @@ import { platform } from 'os';
 import { Platform, platformService } from './services/platform-service';
 import axios from 'axios';
 
-const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
+export const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
 export class RelatedReviews extends Component<{ game_id?: number; genre_id?: number }> {
   render() {
