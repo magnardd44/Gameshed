@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { FormGroup, Form, Card, Alert, Button, Container, Column } from './widgets';
+import { FormContainer, FormGroup, Form, Card, Alert, Button, Container, Column } from './widgets';
 import userService from './services/user-service';
 import { createHashHistory } from 'history';
 
@@ -32,6 +32,7 @@ export class UserNav extends Component {
             userService.email = event.currentTarget.value;
           }}
         />
+
         {userService.token ? (
           // If user logged in
           <Button.Success
@@ -60,15 +61,17 @@ export class UserNav extends Component {
           <Button.Success
             small
             onClick={() => {
-              let password = prompt('Skriv inn passord');
-              if (userService.email.length && password?.length) {
-                userService
-                  .login(userService.email, password)
-                  .catch((err) => Alert.warning(<>Feil brukarnavn eller passord</>));
-              } else {
-                Alert.info(<>Skriv inn brukarnavn og passord</>);
-              }
-              //                this.password = '';
+              userService.loginOrRegister = userService.login;
+              userService.passwordPrompt = true;
+              //let password = prompt('Skriv inn passord');
+              //if (userService.email.length && password?.length) {
+              //  userService
+              //    .login(userService.email, password)
+              //    .catch((err) => Alert.warning(<>Feil brukarnavn eller passord</>));
+              //} else {
+              //  Alert.info(<>Skriv inn brukarnavn og passord</>);
+              //}
+              ////                this.password = '';
             }}
           >
             Login
@@ -83,11 +86,13 @@ export class UserNav extends Component {
         >
           {userService.token ? 'MinSide' : 'Registrer'}
         </Button.Success>
+        <PasswordPrompt />
       </>
     );
   }
   mounted() {
     userService.get_user().catch((err) => {});
+    //<PasswordPrompt/>
   }
 }
 
@@ -189,15 +194,17 @@ export class UserRegister extends Component {
             if (userService.name == '' || userService.email == '' || userService.about == '') {
               Alert.warning('Fyll inn alle feltene!');
             } else {
-              let newPassword = prompt('Skriv inn passord');
-              if (newPassword?.length) {
-                userService
-                  .register(userService.email, newPassword)
-                  .then(() => Alert.success(<>Ny bruker registrert</>))
-                  .catch(() => Alert.danger(<>Bruker eksisterer allerede.</>));
-              } else {
-                Alert.warning(<>Skriv inn passord</>);
-              }
+              userService.loginOrRegister = userService.register;
+              userService.passwordPrompt = true;
+              //  let newPassword = prompt('Skriv inn passord');
+              //  if (newPassword?.length) {
+              //    userService
+              //      .register(userService.email, newPassword)
+              //      .then(() => Alert.success(<>Ny bruker registrert</>))
+              //      .catch(() => Alert.danger(<>Bruker eksisterer allerede.</>));
+              //  } else {
+              //    Alert.warning(<>Skriv inn passord</>);
+              //  }
             }
           }}
         >
@@ -218,5 +225,77 @@ export class UserPage extends Component {
         </Container>
       </>
     );
+  }
+}
+
+export class PasswordPrompt extends Component<{}> {
+  hidden = false;
+  password = '';
+  render() {
+    return (
+      <div
+        id="password"
+        hidden={!userService.passwordPrompt}
+        style={{
+          position: 'fixed',
+          padding: '20px',
+          border: 'dashed',
+          background: '#eeeeee',
+          left: '35%',
+          top: '30%',
+          width: '30%',
+          zIndex: 100,
+        }}
+      >
+        <Form.Label>Skriv inn passord:</Form.Label>
+        <Form.Input
+          type="password"
+          value={this.password}
+          placeholder="passord"
+          onChange={(event) => {
+            this.password = event.currentTarget.value;
+          }}
+          onKeyUp={(event: any) => {
+            if (event.key == 'Enter') {
+              this.submit();
+            }
+          }}
+        />
+        <Button.Success
+          small
+          onClick={() => {
+            this.submit();
+          }}
+        >
+          Send inn
+        </Button.Success>
+        <Button.Light
+          small
+          onClick={() => {
+            this.cancel();
+          }}
+        >
+          Avbryt
+        </Button.Light>
+      </div>
+    );
+  }
+
+  submit() {
+    userService.passwordPrompt = false;
+    let password = this.password;
+    this.password = '';
+    if (userService.email.length && password?.length) {
+      userService
+        .loginOrRegister(userService.email, password)
+        .catch((err) => Alert.warning(<>Feil brukarnavn eller passord</>));
+    } else {
+      Alert.info(<>Skriv inn brukarnavn og passord</>);
+    }
+  }
+
+  cancel() {
+    userService.passwordPrompt = false;
+    this.password = '';
   }
 }

@@ -15,6 +15,10 @@ class UserService {
   token: Token | null = null;
   storage: any;
 
+  passwordPrompt: boolean = false;
+
+  loginOrRegister = this.login;
+
   axios;
 
   constructor() {
