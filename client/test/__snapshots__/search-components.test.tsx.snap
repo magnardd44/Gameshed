@@ -59,29 +59,28 @@ exports[`SearchListings component SearchListings default 1`] = `
         </FormLabel>
         <FormSelect
           onChange={[Function]}
-          value=""
+          value="alle"
         >
           <option
-            key="0"
-          />
-          <option
-            key="1"
-          />
+            key="-1"
+          >
+            alle
+          </option>
         </FormSelect>
         <FormLabel>
           Platform: 
         </FormLabel>
         <FormSelect
           onChange={[Function]}
-          value=""
+          value="alle"
         >
           <option
-            key="0"
-          />
-          <option
-            key="1"
-          />
+            key="-1"
+          >
+            alle
+          </option>
         </FormSelect>
+        )
         <FormLabel>
           År: 
         </FormLabel>
@@ -90,9 +89,9 @@ exports[`SearchListings component SearchListings default 1`] = `
           value={0}
         >
           <option
-            value="1"
+            key="-1"
           >
-            2020
+            alle
           </option>
         </FormSelect>
       </FormGroup>
@@ -119,10 +118,7 @@ exports[`SearchResult component SearchResult default 1`] = `
     className="card-subtitle mb-2 text-muted"
   >
     Terningkast:
-    <ThumbNail
-      img="https://cdn-icons-png.flaticon.com/512/220/220725.png"
-      small={true}
-    />
+    Ikke tilgjengelig
   </h6>
   <Row>
     <Column
@@ -175,10 +171,7 @@ exports[`SearchResult component SearchResult with empty game 1`] = `
     className="card-subtitle mb-2 text-muted"
   >
     Terningkast:
-    <ThumbNail
-      img="https://cdn-icons-png.flaticon.com/512/220/220725.png"
-      small={true}
-    />
+    Ikke tilgjengelig
   </h6>
   <Row>
     <Column

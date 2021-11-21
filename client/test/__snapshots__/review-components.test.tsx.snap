@@ -105,7 +105,6 @@ exports[`Snapshot component tests 1 Snapshot - AddReview draws correctly 1`] = `
     </FormContainer>
   </Card>
   <Linebreak />
-  <Alert />
   <Column>
     <ButtonDanger
       onClick={[Function]}
@@ -235,7 +234,7 @@ exports[`Snapshot component tests 2 Snapshot - EditReview draws correctly 1`] = 
       <ButtonSuccess
         onClick={[Function]}
       >
-        Save
+        Lagre
       </ButtonSuccess>
     </Column>
   </Row>
@@ -243,18 +242,11 @@ exports[`Snapshot component tests 2 Snapshot - EditReview draws correctly 1`] = 
 `;
 
 exports[`Snapshot component tests 3 Snapshot - CompleteReview draws correctly 1`] = `
-<Fragment>
-  <Card
-    title="Anmeldelse"
+<Container>
+  <FullReviewCard
+    img=" "
+    subtitle=""
   >
-    <Row>
-      <Column
-        width={2}
-      >
-        Spill:
-      </Column>
-      <Column />
-    </Row>
     <Row>
       <Column
         width={2}
@@ -270,41 +262,6 @@ exports[`Snapshot component tests 3 Snapshot - CompleteReview draws correctly 1`
         Plattform:
       </Column>
       <Column />
-    </Row>
-    <Row>
-      <Column>
-        <ThumbNail
-          img=""
-        />
-      </Column>
-    </Row>
-    <Linebreak />
-    <Row>
-      <Column
-        width={12}
-      >
-        <div>
-          <b />
-        </div>
-      </Column>
-    </Row>
-    <Linebreak />
-    <Row>
-      <Column
-        width={12}
-      >
-        <div />
-      </Column>
-    </Row>
-    <Linebreak />
-    <Row>
-      <Column
-        width={12}
-      >
-        <div>
-          Terningkast: 
-        </div>
-      </Column>
     </Row>
     <Linebreak />
     <Row>
@@ -368,8 +325,8 @@ exports[`Snapshot component tests 3 Snapshot - CompleteReview draws correctly 1`
         </ForwardRef(ShareButton-email)>
       </Column>
     </Row>
-  </Card>
-</Fragment>
+  </FullReviewCard>
+</Container>
 `;
 
 exports[`Snapshot component tests 4 Snapshot - PublishReview draws correctly 1`] = `
@@ -381,7 +338,9 @@ exports[`Snapshot component tests 4 Snapshot - PublishReview draws correctly 1`]
       <Column
         width={2}
       >
-        Spill:
+        <b>
+          Spill:
+        </b>
       </Column>
       <Column />
     </Row>
@@ -389,7 +348,9 @@ exports[`Snapshot component tests 4 Snapshot - PublishReview draws correctly 1`]
       <Column
         width={2}
       >
-        Sjanger:
+        <b>
+          Sjanger:
+        </b>
       </Column>
       <Column />
     </Row>
@@ -397,7 +358,9 @@ exports[`Snapshot component tests 4 Snapshot - PublishReview draws correctly 1`]
       <Column
         width={2}
       >
-        Plattform:
+        <b>
+          Plattform:
+        </b>
       </Column>
       <Column />
     </Row>
@@ -465,7 +428,20 @@ exports[`Snapshot component tests 4 Snapshot - PublishReview draws correctly 1`]
           Slett
         </ButtonDanger>
       </Column>
+      <Column>
+        <ButtonLight
+          onClick={[Function]}
+        >
+          Lagre som utkast
+        </ButtonLight>
+      </Column>
     </Row>
   </Card>
+</Container>
+`;
+
+exports[`Snapshot component tests 5 Snapshot - MyReviews draws correctly 1`] = `
+<Container>
+  Du er ikke logget inn. Logg inn for å se dine anmeldelser.
 </Container>
 `;
