@@ -20,8 +20,9 @@ import { Genre } from './services/genre-service';
 import { createHashHistory } from 'history';
 import axios from 'axios';
 import { genreService } from './services/genre-service';
-import { history } from './index';
 import userService from './services/user-service';
+
+export const history = createHashHistory();
 
 export class Home extends Component {
   render() {
