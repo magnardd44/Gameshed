@@ -1,0 +1,221 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Search component Search component default 1`] = `
+<Fragment>
+  <Container
+    textalign="centre"
+  >
+    <Row>
+      <ColumnCentre
+        offset={2}
+        width={6}
+      >
+        <FormInput
+          onChange={[Function]}
+          onKeyUp={[Function]}
+          placeholder="Søk etter et spill"
+          type=""
+          value=""
+        />
+      </ColumnCentre>
+      <ColumnCentre
+        width={4}
+      >
+        <ButtonSuccess
+          onClick={[Function]}
+        >
+          Søk
+        </ButtonSuccess>
+      </ColumnCentre>
+    </Row>
+  </Container>
+</Fragment>
+`;
+
+exports[`SearchHotBar component Search component default 1`] = `
+<div
+  className=" option"
+  role="option"
+  style={
+    Object {
+      "backgroundColor": "lightgray",
+      "border": "1px solid black",
+      "borderRadius": "5px",
+      "cursor": "pointer",
+      "marginTop": "10px",
+    }
+  }
+/>
+`;
+
+exports[`SearchListings component SearchListings default 1`] = `
+<Fragment>
+  <Container>
+    Filtrer dine søkeresultater:
+    <FormContainer>
+      <FormGroup>
+        <FormLabel>
+          Sjanger: 
+        </FormLabel>
+        <FormSelect
+          onChange={[Function]}
+          value=""
+        >
+          <option
+            key="0"
+          />
+          <option
+            key="1"
+          />
+        </FormSelect>
+        <FormLabel>
+          Platform: 
+        </FormLabel>
+        <FormSelect
+          onChange={[Function]}
+          value=""
+        >
+          <option
+            key="0"
+          />
+          <option
+            key="1"
+          />
+        </FormSelect>
+        <FormLabel>
+          År: 
+        </FormLabel>
+        <FormSelect
+          onChange={[Function]}
+          value={0}
+        >
+          <option
+            value="1"
+          >
+            2020
+          </option>
+        </FormSelect>
+      </FormGroup>
+    </FormContainer>
+  </Container>
+  <Container />
+  <Container>
+    Fant du ikke det du lette etter?
+    <Linebreak />
+    <ButtonSuccess
+      onClick={[Function]}
+    >
+      Legg til nytt spill
+    </ButtonSuccess>
+  </Container>
+</Fragment>
+`;
+
+exports[`SearchResult component SearchResult default 1`] = `
+<Card
+  title="Title"
+>
+  <h6
+    className="card-subtitle mb-2 text-muted"
+  >
+    Terningkast:
+    <ThumbNail
+      img="https://cdn-icons-png.flaticon.com/512/220/220725.png"
+      small={true}
+    />
+  </h6>
+  <Row>
+    <Column
+      width={2}
+    >
+      <ThumbNail
+        img="url"
+      />
+    </Column>
+    <Column
+      width={8}
+    >
+      Text
+      <Linebreak />
+    </Column>
+    <Column
+      width={2}
+    >
+       
+      <ButtonSuccess
+        onClick={[Function]}
+      >
+        Les mer
+      </ButtonSuccess>
+    </Column>
+  </Row>
+  <Row>
+    Sjanger: 
+    Adventure, Shooter
+  </Row>
+  <Row>
+    Platformer: 
+    PC, Playstation, xbox
+  </Row>
+  <Row>
+    Utgivelsesår:
+     
+    1970
+     
+  </Row>
+  <Linebreak />
+</Card>
+`;
+
+exports[`SearchResult component SearchResult with empty game 1`] = `
+<Card
+  title=""
+>
+  <h6
+    className="card-subtitle mb-2 text-muted"
+  >
+    Terningkast:
+    <ThumbNail
+      img="https://cdn-icons-png.flaticon.com/512/220/220725.png"
+      small={true}
+    />
+  </h6>
+  <Row>
+    <Column
+      width={2}
+    >
+      <ThumbNail
+        img=""
+      />
+    </Column>
+    <Column
+      width={8}
+    >
+      Ingen beskrivelse
+      <Linebreak />
+    </Column>
+    <Column
+      width={2}
+    >
+       
+      <ButtonSuccess
+        onClick={[Function]}
+      >
+        Les mer
+      </ButtonSuccess>
+    </Column>
+  </Row>
+  <Row>
+    Sjanger: 
+  </Row>
+  <Row>
+    Platformer: 
+  </Row>
+  <Row>
+    Utgivelsesår:
+     
+     
+  </Row>
+  <Linebreak />
+</Card>
+`;

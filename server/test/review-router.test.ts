@@ -196,11 +196,13 @@ beforeEach((done) => {
 //Delet user and game
 afterEach((done) => {
   pool.query('DELETE FROM mapping_relevant', () => {
-    pool.query('DELETE FROM reviews', () => {
-      pool.query("DELETE FROM users WHERE email = 'zool@zool.no'", () => {
-        pool.query("DELETE FROM games WHERE game_title = 'zool_game'", () => {
-          pool.query("DELETE FROM genres WHERE genre_name = 'zool_adventure'", () => {
-            done();
+    pool.query('DELETE FROM platforms', () => {
+      pool.query('DELETE FROM reviews', () => {
+        pool.query("DELETE FROM users WHERE email = 'zool@zool.no'", () => {
+          pool.query("DELETE FROM games WHERE game_title = 'zool_game'", () => {
+            pool.query("DELETE FROM genres WHERE genre_name = 'zool_adventure'", () => {
+              done();
+            });
           });
         });
       });
@@ -261,18 +263,9 @@ describe('Fetch  reviews (GET)', () => {
   //Test getting a single complete review
 
   test('Fetch complete (200 OK)', (done) => {
-    axios.get('/reviews/' + testReviews[0].review_id).then((response) => {
+    axios.get('/reviews/review/' + testReviews[0].review_id).then((response) => {
       expect(response.status).toEqual(200);
       expect(response.data.review_title).toEqual(testReviews[0].review_title);
-      done();
-    });
-  });
-
-  test('Fetch draft (200 OK)', (done) => {
-    axios.get('/reviews/' + testReviews[3].review_id + '/draft').then((response) => {
-      expect(response.status).toEqual(200);
-
-      expect(response.data.review_title).toEqual(testReviews[3].review_title);
       done();
     });
   });

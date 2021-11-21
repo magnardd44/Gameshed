@@ -101,12 +101,51 @@ class ReviewService {
   }
 
   /**
+   * Get all reviews based on game id
+   */
+  getAllByGameId(game_id: number) {
+    return new Promise<Review[]>((resolve, reject) => {
+      pool.query('SELECT * FROM reviews WHERE game_id = ?', [game_id], (error, results) => {
+        if (error) return reject(error);
+
+        resolve(results);
+      });
+    });
+  }
+
+  /**
+   * Get all reviews based on genre id
+   */
+  getAllByGenreId(genre_id: number) {
+    return new Promise<Review[]>((resolve, reject) => {
+      pool.query('SELECT * FROM reviews WHERE genre_id = ?', [genre_id], (error, results) => {
+        if (error) return reject(error);
+
+        resolve(results);
+      });
+    });
+  }
+
+  /**
+   * Get all reviews based on genre id
+   */
+  getAllByPlatformId(platform_id: number) {
+    return new Promise<Review[]>((resolve, reject) => {
+      pool.query('SELECT * FROM reviews WHERE platform_id = ?', [platform_id], (error, results) => {
+        if (error) return reject(error);
+
+        resolve(results);
+      });
+    });
+  }
+
+  /**
    * Get single complete review based on ID
    */
   get(review_id: number) {
     return new Promise<Review | undefined>((resolve, reject) => {
       pool.query(
-        `SELECT *, (SELECT COUNT(*) FROM mapping_relevant WHERE review_id = r.review_id) AS likes FROM reviews r LEFT JOIN games g ON r.game_id = g.game_id WHERE r.review_id = ?`,
+        `SELECT r.*, (SELECT COUNT(*) FROM mapping_relevant WHERE review_id = r.review_id) AS likes, u.user_nickname, g.game_title FROM reviews r LEFT JOIN games g ON r.game_id = g.game_id LEFT JOIN users u ON r.user_id = u.user_id WHERE r.review_id = ?`,
         [review_id],
         (error, results) => {
           if (error) return reject(error);
@@ -201,7 +240,7 @@ class ReviewService {
         INNER JOIN games g ON g.game_id = r.game_id
         INNER JOIN mapping_platform mp ON mp.game_id = g.game_id
         INNER JOIN platforms p ON mp.platform_id = p.platform_id
-        WHERE published=1 AND p.platform_id = ?`,
+        WHERE p.platform_id = ?`,
         [platform_id],
         (error, results) => {
           if (error) return reject(error);

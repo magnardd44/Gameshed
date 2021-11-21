@@ -81,6 +81,42 @@ reviewRouter.get('/users/:user_id', (request, response) => {
     .catch((error) => response.status(500).send(error));
 });
 
+//Fetch all reviews for a specific game
+reviewRouter.get('/game/:game_id', (request, response) => {
+  const id = Number(request.params.game_id);
+
+  reviewService
+    .getAllByGameId(id)
+    .then((reviews) =>
+      reviews ? response.send(reviews) : response.status(404).send('Reviews not found')
+    )
+    .catch((error) => response.status(500).send(error));
+});
+
+//Fetch all reviews for a specific genre
+reviewRouter.get('/genre/:genre_id', (request, response) => {
+  const id = Number(request.params.genre_id);
+
+  reviewService
+    .getAllByGenreId(id)
+    .then((reviews) =>
+      reviews ? response.send(reviews) : response.status(404).send('Reviews not found')
+    )
+    .catch((error) => response.status(500).send(error));
+});
+
+//Fetch all reviews for a specific genre
+reviewRouter.get('/platform/:platform_id', (request, response) => {
+  const id = Number(request.params.platform_id);
+
+  reviewService
+    .getAllByPlatformId(id)
+    .then((reviews) =>
+      reviews ? response.send(reviews) : response.status(404).send('Reviews not found')
+    )
+    .catch((error) => response.status(500).send(error));
+});
+
 //Fetch review
 reviewRouter.get('/review/:review_id', (request, response) => {
   const id = Number(request.params.review_id);

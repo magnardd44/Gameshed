@@ -42,18 +42,10 @@ export class Category extends Component {
     relevant: 0,
     platform_id: 0,
     likes: 0,
+    user_nickname: '',
   };
   state = { isHidden: false };
-  genreCall(id: number) {
-    reviewService
-      .getGenre(id)
-      .then((data) => {
-        this.reviews = data;
-        console.log(this.reviews);
-      })
-      .catch((error) => Alert.danger('Error retrieving reviews: ' + error.message));
-    this.setState({ isHidden: false });
-  }
+
   render() {
     return (
       <>
@@ -105,12 +97,12 @@ export class Category extends Component {
               ) : (
                 <div className="sticky-top">
                   <div>Resultater:</div>
-                  {this.reviews.length == 0 ? (
+                  {reviewService.reviews.length == 0 ? (
                     <Row>
                       <Column>Ingen resultater</Column>
                     </Row>
                   ) : (
-                    this.reviews.map((review, index) => (
+                    reviewService.reviews.map((review, index) => (
                       <Row key={index}>
                         <ReviewCard
                           title={review.review_title}
@@ -118,6 +110,7 @@ export class Category extends Component {
                           terningkast={review.rating}
                           relevanse={review.likes}
                           text={review.text}
+                          user_nickname={review.user_nickname}
                         >
                           <Button.Success
                             small
@@ -145,6 +138,26 @@ export class Category extends Component {
       .then((genres) => {
         this.genres = genres;
       })
+      .then(() => {})
       .catch((error) => Alert.danger('Error getting genres: ' + error.message));
+  }
+  genreCall(id: number) {
+    reviewService.reviews = [];
+    reviewService
+      .getAllByGenreId(id)
+      .then((res) => {
+        console.log(res);
+        reviewService.reviews = res;
+        reviewService.reviews.map((review, i) => {
+          console.log(review);
+
+          reviewService.get(review.review_id).then((res) => {
+            reviewService.reviews[i] = res;
+          });
+        });
+      })
+
+      .catch((error) => Alert.danger('Error retrieving reviews: ' + error.message));
+    this.setState({ isHidden: false });
   }
 }

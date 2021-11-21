@@ -9,7 +9,6 @@ import {
   Column,
   Button,
   JustifiedNavBar,
-  
   NavBarLink,
   Container,
   ColumnCentre,
@@ -23,9 +22,7 @@ import {
   EditReview,
   PublishedReviews,
   PublishReview,
-
   CompleteReview,
-
   MyReviews,
 } from './review-components';
 
@@ -95,7 +92,7 @@ ReactDOM.render(
 
       <Route exact path="/editReview/:id" component={EditReview} />
       <Route exact path="/myReviews" component={MyReviews} />
-  
+
       <Route exact path="/reviews-by-genre" component={Category}></Route>
       <Route exact path="/reviews-by-platform" component={Platform}></Route>
 

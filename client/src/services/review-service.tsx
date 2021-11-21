@@ -31,6 +31,7 @@ export type Review = {
   platform_id: number;
   relevant: number;
   likes: number;
+  user_nickname: string;
 };
 
 export type RelatedReview = {
@@ -46,6 +47,7 @@ export type RelatedReview = {
   platform_id: number;
   relevant: number;
   likes: number;
+  user_nickname: string;
 };
 
 class ReviewService {
@@ -62,6 +64,7 @@ class ReviewService {
     platform_id: 0,
     relevant: 0,
     likes: 0,
+    user_nickname: '',
   };
   reviews: Review[] = [];
 
@@ -78,6 +81,7 @@ class ReviewService {
     platform_id: 0,
     relevant: 0,
     likes: 0,
+    user_nickname: '',
   };
 
   relatedReviews: RelatedReview[] = [];
@@ -94,10 +98,28 @@ class ReviewService {
   }
 
   /**
-   * Get review with given id.
+   * Get review with given game id.
    */
   getAllByGameId(id: number) {
-    return userService.axios.get<Review>('/reviews/' + id).then((response) => response.data);
+    return userService.axios.get<Review[]>('/reviews/game/' + id).then((response) => response.data);
+  }
+
+  /**
+   * Get review with given genre id.
+   */
+  getAllByGenreId(id: number) {
+    return userService.axios
+      .get<Review[]>('/reviews/genre/' + id)
+      .then((response) => response.data);
+  }
+
+  /**
+   * Get review with given platform id.
+   */
+  getAllByPlatformId(id: number) {
+    return userService.axios
+      .get<Review[]>('/reviews/platform/' + id)
+      .then((response) => response.data);
   }
 
   /**

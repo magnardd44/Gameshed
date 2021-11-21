@@ -13,9 +13,10 @@ import {
   Linebreak,
   FormContainer,
   FormGroup,
-  ReviewCard
+  ReviewCard,
+  FullReviewCard,
 } from './widgets';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { gameService } from './services/game-service';
 import { Genre, genreService } from './services/genre-service';
 import { createHashHistory } from 'history';
@@ -24,29 +25,33 @@ import { Platform, platformService } from './services/platform-service';
 import axios from 'axios';
 import { RelatedReviews } from './related-reviews';
 import { reviewService, Review } from './services/review-service';
+import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton } from 'react-share';
 // import Select from 'react-select';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
 export class GameCard extends Component<{ match: { params: { igdb_id: number; db_id: number } } }> {
-  
+  counter = 0;
   render() {
     return (
       <>
         <Container>
-          <Card title={gameService.current.game_title}>
+          <Card title={gameService.current.game_title} key={gameService.current.game_id}>
             <h6 className="card-subtitle mb-2 text-muted">
-              <ColumnCentre key={0}>
-                Terningkast:
-                {gameService.current.igdb?.aggregated_rating != undefined ? <ThumbNail
-                  small
-                  img={
-                    'https://helenaagustsson.github.io/INFT2002-images/images/dice-' +
-                    this.rating() +
-                    '.png'
-                  }
-                ></ThumbNail>:'Ikke tilgjengelig' }
-                
+              <ColumnCentre>
+                Terningkast:{' '}
+                {gameService.current.igdb?.aggregated_rating != undefined ? (
+                  <ThumbNail
+                    small
+                    img={
+                      'https://helenaagustsson.github.io/INFT2002-images/images/dice-' +
+                      this.rating() +
+                      '.png'
+                    }
+                  ></ThumbNail>
+                ) : (
+                  ' Ikke tilgjengelig'
+                )}
               </ColumnCentre>
             </h6>
             <Row>
@@ -58,26 +63,26 @@ export class GameCard extends Component<{ match: { params: { igdb_id: number; db
                   }
                 ></ThumbNail>
               </ColumnCentre>
-              <ColumnCentre width={12} mdwidth={10} key={2}>
+              <ColumnCentre width={12} mdwidth={10}>
                 {gameService.current.game_description}
                 <Linebreak></Linebreak>
               </ColumnCentre>
             </Row>
             <Linebreak></Linebreak>
             <Row>
-              <ColumnCentre key={3}>
+              <ColumnCentre>
                 Sjanger:{' '}
                 {gameService.current.genre.reduce((p, c) => (p == '' ? c : p + ', ' + c), '')}
               </ColumnCentre>
             </Row>
             <Row>
-              <ColumnCentre key={4}>
+              <ColumnCentre>
                 Plattformer:{' '}
                 {gameService.current.platform.reduce((p, c) => (p == '' ? c : p + ', ' + c), '')}
               </ColumnCentre>
             </Row>
             <Row>
-              <ColumnCentre key={5}>
+              <ColumnCentre>
                 Årstall:{' '}
                 {gameService.current.igdb
                   ? new Date(gameService.current.igdb?.release_date * 1000).getFullYear()
@@ -85,7 +90,7 @@ export class GameCard extends Component<{ match: { params: { igdb_id: number; db
               </ColumnCentre>
             </Row>
             <Row>
-              <ColumnCentre key={6}>
+              <ColumnCentre>
                 Lignende spill:{' '}
                 {gameService.current.igdb?.similar_games?.map((e, i) => {
                   return (
@@ -97,10 +102,10 @@ export class GameCard extends Component<{ match: { params: { igdb_id: number; db
               </ColumnCentre>
             </Row>
             <Row>
-              {gameService.current.igdb?.screenshots_url?.map((url, index) => {
+              {gameService.current.igdb?.screenshots_url?.map((url, i) => {
                 return (
-                  <ColumnCentre width={12} smwidth={6} mdwidth={3} key={index}>
-                    <ThumbNail img={url} key={index} />
+                  <ColumnCentre width={12} smwidth={6} mdwidth={3} key={i}>
+                    <ThumbNail img={url} key={i} />
                   </ColumnCentre>
                 );
               })}
@@ -116,9 +121,35 @@ export class GameCard extends Component<{ match: { params: { igdb_id: number; db
             </Column>
           </Row>
         </Container>
-        
-        
-         
+        <Container>
+          <Card title="Anmeldelser for dette spillet:">
+            {this.props.match.params.db_id == 0
+              ? `Det finnes for øyeblikket ingen anmeldelser for dette spillet. `
+              : reviewService.reviews.map((review, i) => {
+                  return (
+                    <Row key={i}>
+                      <ReviewCard
+                        key={i}
+                        title={review.review_title}
+                        terningkast={review.rating}
+                        relevanse={review.likes}
+                        text={review.text}
+                        user_nickname={review.user_nickname}
+                      >
+                        <Button.Success
+                          small
+                          onClick={() => {
+                            history.push('/publishedReviews/' + review.review_id);
+                          }}
+                        >
+                          Les mer
+                        </Button.Success>
+                      </ReviewCard>
+                    </Row>
+                  );
+                })}
+          </Card>
+        </Container>
       </>
     );
   }
@@ -162,20 +193,27 @@ export class GameCard extends Component<{ match: { params: { igdb_id: number; db
     //        })
     //        .catch();
     //    }
-    
+
+    reviewService.reviews = [];
+    reviewService.getAllByGameId(game_id).then((res) => {
+      reviewService.reviews = res;
+      reviewService.reviews.map((review, i) => {
+        console.log(review);
+
+        reviewService.get(review.review_id).then((res) => {
+          reviewService.reviews[i] = res;
+        });
+      });
+    });
   }
   addReview() {
     history.push(`/addReview/${gameService.current.game_id}/${gameService.current.igdb_id}`);
   }
   rating() {
-    
-      let terningkast = gameService.current.igdb
-      
+    let terningkast = gameService.current.igdb
       ? Math.ceil((gameService.current.igdb?.aggregated_rating * 6) / 100)
       : '';
     return terningkast;
-    
-   
   }
 }
 

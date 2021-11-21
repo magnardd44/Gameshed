@@ -21,6 +21,7 @@ import { createHashHistory } from 'history';
 import axios from 'axios';
 import { genreService } from './services/genre-service';
 import { history } from './index';
+import userService from './services/user-service';
 
 export class Home extends Component {
   render() {
@@ -52,7 +53,7 @@ export class Home extends Component {
         </Row>
         <Linebreak></Linebreak>
         <Row>
-          <ColumnCentre width={6}>
+          <ColumnCentre width={userService.token ? 12 : 6}>
             <Card title={'Legg til nytt spill'}>
               <Button.Success
                 onClick={() => {
@@ -63,17 +64,21 @@ export class Home extends Component {
               </Button.Success>
             </Card>
           </ColumnCentre>
-          <ColumnCentre width={6}>
-            <Card title="Registrer ny konto">
-              <Button.Success
-                onClick={() => {
-                  history.push('/user');
-                }}
-              >
-                Registrer deg
-              </Button.Success>
-            </Card>
-          </ColumnCentre>
+          {userService.token ? (
+            ''
+          ) : (
+            <ColumnCentre width={6}>
+              <Card title="Registrer ny konto">
+                <Button.Success
+                  onClick={() => {
+                    history.push('/user');
+                  }}
+                >
+                  Registrer deg
+                </Button.Success>
+              </Card>
+            </ColumnCentre>
+          )}
         </Row>
       </Container>
     );

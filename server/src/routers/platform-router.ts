@@ -11,7 +11,7 @@ const platformRouter = express.Router();
 //Update mapping_platform
 platformRouter.post('/map', (request, response) => {
   const data = request.body;
-  if (typeof data.platform_id == 'number' && typeof data.game_id == 'number')
+  if (typeof data.platform_name == 'number' && typeof data.game_id == 'number')
     userService
       .verify(request.headers.authorization)
       .catch((err) => {

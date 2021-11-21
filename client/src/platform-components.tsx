@@ -29,7 +29,6 @@ const history = createHashHistory();
 
 //Renders overview of published reviews based on genre
 export class Platform extends Component {
-  reviews: Review[] = [];
   state = { isHidden: true };
 
   review: Review = {
@@ -45,18 +44,8 @@ export class Platform extends Component {
     relevant: 0,
     platform_id: 0,
     likes: 0,
+    user_nickname: '',
   };
-
-  platformCall(id: number) {
-    reviewService
-      .getPlatform(id)
-      .then((data) => {
-        this.setState({ isHidden: false });
-        console.log(data);
-        this.reviews = data;
-      })
-      .catch((error) => Alert.danger('Error retrieving reviews: ' + error.message));
-  }
 
   render() {
     return (
@@ -121,12 +110,12 @@ export class Platform extends Component {
                   <Row>
                     <Column>Resultater:</Column>
                   </Row>
-                  {this.reviews.length == 0 ? (
+                  {reviewService.reviews.length == 0 ? (
                     <Row>
                       <Column>Ingen resultater</Column>
                     </Row>
                   ) : (
-                    this.reviews.map((review, index) => (
+                    reviewService.reviews.map((review, index) => (
                       <Row key={index}>
                         <ReviewCard
                           title={review.review_title}
@@ -134,6 +123,7 @@ export class Platform extends Component {
                           terningkast={review.rating}
                           relevanse={review.likes}
                           text={review.text}
+                          user_nickname={review.user_nickname}
                         >
                           <Button.Success
                             small
@@ -156,11 +146,24 @@ export class Platform extends Component {
     );
   }
 
-  mounted() {
+  platformCall(id: number) {
+    reviewService.reviews = [];
     reviewService
-      .getPublishedReviews()
-      .then((reviews) => (this.reviews = reviews))
-      .catch((error) => Alert.danger('Error getting reviews: ' + error.message));
+      .getPlatform(id)
+      .then((res) => {
+        console.log(res);
+        reviewService.reviews = res;
+        reviewService.reviews.map((review, i) => {
+          console.log(review);
+
+          reviewService.get(review.review_id).then((res) => {
+            reviewService.reviews[i] = res;
+          });
+        });
+      })
+
+      .catch((error) => Alert.danger('Error retrieving reviews: ' + error.message));
+    this.setState({ isHidden: false });
   }
 }
 

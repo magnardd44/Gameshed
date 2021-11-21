@@ -142,10 +142,12 @@ export class ReviewCard extends Component<{
   text?: string;
   terningkast?: number;
   relevanse?: number;
+  user_nickname?: string;
 }> {
+  key: React.Key | null | undefined;
   render() {
     return (
-      <div className="card border-success my-2">
+      <div className="card border-success my-2" key={this.key}>
         <Row>
           <Column width={2} offset={10} right>
             <ThumbNail
@@ -160,7 +162,14 @@ export class ReviewCard extends Component<{
           <Row>
             <ColumnCentre width={11}>
               <h5 className="card-title">
-                {this.props.title + ' '}
+                "{this.props.title + '" '}{' '}
+                {this.props.user_nickname ? (
+                  <>
+                    - <i>{this.props.user_nickname + ' '}</i>{' '}
+                  </>
+                ) : (
+                  ''
+                )}
                 <ThumbNail
                   small
                   img={
@@ -170,7 +179,11 @@ export class ReviewCard extends Component<{
                   }
                 ></ThumbNail>
               </h5>
-              <h6 className="card-subtitle mb-2 text-muted">Spill: {this.props.subtitle}</h6>
+              {this.props.subtitle ? (
+                <h6 className="card-subtitle mb-2 text-muted">Spill: {this.props.subtitle}</h6>
+              ) : (
+                ''
+              )}
             </ColumnCentre>
           </Row>
           <Row>
@@ -194,6 +207,7 @@ export class FullReviewCard extends Component<{
   terningkast?: number;
   relevanse?: number;
   img?: string;
+  user?: string;
 }> {
   render() {
     return (
@@ -212,7 +226,7 @@ export class FullReviewCard extends Component<{
           <Row>
             <ColumnCentre width={11}>
               <h5 className="card-title">
-                {this.props.title + ' '}
+                "{this.props.title + ' '}" - <i>{this.props.user + ' '}</i>
                 <ThumbNail
                   small
                   img={
@@ -604,6 +618,12 @@ export class Alert extends Component {
       <div>
         {this.alerts.map((alert, i) => (
           <div
+            style={{
+              position: 'fixed',
+              top: '0px',
+              zIndex: 100,
+              width: document.documentElement.clientWidth,
+            }}
             key={alert.id}
             className={'alert alert-dismissible alert-' + alert.type}
             role="alert"

@@ -38,6 +38,7 @@ export class PublishedReviews extends Component {
           {reviewService.reviews.map((review, index) => (
             <Row key={index}>
               <ReviewCard
+                key={index}
                 title={review.review_title}
                 subtitle={review.game_title}
                 terningkast={review.rating}
@@ -215,7 +216,7 @@ export class AddReview extends Component<{
                         )
                         .then((res) => {
                           Alert.success('Anmeldelsen er lagret!');
-                          history.push('/publishReview/' + res);
+                          history.push('/myReviews');
                         });
                     });
                 } else {
@@ -228,7 +229,7 @@ export class AddReview extends Component<{
                     )
                     .then((res) => {
                       Alert.success('Anmeldelsen er lagret!');
-                      history.push('/publishReview/' + res);
+                      history.push('/myReviews');
                     });
                 }
               }
@@ -281,16 +282,22 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
       <Container>
         <Card title="Anmeldelse til publisering">
           <Row>
-            <Column width={2}>Spill:</Column>
+            <Column width={2}>
+              <b>Spill:</b>
+            </Column>
             <Column>{gameService.current.game_title}</Column>
           </Row>
 
           <Row>
-            <Column width={2}>Sjanger:</Column>
+            <Column width={2}>
+              <b>Sjanger:</b>
+            </Column>
             <Column>{gameService.current.genre.join(', ')}</Column>
           </Row>
           <Row>
-            <Column width={2}>Plattform:</Column>
+            <Column width={2}>
+              <b>Plattform:</b>
+            </Column>
             <Column>{gameService.current.platform.join(', ')}</Column>
           </Row>
           <Linebreak />
@@ -330,18 +337,24 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
                 Rediger
               </Button.Success>
             </Column>
-            <Column>
-              <Button.Success
-                onClick={() => {
-                  reviewService.publish(Number(this.props.match.params.id)).then(() => {
-                    Alert.success('Anmeldelsen er publisert!');
-                    history.push('/publishedReviews');
-                  });
-                }}
-              >
-                Publiser
-              </Button.Success>
-            </Column>
+            {reviewService.review.published ? (
+              ''
+            ) : (
+              <>
+                <Column>
+                  <Button.Success
+                    onClick={() => {
+                      reviewService.publish(Number(this.props.match.params.id)).then(() => {
+                        Alert.success('Anmeldelsen er publisert!');
+                        history.push('/publishedReviews');
+                      });
+                    }}
+                  >
+                    Publiser
+                  </Button.Success>
+                </Column>
+              </>
+            )}
 
             <Column>
               <Button.Danger
@@ -466,8 +479,6 @@ export class EditReview extends Component<{ match: { params: { id: number } } }>
             <Linebreak />
             <Button.Success
               onClick={() => {
-                alert('review saved');
-
                 reviewService
                   .edit(
                     reviewService.review.review_id,
@@ -475,11 +486,14 @@ export class EditReview extends Component<{ match: { params: { id: number } } }>
                     reviewService.review.text,
                     reviewService.review.rating
                   )
-                  .then(() => history.push('/publishReview/' + reviewService.review.review_id))
+                  .then(() => {
+                    history.push('/myReviews');
+                    Alert.info('Endringene er lagret!');
+                  })
                   .catch((error) => Alert.danger('Error editing review: ' + error.message));
               }}
             >
-              Save
+              Lagre
             </Button.Success>
           </Column>
         </Row>
@@ -528,6 +542,7 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
           terningkast={reviewService.review.rating}
           relevanse={reviewService.review.likes}
           img={gameService.current.igdb?.cover_url ? gameService.current.igdb.cover_url : ' '}
+          user={reviewService.review.user_nickname}
         >
           <Row>
             <Column width={2}>Sjanger: </Column>
@@ -587,6 +602,7 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
       .then((review) => {
         reviewService.review = review;
         gameService.set(reviewService.review.game_id, 0);
+        console.log(reviewService.review);
       })
       .catch((error) => Alert.danger('Error getting review: ' + error.message));
   }
@@ -623,7 +639,9 @@ export class MyReviews extends Component<{ match: { params: { id: number } } }> 
                   <Row key={review.game_id}>
                     <Column>Innhold:</Column>
                     <Column>
-                      <b>{review.text}</b>
+                      <b>
+                        <i>{review.text}</i>
+                      </b>
                     </Column>
                   </Row>
                   <Linebreak />
@@ -666,49 +684,63 @@ export class MyReviews extends Component<{ match: { params: { id: number } } }> 
                         <Column>
                           <Button.Success
                             onClick={() => {
-                              reviewService
-                                .publish(review.review_id)
-                                .then(() => {
-                                  reviewService.reviews.splice(i, 1);
-                                  Alert.success('Review published!');
-                                })
-                                .catch((error) =>
-                                  Alert.danger(
-                                    'Det oppsto en feil når anmeldelsen: ' + error.message
-                                  )
-                                );
+                              let sikkerSlett = confirm(
+                                'Er du sikker på at du vil publisere denne anmeldelsen?'
+                              );
+                              if (sikkerSlett) {
+                                reviewService
+                                  .publish(review.review_id)
+                                  .then(() => {
+                                    reviewService.reviews.splice(i, 1);
+                                    Alert.success('Review published!');
+                                    this.mounted();
+                                    this.render();
+                                  })
+                                  .catch((error) =>
+                                    Alert.danger(
+                                      'Det oppsto en feil når anmeldelsen: ' + error.message
+                                    )
+                                  );
+                              }
                             }}
                           >
                             Publiser
                           </Button.Success>
                         </Column>
-
-                        <Column>
-                          <Button.Light
-                            onClick={() => {
-                              history.push('/editReview/' + review.review_id);
-                            }}
-                          >
-                            Rediger
-                          </Button.Light>
-                        </Column>
                       </>
                     )}
 
                     <Column>
+                      <Button.Light
+                        onClick={() => {
+                          history.push('/editReview/' + review.review_id);
+                        }}
+                      >
+                        Rediger
+                      </Button.Light>
+                    </Column>
+
+                    <Column>
                       <Button.Danger
                         onClick={() => {
-                          reviewService
-                            .delete(review.review_id)
-                            .then(() => {
-                              reviewService.reviews.splice(i, 1);
-                              Alert.success('Anmeldelse slettet');
-                            })
-                            .catch((error) =>
-                              Alert.danger(
-                                'Det oppsto en feil ved sletting av anmeldelse: ' + error.message
-                              )
-                            );
+                          let sikkerPubliser = confirm(
+                            'Er du sikker på at du vil slette denne anmeldelsen?'
+                          );
+                          if (sikkerPubliser) {
+                            reviewService
+                              .delete(review.review_id)
+                              .then(() => {
+                                reviewService.reviews.splice(i, 1);
+                                Alert.success('Anmeldelse slettet');
+                                this.mounted();
+                                this.render();
+                              })
+                              .catch((error) =>
+                                Alert.danger(
+                                  'Det oppsto en feil ved sletting av anmeldelse: ' + error.message
+                                )
+                              );
+                          }
                         }}
                       >
                         Slett
@@ -732,6 +764,7 @@ export class MyReviews extends Component<{ match: { params: { id: number } } }> 
     }
   }
   mounted() {
+    console.log(userService.token?.id);
     if (userService.token) {
       reviewService
         .getAllById(userService.token.id)

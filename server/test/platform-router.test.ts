@@ -5,19 +5,6 @@ import app from '../src/app';
 import { Platform, platformService } from '../src/services/platform-service';
 import userService from '../src/services/user-service';
 
-/*
-jest.mock('../src/mysql-pool', () => {
-  const mysql = require('mysql');
-  return mysql.createPool({
-    host: 'mysql.stud.ntnu.no',
-    connectionLimit: 1,
-    user: 'solveol_gameshed',
-    password: 'gameshed',
-    database: 'solveol_test',
-  });
-});
-*/
-
 //Mock user service
 
 /*
@@ -151,7 +138,16 @@ describe('Create new platform (POST)', () => {
     });
   });
   test('Create new platform (500 Internal Server error)', async () => {
-    const newPlatformMissingName = { platform_name: null };
+    const newPlatform = { platform_name: '' };
+    try {
+      const response = await axios.post('/platforms');
+    } catch (error: any) {
+      expect(error.response.status).toEqual(500);
+    }
+  });
+
+  test('Create new platform (401 Internal Server error)', async () => {
+    const newPlatformMissingName = { platform_name: 0 };
     try {
       const response = await axios.post('/platforms', newPlatformMissingName);
     } catch (error: any) {
