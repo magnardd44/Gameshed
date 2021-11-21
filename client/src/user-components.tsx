@@ -1,27 +1,26 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Form, Card, Alert, Button, Container, Column } from './widgets';
+import { FormGroup, Form, Card, Alert, Button, Container, Column } from './widgets';
 import userService from './services/user-service';
-//import { history } from './index';
 import { createHashHistory } from 'history';
-//
-const history = createHashHistory();
+
+export const history = createHashHistory();
 
 export class UserNav extends Component {
-  //password: string = '';
-
   render() {
     return (
       <>
-        <Button.Success
-          small
-          onClick={() => {
-            userService.login('admin', 'admin').then(() => Alert.success(<>Logged inn as admin</>));
-            //this.password = '';
-          }}
-        >
-          DebugAdmin
-        </Button.Success>
+        {
+          // <Button.Success
+          //   small
+          //   onClick={() => {
+          //     userService.login('admin', 'admin').then(() => Alert.success(<>Logged inn as admin</>));
+          //     //this.password = '';
+          //   }}
+          // >
+          //   DebugAdmin
+          // </Button.Success>
+        }
         <Form.Label>Brukernavn:</Form.Label>
         <Form.Input
           id="emailInput"
@@ -50,7 +49,7 @@ export class UserNav extends Component {
           //          <>
           //		  {
           //            //<Form.Input
-          //            //  type="text"
+          //            //  type="password"
           //            //  value={this.password}
           //            //  placeholder="Passord"
           //            //  onChange={(event) => {
@@ -61,7 +60,6 @@ export class UserNav extends Component {
           <Button.Success
             small
             onClick={() => {
-              //console.log(userService.email.length ? true : false);
               let password = prompt('Skriv inn passord');
               if (userService.email.length && password?.length) {
                 userService
@@ -81,13 +79,6 @@ export class UserNav extends Component {
           small
           onClick={() => {
             history.push('/user');
-            //if(history.location.pathname != '/user')  history.push('/user')
-            //                this.password = '';
-            //                userService.register(this.input, this.password)
-            //				.then(()=> history.push('/user'))
-            //				.catch(()=> history.push('/user')
-            //				);
-            //				:
           }}
         >
           {userService.token ? 'MinSide' : 'Registrer'}
@@ -95,14 +86,17 @@ export class UserNav extends Component {
       </>
     );
   }
+  mounted() {
+    userService.get_user().catch((err) => {});
+  }
 }
 
 export class UserData extends Component {
   render() {
     return (
       <Card title="Brukerdata">
-        <Form.Label>
-          Brukarnavn
+        <FormGroup>
+          <Form.Label>Brukarnavn</Form.Label>
           <Form.Input
             id="inputName"
             type="text"
@@ -112,10 +106,10 @@ export class UserData extends Component {
               userService.name = event.currentTarget.value;
             }}
           />
-        </Form.Label>
+        </FormGroup>
 
-        <Form.Label>
-          Epost
+        <FormGroup>
+          <Form.Label>Epost</Form.Label>
           <Form.Input
             id="inputEmail"
             type="text"
@@ -127,10 +121,10 @@ export class UserData extends Component {
               userService.email = event.currentTarget.value;
             }}
           />
-        </Form.Label>
+        </FormGroup>
 
-        <Form.Label>
-          Om meg
+        <FormGroup>
+          <Form.Label>Om meg</Form.Label>
           <Form.Textarea
             id="inputAbout"
             type="text"
@@ -140,7 +134,7 @@ export class UserData extends Component {
               userService.about = event.currentTarget.value;
             }}
           />
-        </Form.Label>
+        </FormGroup>
       </Card>
     );
   }
@@ -152,14 +146,20 @@ export class UserPersonal extends Component {
       <>
         <Button.Success
           onClick={() => {
-            userService.set_user().then(() => Alert.success(<>Oppdatert bruker</>));
+            userService
+              .set_user()
+              .then(() => Alert.success(<>Oppdatert bruker</>))
+              .catch((err) => Alert.warning(<>Bruker ble ikke oppdatert</>));
           }}
         >
           Oppdater bruker
         </Button.Success>
         <Button.Danger
           onClick={() => {
-            userService.delete();
+            userService
+              .delete()
+              .then(() => Alert.success(<>Bruker slettet</>))
+              .catch((err) => Alert.warning(<>Bruker ble ikke oppdatert</>));
             // this.input = '';
             // this.password = '';
           }}
@@ -208,8 +208,10 @@ export class UserPage extends Component {
   render() {
     return (
       <>
-        <UserData />
-        {userService.token ? <UserPersonal /> : <UserRegister />}
+        <Container>
+          <UserData />
+          {userService.token ? <UserPersonal /> : <UserRegister />}
+        </Container>
       </>
     );
   }

@@ -1,7 +1,14 @@
 import * as React from 'react';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { UserNav, UserData, UserPersonal, UserRegister, UserPage } from '../src/user-components';
+import {
+  history,
+  UserNav,
+  UserData,
+  UserPersonal,
+  UserRegister,
+  UserPage,
+} from '../src/user-components';
 import { Form, Card, Alert, Button, Container, Column } from '../src/widgets';
 import { shallow } from 'enzyme';
 import userService, { Token } from '../src/services/user-service';
@@ -23,8 +30,13 @@ window.prompt = jest.fn(() => {
 });
 
 Alert.info = jest.fn(() => {});
-Alert.warning = jest.fn(() => {});
+//Alert.warning = jest.fn(() => {});
 Alert.success = jest.fn(() => {});
+Alert.danger = jest.fn(() => {});
+
+const validToken = { id: 1, token: 'abc' };
+
+const emptyUser = {};
 
 describe('UserNav component', () => {
   test('UserNav default', (done) => {
@@ -75,6 +87,20 @@ describe('UserNav component', () => {
     });
   });
 
+  test('Button register pressed', (done) => {
+    const wrapper = shallow(<UserNav />);
+
+    let spy = jest.spyOn(history, 'push');
+
+    wrapper.find(Button.Success).at(1).simulate('click');
+
+    setTimeout(() => {
+      expect(history.push).toBeCalled();
+      spy.mockRestore();
+      done();
+    });
+  });
+
   test('UserNav on logged out', (done) => {
     const wrapper = shallow(<UserNav />);
 
@@ -110,7 +136,7 @@ describe('UserNav component', () => {
     });
   });
 
-  test('Ingen epost', (done) => {
+  test('No email', (done) => {
     const wrapper = shallow(<UserNav />);
 
     wrapper.find({ children: 'Login' }).simulate('click');
@@ -121,8 +147,10 @@ describe('UserNav component', () => {
     });
   });
 
-  test('Feil brukar eller passord', (done) => {
+  test('Wrong user or password', (done) => {
     const wrapper = shallow(<UserNav />);
+
+    const spy = jest.spyOn(Alert, 'warning');
 
     wrapper.find('#emailInput').simulate('change', { currentTarget: { value: 'email' } });
     mockAdapter.onPost('user/login').reply(400);
@@ -130,6 +158,25 @@ describe('UserNav component', () => {
 
     setTimeout(() => {
       expect(Alert.warning).toBeCalled();
+      spy.mockRestore();
+      done();
+    });
+  });
+
+  test('Server error logging out', (done) => {
+    const wrapper = shallow(<UserNav />);
+
+    const spy = jest.spyOn(console, 'log');
+    spy.mockImplementationOnce(() => {});
+
+    userService.token = validToken;
+    mockAdapter.onPost('user/logout').reply(401);
+
+    wrapper.find({ children: 'Logout' }).simulate('click');
+
+    setTimeout(() => {
+      expect(spy).toBeCalled();
+      spy.mockRestore();
       done();
     });
   });
@@ -153,12 +200,49 @@ describe('UserData component', () => {
       });
     });
   });
+
+  test('No data in user from server', (done) => {
+    const wrapper = shallow(<UserData />);
+
+    userService.token = validToken;
+    mockAdapter.onGet('user').reply(200, emptyUser);
+
+    userService.get_user();
+
+    setTimeout(() => {
+      expect(userService.name).toMatch('Anonym');
+      expect(userService.about).toMatch('');
+      done();
+    });
+  });
+
+  test('Error getting user', (done) => {
+    const wrapper = shallow(<UserData />);
+
+    const spy = jest.spyOn(console, 'log');
+    spy.mockImplementationOnce(() => {});
+
+    userService.token = validToken;
+    mockAdapter.onGet('user').reply(401);
+
+    userService.get_user();
+
+    setTimeout(() => {
+      expect(spy).toBeCalled();
+      spy.mockRestore();
+      done();
+    });
+  });
+
+  test('Set user with no token', () => {
+    expect(userService.set_user()).rejects.toEqual('No token');
+  });
 });
 
 describe('UserRegister component', () => {
   test('Register new ', (done) => {
     userService.email = 'email';
-    mockAdapter.onPost('user/add').reply(200, { id: 0, token: 'token' });
+    mockAdapter.onPost('user/add').reply(201, { id: 0, token: 'token' });
     mockAdapter.onPut('user').reply(200);
     mockAdapter.onGet('user').reply(200, { nick: 'abc', about: 'def', email: 'ghi' });
 
@@ -184,11 +268,28 @@ describe('UserRegister component', () => {
       done();
     });
   });
+
+  test('User already exists', (done) => {
+    userService.email = 'email';
+    window.prompt = jest.fn(() => {
+      return 'password';
+    });
+
+    mockAdapter.onPost('user/add').reply(400, { id: 0, token: 'token' });
+
+    const wrapper = shallow(<UserRegister />);
+
+    wrapper.find({ children: 'Registrer ny bruker' }).simulate('click');
+    setTimeout(() => {
+      expect(Alert.danger).toBeCalled();
+      done();
+    });
+  });
 });
 
 describe('UserPersonal component', () => {
   beforeEach(() => {
-    userService.token = { id: 0, token: '' };
+    userService.token = validToken;
     mockAdapter.onGet('user').reply(200, { nick: 'abc', about: 'def', email: 'ghi' });
   });
 
@@ -203,6 +304,21 @@ describe('UserPersonal component', () => {
     });
   });
 
+  test('Server refuse user update', (done) => {
+    const wrapper = shallow(<UserPersonal />);
+
+    const spy = jest.spyOn(Alert, 'warning');
+    mockAdapter.onPut('user').reply(401);
+
+    wrapper.find({ children: 'Oppdater bruker' }).simulate('click');
+
+    setTimeout(() => {
+      expect(Alert.warning).toBeCalled();
+      spy.mockRestore();
+      done();
+    });
+  });
+
   test('Delete user', (done) => {
     const wrapper = shallow(<UserPersonal />);
     mockAdapter.onDelete('user').reply(200);
@@ -210,6 +326,26 @@ describe('UserPersonal component', () => {
     wrapper.find({ children: 'Slett meg' }).simulate('click');
     setTimeout(() => {
       expect(userService.token).toBe(null);
+      done();
+    });
+  });
+
+  test('Delete on no token or Server refuse to delete user', (done) => {
+    const wrapper = shallow(<UserPersonal />);
+
+    mockAdapter.onDelete('user').reply(401);
+
+    const spy = jest.spyOn(Alert, 'warning');
+
+    userService.token = null;
+    wrapper.find({ children: 'Slett meg' }).simulate('click');
+
+    userService.token = validToken;
+    wrapper.find({ children: 'Slett meg' }).simulate('click');
+
+    setTimeout(() => {
+      expect(Alert.warning).toBeCalledTimes(2);
+      spy.mockRestore();
       done();
     });
   });
