@@ -46,6 +46,7 @@ export class SearchHotBar extends Component<{
 }
 
 export class Search extends Component {
+  //Inverval function to avoid overloading IGDB server with search requests.
   igdbSearcher: ReturnType<typeof setInterval> | null = null;
 
   input: string = '';
@@ -104,6 +105,7 @@ export class Search extends Component {
   mounted() {
     gameService.clear();
 
+    //Start searching IGDB on search field
     this.igdbSearcher = setInterval(() => {
       if (this.input != this.lastInput) {
         if (this.input) {
@@ -223,15 +225,18 @@ export class SearchListings extends Component {
           </FormContainer>
         </Container>
         <Container>
-          {gameService.db.concat(gameService.igdb).map((game, index) => {
-            if (
-              (this.genre == 'alle' || game.genre?.find((g) => g == this.genre)) &&
-              (this.platform == 'alle' || game.platform?.find((p) => p == this.platform)) &&
-              (this.year == 0 ||
-                new Date((game.igdb?.release_date || 0) * 1000).getFullYear() == this.year)
-            )
-              return <SearchResult game={game} key={index}></SearchResult>;
-          })}
+          {
+            //Filter the games on genre, platform and year
+            gameService.db.concat(gameService.igdb).map((game, index) => {
+              if (
+                (this.genre == 'alle' || game.genre?.find((g) => g == this.genre)) &&
+                (this.platform == 'alle' || game.platform?.find((p) => p == this.platform)) &&
+                (this.year == 0 ||
+                  new Date((game.igdb?.release_date || 0) * 1000).getFullYear() == this.year)
+              )
+                return <SearchResult game={game} key={index}></SearchResult>;
+            })
+          }
         </Container>
 
         <Container>

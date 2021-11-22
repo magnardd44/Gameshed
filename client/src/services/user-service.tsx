@@ -15,8 +15,8 @@ class UserService {
   token: Token | null = null;
   storage: any;
 
+  //Variables to control the password prompt
   passwordPrompt: boolean = false;
-
   loginOrRegister = this.login;
 
   axios;
