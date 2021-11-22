@@ -170,12 +170,17 @@ export class GameCard extends Component<{ match: { params: { igdb_id: number; db
       Alert.danger('Heiheihei dette går ikke: Ingen spillId valgt.');
     }
 
-    console.log(game_id);
-    console.log(igdb_id);
+    //console.log(game_id);
+    //console.log(igdb_id);
 
-    gameService.set(game_id, igdb_id).then(() => {
-      console.log(gameService.current);
-    });
+    gameService
+      .set(game_id, igdb_id)
+      .then(() => {
+        //console.log(gameService.current);
+      })
+      .catch((err) => {
+        //console.log(err)
+      });
     //    if (game_id > 0) {
     //      gameService2
     //        .get(game_id)
@@ -205,16 +210,19 @@ export class GameCard extends Component<{ match: { params: { igdb_id: number; db
     //    }
 
     reviewService.reviews = [];
-    reviewService.getAllByGameId(game_id).then((res) => {
-      reviewService.reviews = res;
-      reviewService.reviews.map((review, i) => {
-        console.log(review);
-
-        reviewService.get(review.review_id).then((res) => {
-          reviewService.reviews[i] = res;
+    reviewService
+      .getAllByGameId(game_id)
+      .then((res) => {
+        reviewService.reviews = res;
+        reviewService.reviews.map((review, i) => {
+          reviewService.get(review.review_id).then((res) => {
+            reviewService.reviews[i] = res;
+          });
         });
+      })
+      .catch((err) => {
+        //console.log(err)
       });
-    });
   }
   addReview() {
     history.push(`/addReview/${gameService.current.game_id}/${gameService.current.igdb_id}`);
@@ -349,7 +357,7 @@ export class AddGame extends Component {
                     }
                   }}
                 >
-                  Fjern siste platform
+                  Fjern siste plattform
                 </Button.Danger>
               ) : (
                 ''

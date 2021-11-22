@@ -18,14 +18,6 @@ class GenreService {
   };
   genres: Genre[] = [];
 
-  axios!: AxiosInstance;
-
-  async test() {
-    this.axios.get('/test').then(function (response) {
-      console.log(response.data);
-    });
-  }
-
   /**
    * Get genre with given id.
    */
@@ -59,6 +51,7 @@ class GenreService {
       })
       .then((response) => response.data.id);
   }
+
   updateGenreMap(game_id: number, genre_id: number) {
     return userService.axios
       .post<{ id: number }>('/genres/map', {

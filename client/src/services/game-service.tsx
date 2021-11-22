@@ -94,7 +94,9 @@ class GameService {
         this.db = response.data;
         //this.remove_duplicates();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   search_igdb(searchString: string) {
@@ -104,7 +106,9 @@ class GameService {
         this.igdb = response.data;
         this.remove_duplicates();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   remove_duplicates() {
