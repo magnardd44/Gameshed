@@ -524,16 +524,17 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
             <Column width={1}>
               <Button.Success
                 onClick={() => {
-                  this.counter = this.counter == 0 ? 1 : 0;
-
                   reviewService
-                    .like(
-                      reviewService.review.review_id,
-
-                      this.counter
-                    )
+                    .like(reviewService.review.review_id, this.counter == 0 ? 1 : 0)
                     .then(() => {
-                      this.setState(() => {});
+                      if (this.counter == 0) {
+                        reviewService.review.likes += 1;
+                        this.counter = 1;
+                      } else {
+                        reviewService.review.likes -= 1;
+                        this.counter = 0;
+                      }
+                      //this.setState(() => {});
                     });
                 }}
               >
