@@ -202,7 +202,7 @@ export class FullReviewCard extends Component<{
           <Row>
             <ColumnCentre width={11}>
               <h5 className="card-title">
-                "{this.props.title + ' '}" - <i>{this.props.user + ' '}</i>
+                "{this.props.title + ' '}" - <i>{this.props.user ? this.props.user + ' ' : ''}</i>
                 <ThumbNail
                   small
                   img={
