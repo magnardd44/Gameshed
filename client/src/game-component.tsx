@@ -82,24 +82,32 @@ export class GameCard extends Component<{ match: { params: { igdb_id: number; db
               </ColumnCentre>
             </Row>
             <Row>
-              <ColumnCentre>
-                Årstall:{' '}
-                {gameService.current.igdb
-                  ? new Date(gameService.current.igdb?.release_date * 1000).getFullYear()
-                  : ''}
-              </ColumnCentre>
+              {gameService.current.igdb?.release_date ? (
+                <ColumnCentre>
+                  Årstall:{' '}
+                  {gameService.current.igdb
+                    ? new Date(gameService.current.igdb?.release_date * 1000).getFullYear()
+                    : ''}
+                </ColumnCentre>
+              ) : (
+                ''
+              )}
             </Row>
             <Row>
-              <ColumnCentre>
-                Lignende spill:{' '}
-                {gameService.current.igdb?.similar_games?.map((e, i) => {
-                  return (
-                    <a key={i} href={'http://localhost:3000/#/games/0/' + e.id}>
-                      {e.name},{' '}
-                    </a>
-                  );
-                })}
-              </ColumnCentre>
+              {gameService.current.igdb?.similar_games ? (
+                <ColumnCentre>
+                  Lignende spill:{' '}
+                  {gameService.current.igdb?.similar_games?.map((e, i) => {
+                    return (
+                      <a key={i} href={'http://localhost:3000/#/games/0/' + e.id}>
+                        {e.name},{' '}
+                      </a>
+                    );
+                  })}
+                </ColumnCentre>
+              ) : (
+                ''
+              )}
             </Row>
             <Row>
               {gameService.current.igdb?.screenshots_url?.map((url, i) => {
@@ -165,7 +173,9 @@ export class GameCard extends Component<{ match: { params: { igdb_id: number; db
     console.log(game_id);
     console.log(igdb_id);
 
-    gameService.set(game_id, igdb_id);
+    gameService.set(game_id, igdb_id).then(() => {
+      console.log(gameService.current);
+    });
     //    if (game_id > 0) {
     //      gameService2
     //        .get(game_id)
@@ -257,7 +267,6 @@ export class AddGame extends Component {
                 cols={10}
               />
             </FormGroup>
-            <FormGroup></FormGroup>
           </FormContainer>
           <Linebreak></Linebreak>
           <Row>
@@ -412,7 +421,7 @@ export class AddGame extends Component {
                       })
                       .then((id) => {
                         Alert.success('Spillet er lagret!');
-                        history.push('/games/' + id);
+                        history.push('/');
                       })
                       .catch((error) => Alert.danger('Error creating game: ' + error.message));
                   }
