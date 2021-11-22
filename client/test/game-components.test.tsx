@@ -1,24 +1,14 @@
 import * as React from 'react';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { UserNav, UserData, UserPersonal, UserRegister, UserPage } from '../src/user-components';
-import { Form, Card, Alert, Button, Container, Column } from '../src/widgets';
+import { UserPersonal } from '../src/user-components';
+import { Form, Alert, Button } from '../src/widgets';
 import { shallow } from 'enzyme';
-import userService, { Token } from '../src/services/user-service';
+import userService from '../src/services/user-service';
 import { gameService } from '../src/services/game-service';
 import { GameCard, AddGame, history } from '../src/game-component';
-import { genreService } from '../src/services/genre-service';
-import { platformService } from '../src/services/platform-service';
 
 jest.setTimeout(1000);
-
-//const mockGenreAdapter = new MockAdapter(genreService.axios);
-
-//const mockPlatformAdapter = new MockAdapter(platformService.axios);
-
-//const mockUserAdapter = new MockAdapter(userService.axios);
-
-//const mockGlobalAdapter = new MockAdapter(axios);
 
 const mockAdapter = new MockAdapter(axios);
 const mockUserAdapter = new MockAdapter(userService.axios);
@@ -164,22 +154,6 @@ const completeReviews = [
     user_nickname: 'jkl',
   },
 ];
-
-//const mockGlobalAdapter = new MockAdapter(axios);
-//const mockGameService = new MockAdapter(gameService.axios);
-//const mockGenreService = new MockAdapter(genreService.axios);
-//const mockPlatformService = new MockAdapter(platformService.axios);
-
-/*beforeEach(() => {});*/
-
-//mockGlobalAdapter.onGet('user').reply(200, { nick: 'abc', about: 'def', email: 'ghi' });
-
-//userService.token = { id: 1, token: 'test' };
-
-/*
-window.prompt = jest.fn(() => {
-  return 'password';
-});*/
 
 Alert.info = jest.fn(() => {});
 Alert.warning = jest.fn(() => {});

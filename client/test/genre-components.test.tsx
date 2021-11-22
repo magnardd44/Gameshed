@@ -6,17 +6,7 @@ import { shallow } from 'enzyme';
 import { history, Category } from '../src/genre-components';
 import userService from '../src/services/user-service';
 
-import {
-  CategoryCard,
-  ReviewCard,
-  ColumnCentre,
-  Form,
-  Card,
-  Alert,
-  Button,
-  Container,
-  Column,
-} from '../src/widgets';
+import { CategoryCard, ReviewCard } from '../src/widgets';
 import { reviewService } from '../src/services/review-service';
 
 const mockAdapter = new MockAdapter(axios);
@@ -72,8 +62,6 @@ describe('Category component', () => {
     mockAdapter.reset();
   });
   test('Category component default', () => {
-    //mockAdapter.onGet('/genres/').reply(200, []);
-
     const wrapper = shallow(<Category />);
 
     expect(wrapper).toMatchSnapshot();
@@ -123,7 +111,6 @@ describe('Category component', () => {
     setTimeout(() => {
       wrapper.find({ children: 'genre1' }).simulate('click');
       done();
-      //expect(wrapper.find(ReviewCard)).toHaveLength(2);
     });
   });
 
@@ -145,29 +132,6 @@ describe('Category component', () => {
       wrapper.find({ children: 'Les mer' }).first().simulate('click');
       expect(spy).toBeCalledWith('/publishedReviews/' + completeReviews[0].review_id);
       done();
-      //expect(wrapper.find(ReviewCard)).toHaveLength(2);
     });
   });
-
-  //  test('Genrebutton is pressed', (done) => {
-  //	mockAdapter.onGet('/genres').reply(200, genres);
-  //    const wrapper = shallow(<Category />);
-  //
-  //	//mockAdapter.onGet('/reviews/genre/1').reply(200, completeReviews);
-  //
-  //	///reviewService.reviews = completeReviews
-  //	//
-  //
-  //	setTimeout(()=>{
-  //	wrapper.find({ children: genres[0].genre_name}).simulate('click');
-  //
-  //	setTimeout(()=>{
-  //		expect(wrapper.instance().genreCall).toBeCalled();
-  ////		expect(reviewService.reviews).toHaveLength(2)
-  ////		expect(wrapper.find('Les mer')).toHaveLength(2)
-  //		done()
-  //	});
-  //
-  //	});
-  //  });
 });

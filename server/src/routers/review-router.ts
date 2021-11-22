@@ -1,4 +1,4 @@
-import express, { request, response } from 'express';
+import express from 'express';
 import { reviewService } from '../services/review-service';
 import userService from '../services/user-service';
 

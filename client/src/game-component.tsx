@@ -14,19 +14,12 @@ import {
   FormContainer,
   FormGroup,
   ReviewCard,
-  FullReviewCard,
 } from './widgets';
-import { Link, NavLink } from 'react-router-dom';
 import { gameService } from './services/game-service';
-import { Genre, genreService } from './services/genre-service';
+import { genreService } from './services/genre-service';
 import { createHashHistory } from 'history';
-import { platform } from 'os';
-import { Platform, platformService } from './services/platform-service';
-import axios from 'axios';
-//import { RelatedReviews } from './related-reviews';
-import { reviewService, Review } from './services/review-service';
-import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton } from 'react-share';
-// import Select from 'react-select';
+import { platformService } from './services/platform-service';
+import { reviewService } from './services/review-service';
 
 export const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 

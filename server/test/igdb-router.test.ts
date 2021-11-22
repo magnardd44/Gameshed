@@ -2,10 +2,8 @@ import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import app from '../src/app';
 import searchService from '../src/services/search-service';
-
 process.env.IGDB_CLIENT_ID = 'id';
 process.env.IGDB_CLIENT_SECRET = 'secret';
-
 const portNumber = 3009;
 
 axios.defaults.baseURL = 'http://localhost:' + portNumber + '/api/v2';

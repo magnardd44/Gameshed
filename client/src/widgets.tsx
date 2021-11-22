@@ -51,30 +51,6 @@ export class Container extends Component<{ textalign?: string }> {
   }
 }
 
-/**
- * export class DropDown extends Component {
-  render() {
-    return (
-      <div className="dropdown">
-        <button
-          className="btn btn-secondary dropdown-toggle"
-          type="button"
-          id="dropdownMenuButton"
-          data-toggle="dropdown"
-          aria-haspopup="true"
-          aria-expanded="false"
-        >
-          Dropdown button
-        </button>
-        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          {this.props.children}
-        </div>
-      </div>
-    );
-  }
-}
- */
-
 export class ThumbNail extends Component<{ small?: boolean; img: string | undefined }> {
   render() {
     return (

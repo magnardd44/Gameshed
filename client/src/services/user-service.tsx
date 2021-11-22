@@ -64,7 +64,7 @@ class UserService {
         localStorage.setItem('userToken', JSON.stringify(this.token));
       })
       .catch((err) => {
-        //console.log(err);
+        console.log(err);
         throw err;
       });
   }
@@ -101,7 +101,7 @@ class UserService {
           this.email = response.data.email;
         })
         .catch((err) => {
-          //console.log(err);
+          throw err;
         });
     } else {
       return Promise.reject('No token');
@@ -113,7 +113,6 @@ class UserService {
       let user = { nick: this.name, email: this.email, about: this.about };
 
       return this.axios.put('user', { user: user }).catch((err) => {
-        //console.log(err);
         throw err;
       });
     } else {
@@ -130,7 +129,6 @@ class UserService {
         this.set_user().then(() => this.get_user());
       })
       .catch((err) => {
-        //console.log(err);
         throw err;
       });
   }
@@ -147,7 +145,6 @@ class UserService {
           this.email = '';
         })
         .catch((err) => {
-          //console.log(err);
           throw err;
         });
     } else {

@@ -10,9 +10,9 @@ import {
   UserPage,
   PasswordPrompt,
 } from '../src/user-components';
-import { Form, Card, Alert, Button, Container, Column } from '../src/widgets';
+import { Form, Alert, Button } from '../src/widgets';
 import { shallow } from 'enzyme';
-import userService, { Token } from '../src/services/user-service';
+import userService from '../src/services/user-service';
 
 jest.setTimeout(1000);
 

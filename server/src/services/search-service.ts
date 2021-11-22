@@ -35,10 +35,9 @@ class SearchService {
           this.token.access_token = res.data.access_token;
           this.token.expire_time = res.data.expires_in * 1000 + Date.now();
           this.token.token_type = res.data.token_type;
-          //console.log('Update token');
         })
         .catch((err) => {
-          //console.log(err)
+          throw err;
         });
       return this.token;
     }
@@ -54,7 +53,7 @@ class SearchService {
         'Client-ID': process.env.IGDB_CLIENT_ID,
         Authorization: this.token.token_type + ' ' + this.token.access_token,
       },
-      data: 'search "' + game + '"; fields ' + this.gameFields + ',' + this.extraFields + ';', //cover.url,aggregated_rating;',
+      data: 'search "' + game + '"; fields ' + this.gameFields + ',' + this.extraFields + ';',
     })
       .then((response) => {
         return response.data.map((g: any) => {
@@ -79,7 +78,6 @@ class SearchService {
         });
       })
       .catch((err) => {
-        //console.error(err);
         throw err;
       });
   }
@@ -108,7 +106,6 @@ class SearchService {
         };
       })
       .catch((err) => {
-        //console.error(err);
         throw err;
       });
   }
@@ -138,7 +135,6 @@ class SearchService {
         };
       })
       .catch((err) => {
-        //console.error(err);
         throw err;
       });
   }
@@ -177,51 +173,9 @@ class SearchService {
         };
       })
       .catch((err) => {
-        //console.error(err);
         throw err;
       });
   }
-
-  //  async get_platform_logos2() {
-  //    await this.get_token();
-  //    return await axios({
-  //      url: 'https://api.igdb.com/v4/release_dates',
-  //      method: 'POST',
-  //      headers: {
-  //        Accept: 'application/json',
-  //        'Client-ID': process.env.IGDB_CLIENT_ID,
-  //        Authorization: this.token.token_type + ' ' + this.token.access_token,
-  //      },
-  //      data:
-  //        'fields *,platform.name,platform.platform_logo.url; where game.platforms = 48;'
-  //    })
-  //      //.then((response) => response.data.map((p:any)=>p.platforms.name))
-  //      .then((response) => response.data)
-  //      .catch((err) => {
-  //        console.error(err);
-  //      });
-  //  }
-
-  //  async get_platform_logos(id: number) {
-  //    await this.get_token();
-  //    return await axios({
-  //      url: 'https://api.igdb.com/v4/platforms',
-  //      method: 'POST',
-  //      headers: {
-  //        Accept: 'application/json',
-  //        'Client-ID': process.env.IGDB_CLIENT_ID,
-  //        Authorization: this.token.token_type + ' ' + this.token.access_token,
-  //      },
-  //      data:
-  //        //'fields platforms.platform_logo.url; where platforms.id = 119;'
-  //        'fields *; where id = ' + id +';'
-  //    })
-  //      //.then((response) => response.data.map((p:any)=>p.platforms.name))
-  //      .then((response) => response.data)
-  //      .catch((err) => {
-  //        console.error(err);
-  //      });
-  //  }
 }
 
 const searchService = new SearchService();

@@ -1,12 +1,7 @@
 import * as React from 'react';
-import axios from 'axios';
-import MockAdapter from 'axios-mock-adapter';
-
 import { shallow } from 'enzyme';
 import { history, Home, ReviewHome } from '../src/home-components';
-
 import userService from '../src/services/user-service';
-import { ColumnCentre, Form, Card, Alert, Button, Container, Column } from '../src/widgets';
 
 describe('Home component', () => {
   test('Home component default', () => {

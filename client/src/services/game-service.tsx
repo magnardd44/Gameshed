@@ -1,7 +1,5 @@
-import axios, { AxiosInstance } from 'axios';
+import axios from 'axios';
 import { sharedComponentData } from 'react-simplified';
-import { Genre } from './genre-service';
-import { Platform } from './platform-service';
 import userService from './user-service';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v2';
@@ -142,40 +140,8 @@ class GameService {
         this.current = response;
       });
     } else {
-      //console.log('gameService: No game selected.');
       return Promise.reject('gameService: No game selected.');
     }
-
-    //  if (db_id > 0) {
-    //    let game = this.db.find((g) => g.game_id == db_id);
-    //    if (game) {
-    //      this.current = game;
-    //      if (game.igdb == null && game.igdb_id > 0) {
-    //        this.get_igdb_extra(game.igdb_id)
-    //          .then((response) => {
-    //            this.current.igdb = response;
-    //          })
-    //          .catch(() => console.log('Cannot get igdb extra'));
-    //      }
-    //    } else {
-    //      this.get(db_id)
-    //        .then((response) => {
-    //          this.current = response;
-    //        })
-    //        .catch(() => console.log('Cannot find game in database'));
-    //    }
-    //  } else {
-    //    let game = this.igdb.find((g) => g.igdb_id == igdb_id);
-    //    if (game) {
-    //      this.current = game;
-    //    } else {
-    //      this.get_igdb(igdb_id)
-    //        .then((response) => {
-    //          this.current = response;
-    //        })
-    //        .catch(() => console.log('Cannot get game from igdb'));
-    //    }
-    //  }
   }
 
   get_igdb(id: number) {

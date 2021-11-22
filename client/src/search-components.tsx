@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Component, sharedComponentData } from 'react-simplified';
+import { Component } from 'react-simplified';
 import {
   Alert,
   Card,
@@ -14,48 +14,19 @@ import {
   FormContainer,
   FormGroup,
 } from './widgets';
-import { NavLink } from 'react-router-dom';
-import { Genre } from './services/genre-service';
 import { createHashHistory } from 'history';
-import axios from 'axios';
-import { genreService } from './services/genre-service';
-import { platformService } from './services/platform-service';
 import { Game, gameService } from './services/game-service';
 
 export const history = createHashHistory();
-
-//type gameType = {
-//  id: number;
-//  name: string;
-//};
-//
-//class SharedGame {
-//  game: gameType = {
-//    id: 0,
-//    name: '',
-//  };
-//  games: gameType[] = [];
-//}
-
-//let shared = sharedComponentData(new SharedGame());
-
-//key={index}
-//onClick={(event) => {
-////                        this.input = event.currentTarget.innerHTML;
-////                        this.game = game;
-//this.setGame(game.game_id, game.igdb_id);
-//}}
 
 export class SearchHotBar extends Component<{
   onClick: () => void;
   [prop: string]: any;
 }> {
-  //game: Game;
   render() {
     const { onClick, ...rest } = this.props;
     return (
       <div
-        //id={game.game_id.toString()}
         {...rest}
         role="option"
         className=" option"
@@ -79,21 +50,6 @@ export class Search extends Component {
 
   input: string = '';
   lastInput: string = '';
-
-  //games: Game[] = [];
-  //filtered: Game[] = [];
-
-  //  game: Game = {
-  //    game_id: 0,
-  //    igdb_id: 0,
-  //    game_title: '',
-  //    genre: 0,
-  //    genres: [],
-  //    genre_id: 0,
-  //    platform: 0,
-  //    platforms: [],
-  //    game_description: '',
-  //  };
 
   render() {
     return (
@@ -126,26 +82,6 @@ export class Search extends Component {
                     >
                       {game.game_title}
                     </SearchHotBar>
-                    //                    <div
-                    //                      //id={game.game_id.toString()}
-                    //                      key={index}
-                    //                      role="option"
-                    //                      className=" option"
-                    //                      style={{
-                    //                        borderRadius: '5px',
-                    //                        border: '1px solid black',
-                    //                        cursor: 'pointer',
-                    //                        marginTop: '10px',
-                    //                        backgroundColor: 'lightgray',
-                    //                      }}
-                    //                      onClick={(event) => {
-                    //                        //                        this.input = event.currentTarget.innerHTML;
-                    //                        //                        this.game = game;
-                    //                        this.setGame(game.game_id, game.igdb_id);
-                    //                      }}
-                    //                    >
-                    //                      {game.game_title}
-                    //                    </div>
                   );
                 }
               })}
@@ -195,7 +131,7 @@ export class Search extends Component {
 
   search() {
     if (this.input.length > 0) {
-      gameService.search_db_and_extra(this.input); // = this.filtered;
+      gameService.search_db_and_extra(this.input);
       gameService.search_igdb(this.input);
       history.push('/results');
     } else {
@@ -279,7 +215,7 @@ export class SearchListings extends Component {
                       ),
                     ]
                       .sort((a, b) => a - b)
-                      .map((year, index) => <option key={year}>{year.toString()}</option>)
+                      .map((year) => <option key={year}>{year.toString()}</option>)
                   )
                 }
               </Form.Select>
@@ -307,14 +243,6 @@ export class SearchListings extends Component {
         </Container>
       </>
     );
-  }
-  mounted() {
-    //    genreService.getAll().then((results) => {
-    //      genreService.genres = results;
-    //    });
-    //    platformService.getAll().then((results) => {
-    //      platformService.platforms = results;
-    //    });
   }
 }
 

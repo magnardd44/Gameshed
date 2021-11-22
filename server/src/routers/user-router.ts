@@ -7,10 +7,6 @@ import userService from '../services/user-service';
 
 const userRouter = express.Router();
 
-//userRouter.get('/', (request, response) => {
-//  response.send('hello');
-//});
-
 userRouter.get('/', (request, response) => {
   userService
     .verify(request.headers.authorization)
@@ -77,7 +73,6 @@ userRouter.post('/logout', (request, response) => {
     .catch((err) => {
       if (response.statusCode != 401) response.status(500).send(err);
     });
-  //} else response.status(400).send('Manglar token');
 });
 
 userRouter.delete('/', (request, response) => {
@@ -92,37 +87,6 @@ userRouter.delete('/', (request, response) => {
     .then((id) => userService.delete(id))
     .then(() => response.status(204).send())
     .catch((err) => response.status(500).send(err));
-  //} else response.status(400).send('Manglar token');
 });
-
-//// DEBUG ///
-//userRouter.get('/test', (request, response) => {
-//  userService
-//	.test()
-//    .then((res) => response.send(res))
-//    .catch((err) => response.status(500).send(err));
-//});
-//userRouter.post('/verify', (request, response) => {
-//  const data = request.body;
-//
-//  userService
-//    .verify(request.headers.authorization)
-//    .then((res) => response.send(res))
-//    .catch((err) => response.status(401).send(err));
-//});
-//
-//userRouter.get('/debug/user/:id', (request, response) => {
-//  userService
-//    .get_debug(Number(request.params.id))
-//    .then((res) => response.send(res))
-//    .catch((error) => response.status(500).send(error));
-//});
-//
-//userRouter.get('/debug/login', (request, response) => {
-//  userService
-//    .get_login_debug()
-//    .then((res) => response.send(res))
-//    .catch((error) => response.status(500).send(error));
-//});
 
 export default userRouter;

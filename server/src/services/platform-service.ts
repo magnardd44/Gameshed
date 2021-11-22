@@ -13,24 +13,6 @@ class PlatformService {
   platforms: Platform[] = [];
 
   /**
-   * Get platform with given id.
-   */
-
-  /*
-  get(id: number) {
-    return new Promise<Platform | undefined>((resolve, reject) => {
-      pool.query('SELECT * FROM platforms WHERE platform_id = ?', [id], (error, results) => {
-        if (error) return reject(error);
-
-        this.platform = results[0];
-
-        resolve(results[0]);
-      });
-    });
-  }
-  */
-
-  /**
    * Get platform id with given name.
    */
   getId(name: string) {

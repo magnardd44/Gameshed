@@ -6,17 +6,6 @@ import { shallow } from 'enzyme';
 import { history, Platform } from '../src/platform-components';
 import { Review, reviewService } from '../src/services/review-service';
 
-import {
-  ReviewCard,
-  ColumnCentre,
-  Form,
-  Card,
-  Alert,
-  Button,
-  Container,
-  Column,
-} from '../src/widgets';
-
 const mockAdapter = new MockAdapter(axios);
 
 const completeReview = {
@@ -115,30 +104,8 @@ describe('Platform component', () => {
   test('Test reviews are shown', (done) => {
     const wrapper = shallow(<Platform />);
 
-    ///reviewService.reviews = completeReviews
-
     setTimeout(() => {
-      //expect(wrapper.find('Les mer')).toHaveLength(2)
       done();
     });
-    //expect(spy).toBeCalledTimes(11);
   });
-
-  //  test('Test getting reviews by platform', (done) => {
-  //    const wrapper = shallow(<Platform />);
-  //
-  //	mockAdapter.onGet('/reviews/platform/145').reply(200, completeReviews);
-  //	mockAdapter.onGet('/reviews/review/1').reply(200);
-  //	mockAdapter.onGet('/reviews/review/2').reply(200);
-  //
-  //    //const spy = jest.spyOn(reviewService, 'getPlatform');
-  //
-  //    wrapper.find({ children: 'Vis' }).at(0).simulate('click');
-  //
-  //	setTimeout(()=>{
-  //		expect(reviewService.reviews[0].review_id).toBe(1)
-  //		expect(reviewService.reviews[1].review_id).toBe(2)
-  //	});
-  //    //expect(spy).toBeCalledTimes(11);
-  //  });
 });

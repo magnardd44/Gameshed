@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
-import { Home, ReviewHome } from '../src/home-components';
-import { Card, Row, Column, Form, Button } from '../src/widgets';
+import { Form, Button } from '../src/widgets';
 import {
   history,
   AddReview,
@@ -11,13 +10,8 @@ import {
   PublishedReviews,
   MyReviews,
 } from '../src/review-components';
-import { NavLink } from 'react-router-dom';
-
 import { reviewService } from '../src/services/review-service';
-import { FacebookIcon, FacebookShareButton } from 'react-share';
-import { userInfo } from 'os';
 import userService from '../src/services/user-service';
-import MockAdapter from 'axios-mock-adapter/types';
 
 const validToken = { id: 1, token: 'token' };
 
@@ -109,22 +103,6 @@ jest.mock('../src/services/review-service', () => {
 });
 
 describe('Review components tests', () => {
-  // test('1 PublishedReviews draws correctly', (done) => {
-  //   const wrapper = shallow(<PublishedReviews />);
-
-  //   // Wait for events to complete
-  //   setTimeout(() => {
-  //     expect(
-  //       wrapper.containsMatchingElement([
-  //         <NavLink to="/publishedReviews/1">test1</NavLink>,
-  //         <NavLink to="/publishedReviews/2">test2</NavLink>,
-  //         <NavLink to="/publishedReviews/3">test3</NavLink>,
-  //       ])
-  //     ).toEqual(true);
-  //     done();
-  //   });
-  // });
-
   test('save button in AddReview calls create method when clicked', (done) => {
     //@ts-ignore
     let newReview = new AddReview();
@@ -187,16 +165,6 @@ describe('Review components tests', () => {
     done();
   });
 
-  // test('Button add game', () => {
-  //   const wrapper = shallow(<Home />);
-
-  //   const spy = jest.spyOn(history, 'push');
-
-  //   wrapper.find({ children: 'Legg til spill' }).simulate('click');
-
-  //   expect(spy).toBeCalledWith('/addGame');
-  // });
-
   test('save button in EditReview calls edit method when clicked', (done) => {
     //@ts-ignore
     let edit = new EditReview();
@@ -213,36 +181,13 @@ describe('Review components tests', () => {
 
   test('like button in CompleteReview calls like method when clicked', (done) => {
     //@ts-ignore
-    //let newReview = new CompleteReview();
-    //@ts-ignore
     const wrapper = shallow(<CompleteReview match={{ params: { review_id: 1 } }} />);
-    //wrapper.find(Button.Success).simulate('click');
     setTimeout(() => {
       //@ts-ignore
-      //expect(reviewService.like).toHaveBeenCalled();
 
       done();
     });
   });
-
-  //  test('publish button in MyReviews calls publish method when clicked', (done) => {
-  //    //@ts-ignore
-  //    let newReview = new MyReviews();
-  //    let sikker = confirm('Er du sikker på at du vil publisere denne anmeldelsen?');
-  //    //@ts-ignore
-  //    const wrapper = shallow(<MyReviews match={{ params: { review_id: 1 } }} />);
-  //    if (userService.token && reviewService.reviews.length > 0) {
-  //      wrapper.find(Button.Success).at(1).simulate('click');
-  //    }
-  //    setTimeout(() => {
-  //      //@ts-ignore
-  //      if (sikker) {
-  //        expect(reviewService.publish).toHaveBeenCalled();
-  //      }
-  //
-  //      done();
-  //    });
-  //  });
 
   test.skip('delete button in MyReviews calls delete method when clicked', (done) => {
     //@ts-ignore
@@ -294,16 +239,7 @@ describe('Review components tests', () => {
 
     // Wait for events to complete
     setTimeout(() => {
-      expect(
-        wrapper
-          .find(
-            'ForwardRef(ShareButton-email)'
-            // <FacebookShareButton {...shareButtonProps}>
-            //   <FacebookIcon size="40" round />
-            // </FacebookShareButton>
-          )
-          .exists()
-      ).toEqual(true);
+      expect(wrapper.find('ForwardRef(ShareButton-email)').exists()).toEqual(true);
       done();
     });
   });

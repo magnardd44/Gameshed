@@ -1,20 +1,7 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
 import ReactDOM from 'react-dom';
-import {
-  Card,
-  Alert,
-  Row,
-  Form,
-  Column,
-  Button,
-  JustifiedNavBar,
-  NavBarLink,
-  Container,
-  ColumnCentre,
-  Heading,
-} from './widgets';
-import { NavLink } from 'react-router-dom';
+import { Alert, Row, JustifiedNavBar, NavBarLink, Heading } from './widgets';
 import axios from 'axios';
 import { HashRouter, Route } from 'react-router-dom';
 import {
@@ -26,7 +13,6 @@ import {
   MyReviews,
 } from './review-components';
 
-import { Hash } from 'crypto';
 import { createHashHistory } from 'history';
 import { Search, SearchListings } from './search-components';
 import { GameCard, AddGame } from './game-component';

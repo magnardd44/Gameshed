@@ -124,21 +124,6 @@ describe('Button tests', () => {
       wrapper.matchesElement(<button type="button" className="btn btn-success"></button>)
     ).toEqual(true);
   });
-  /**
-   * test('button click', (done) => {
-    const wrapper = shallow(<Button.Success onClick={()=>{history.push('/')}}></Button.Success>);
-
-    // Wait for events to complete
-    setTimeout(() => {
-
-      wrapper.find('.btn').simulate('click');
-
-      expect(window.location.pathname).toEqual('/');
-
-      done();
-    });
-  });
-   */
 });
 
 describe('Container tests', () => {
@@ -208,42 +193,6 @@ describe('Card render tests', () => {
     );
 
     expect(wrapper).toMatchSnapshot();
-    //    expect(
-    //      wrapper.matchesElement(
-    //        <div className="card border-success my-2">
-    //        <Row>
-    //          <Column width={2} offset={10} right>
-    //            <ThumbNail
-    //              small
-    //              img={'https://helenaagustsson.github.io/INFT2002-images/images/star.png'}
-    //            ></ThumbNail>
-    //
-    //            {' ' + 2}
-    //          </Column>
-    //        </Row>
-    //        <div className="card-body pt-0">
-    //          <Row>
-    //            <ColumnCentre width={11}>
-    //              <h5 className="card-title">
-    //                review-title
-    //                <ThumbNail
-    //                  small
-    //                  img="https://helenaagustsson.github.io/INFT2002-images/images/dice-5.png"
-    //                ></ThumbNail>
-    //              </h5>
-    //              <h6 className="card-subtitle mb-2 text-muted">Spill: review-subtitle</h6>
-    //            </ColumnCentre>
-    //          </Row>
-    //          <Row>
-    //            <ColumnCentre width={12}>
-    //              <div className="card-text">review-text...</div>
-    //            </ColumnCentre>
-    //          </Row>
-    //        </div>
-    //      </div>
-    //
-    //      )
-    //    ).toEqual(true);
   });
 });
 
@@ -260,48 +209,6 @@ describe('Full Review Card', () => {
       ></FullReviewCard>
     );
     expect(wrapper).toMatchSnapshot();
-    //    expect(
-    //      wrapper.matchesElement(
-    //        <div className="card border-success my-2">
-    //        <Row>
-    //          <Column width={2} offset={10} right>
-    //            <ThumbNail
-    //              small
-    //              img={'https://helenaagustsson.github.io/INFT2002-images/images/star.png'}
-    //            ></ThumbNail>
-    //
-    //            {' ' + 2}
-    //          </Column>
-    //        </Row>
-    //        <div className="card-body pt-0">
-    //          <Row>
-    //            <ColumnCentre width={11}>
-    //              <h5 className="card-title">
-    //                {'review-title' + ' '}
-    //                <ThumbNail
-    //                  small
-    //                  img={
-    //                    'https://helenaagustsson.github.io/INFT2002-images/images/dice-5.png'
-    //
-    //                  }
-    //                ></ThumbNail>
-    //              </h5>
-    //              <h6 className="card-subtitle mb-2 text-muted">Spill: review-subtitle</h6>
-    //            </ColumnCentre>
-    //          </Row>
-    //          <Row>
-    //            <ColumnCentre width={2}>
-    //              <ThumbNail img='img.png'></ThumbNail>
-    //            </ColumnCentre>
-    //            <ColumnCentre width={9}>
-    //              <div className="card-text">review-text</div>
-    //            </ColumnCentre>
-    //          </Row>
-    //
-    //        </div>
-    //      </div>
-    //      )
-    //    ).toEqual(true);
   });
 });
 

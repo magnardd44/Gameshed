@@ -1,5 +1,4 @@
-import express, { request, response } from 'express';
-import { genreService } from '../services/genre-service';
+import express from 'express';
 import { platformService } from '../services/platform-service';
 import userService from '../services/user-service';
 

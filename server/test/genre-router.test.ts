@@ -1,19 +1,8 @@
 import axios from 'axios';
 import pool from '../src/mysql-pool';
 import app from '../src/app';
-
 import { Genre, genreService } from '../src/services/genre-service';
 import userService from '../src/services/user-service';
-
-//Mock user service
-
-/*
-userService.verify = jest.fn(() => {
-  return new Promise((resolve: any, reject: any) => {
-    resolve(testPlatform[0].platform_id);
-  });
-});
-*/
 
 jest.mock('../src/mysql-pool', () => {
   const mysql = require('mysql');

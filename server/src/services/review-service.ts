@@ -1,4 +1,3 @@
-import { resolveConfig } from 'prettier';
 import pool from '../mysql-pool';
 
 export type Review = {

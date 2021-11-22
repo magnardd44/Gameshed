@@ -2,10 +2,7 @@ import axios from 'axios';
 import pool from '../src/mysql-pool';
 import app from '../src/app';
 import { Review, reviewService } from '../src/services/review-service';
-
-import userService, { Token } from '../src/services/user-service';
-import { gameService } from '../src/services/game-service';
-import { genreService } from '../src/services/genre-service';
+import userService from '../src/services/user-service';
 
 // // Since API is not compatible with v1, API version is increased to v2
 axios.defaults.baseURL = 'http://localhost:3002/api/v2';
@@ -292,7 +289,6 @@ describe('Create new review (POST)', () => {
       .post('/reviews', newReview)
       .then((response: any) => {
         expect(response.status).toEqual(200);
-        // expect(response.data).toEqual({ id: 4 });
         done();
       })
       .catch((err) => {
@@ -360,7 +356,6 @@ describe('Update review (PATCH)', () => {
       .then((response) => {
         expect(response.status).toEqual(200);
         axios.get('/reviews/review/' + testReviews[0].review_id).then((response) => {
-          //console.log(response.data);
           expect(response.data.likes).toEqual(1);
 
           done();
@@ -377,7 +372,6 @@ describe('Get top ten', () => {
     .get('/reviews/topTen')
     .then((response) => {
       expect(response.status).toEqual(200);
-      //expect(response.data).toHaveLength(1);
     })
     .catch((err) => {
       console.log(err);
@@ -389,7 +383,6 @@ describe('Get last ten', () => {
     .get('/reviews/lastTen')
     .then((response) => {
       expect(response.status).toEqual(200);
-      //expect(response.data).toHaveLength(1);
     })
     .catch((err) => {
       console.log(err);

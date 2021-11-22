@@ -1,7 +1,6 @@
 import * as React from 'react';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-
 import { shallow } from 'enzyme';
 import {
   history,
@@ -11,15 +10,13 @@ import {
   SearchHotBar,
 } from '../src/search-components';
 import { gameService } from '../src/services/game-service';
-import { ColumnCentre, Form, Card, Alert, Button, Container, Column } from '../src/widgets';
+import { Form, Alert, Button } from '../src/widgets';
 
 jest.setTimeout(1000);
 
 const mockAdapter = new MockAdapter(axios);
 
 Alert.info = jest.fn(() => {});
-//Alert.warning = jest.fn(() => {});
-//Alert.success = jest.fn(() => {});
 
 const testGameComplete = {
   game_id: 1,

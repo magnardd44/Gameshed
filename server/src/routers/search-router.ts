@@ -35,11 +35,4 @@ searchRouter.get('/get_all/:id', (request, response) => {
     .catch((err) => response.status(500).send(err));
 });
 
-//searchRouter.get('/platform_logo/:id', (request, response) => {
-//  searchService
-//    .get_platform_logos(Number(request.params.id))
-//    .then((res) => response.send(res))
-//    .catch((err) => response.status(500).send(err));
-//});
-
 export default searchRouter;

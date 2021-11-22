@@ -1,23 +1,16 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
-import { Home, ReviewHome } from '../src/home-components';
-import { Alert, Card, Row, Column, Form, Button } from '../src/widgets';
+import { Alert, Form, Button } from '../src/widgets';
 import {
   history,
   AddReview,
-  EditReview,
-  PublishReview,
   CompleteReview,
   PublishedReviews,
   MyReviews,
 } from '../src/review-components';
-import { NavLink } from 'react-router-dom';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-
 import { reviewService } from '../src/services/review-service';
-import { FacebookIcon, FacebookShareButton } from 'react-share';
-import { userInfo } from 'os';
 import userService from '../src/services/user-service';
 import { gameService } from '../src/services/game-service';
 
@@ -113,8 +106,6 @@ describe('AddReview', () => {
   test('Game set', (done) => {
     mockAdapter.onGet('search/get_all/1').reply(200, testGameComplete);
 
-    //reviewService.reviews = completeReviews;
-
     const spy = jest.spyOn(gameService, 'set');
 
     //@ts-ignore
@@ -123,17 +114,9 @@ describe('AddReview', () => {
     setTimeout(() => {
       expect(spy).resolves;
       done();
-      //			wrapper.find(Button.Success).first().simulate('click');
-      //			setTimeout(()=>{
-      //					expect(spy).toBeCalled();
-      //					});
     });
   });
   test('No game', (done) => {
-    //mockAdapter.onGet('/reviews/').reply(200, completeReviews);
-
-    //reviewService.reviews = completeReviews;
-
     const spy = jest.spyOn(gameService, 'set');
 
     //@ts-ignore
@@ -142,10 +125,6 @@ describe('AddReview', () => {
     setTimeout(() => {
       expect(spy).rejects;
       done();
-      //			wrapper.find(Button.Success).first().simulate('click');
-      //			setTimeout(()=>{
-      //					expect(spy).toBeCalled();
-      //					});
     });
   });
   test('Input fields', (done) => {
@@ -286,26 +265,8 @@ describe('MyReviews', () => {
     const spyAlert = jest.spyOn(Alert, 'success');
     wrapper.find({ children: 'Publiser' }).first().simulate('click');
 
-    //    const spy = jest.spyOn(history, 'push');
-    //    const spyAlert = jest.spyOn(Alert, 'success');
-    //    mockAdapter.onGet('search/get_all/1').reply(200, testGameComplete);
-    //    mockUserAdapter.onPost('games').reply(200, 1);
-    //    mockUserAdapter.onPost('genres/map/string').reply(200, 1);
-    //    mockUserAdapter.onPost('platforms/map/string').reply(200, 1);
-    //    mockUserAdapter.onPost('reviews').reply(200, 1);
-    //
-    //    //@ts-ignore
-    //    const wrapper = shallow(<AddReview match={{ params: { igdb_id: 1, db_id: 0 } }} />);
-    //
-    //    reviewService.review.review_title = 'title';
-    //    reviewService.review.text = 'title';
-    //    reviewService.review.rating = 1;
-    //
-    //    wrapper.find({ children: 'Lagre' }).simulate('click');
-    //
     setTimeout(() => {
       expect(spyAlert).toBeCalledWith('Anmeldelse publisert!');
-      //     expect(spy).toBeCalledWith('/myReviews');
       done();
     });
   });
@@ -314,32 +275,10 @@ describe('MyReviews', () => {
     const wrapper = shallow(<MyReviews match={{ params: { id: 1 } }} />);
 
     const spy = jest.spyOn(history, 'push');
-    //spy.mockImplementationOnce(()=>true);
 
-    //mockUserAdapter.onDelete('/reviews/' + completeReviews[0].review_id).reply(200, Promise.resolve(1));
-
-    //const spyAlert = jest.spyOn(Alert, 'success');
     wrapper.find({ children: 'Rediger' }).first().simulate('click');
 
-    //    const spy = jest.spyOn(history, 'push');
-    //    const spyAlert = jest.spyOn(Alert, 'success');
-    //    mockAdapter.onGet('search/get_all/1').reply(200, testGameComplete);
-    //    mockUserAdapter.onPost('games').reply(200, 1);
-    //    mockUserAdapter.onPost('genres/map/string').reply(200, 1);
-    //    mockUserAdapter.onPost('platforms/map/string').reply(200, 1);
-    //    mockUserAdapter.onPost('reviews').reply(200, 1);
-    //
-    //    //@ts-ignore
-    //    const wrapper = shallow(<AddReview match={{ params: { igdb_id: 1, db_id: 0 } }} />);
-    //
-    //    reviewService.review.review_title = 'title';
-    //    reviewService.review.text = 'title';
-    //    reviewService.review.rating = 1;
-    //
-    //    wrapper.find({ children: 'Lagre' }).simulate('click');
-    //
     setTimeout(() => {
-      //expect(spyAlert).toBeCalledWith('Anmeldelse slettet');
       expect(spy).toBeCalledWith('/editReview/' + completeReviews[0].review_id);
       done();
     });
@@ -358,27 +297,9 @@ describe('MyReviews', () => {
     const spyAlert = jest.spyOn(Alert, 'success');
     wrapper.find({ children: 'Slett' }).first().simulate('click');
 
-    //    const spy = jest.spyOn(history, 'push');
-    //    const spyAlert = jest.spyOn(Alert, 'success');
-    //    mockAdapter.onGet('search/get_all/1').reply(200, testGameComplete);
-    //    mockUserAdapter.onPost('games').reply(200, 1);
-    //    mockUserAdapter.onPost('genres/map/string').reply(200, 1);
-    //    mockUserAdapter.onPost('platforms/map/string').reply(200, 1);
-    //    mockUserAdapter.onPost('reviews').reply(200, 1);
-    //
-    //    //@ts-ignore
-    //    const wrapper = shallow(<AddReview match={{ params: { igdb_id: 1, db_id: 0 } }} />);
-    //
-    //    reviewService.review.review_title = 'title';
-    //    reviewService.review.text = 'title';
-    //    reviewService.review.rating = 1;
-    //
-    //    wrapper.find({ children: 'Lagre' }).simulate('click');
-    //
     setTimeout(() => {
       expect(spyAlert).toBeCalledWith('Anmeldelse slettet');
       expect(reviewService.reviews).toHaveLength(2);
-      //     expect(spy).toBeCalledWith('/myReviews');
       done();
     });
   });

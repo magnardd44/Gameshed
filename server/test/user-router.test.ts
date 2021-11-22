@@ -1,7 +1,7 @@
 import axios from 'axios';
 import pool from '../src/mysql-pool';
 import app from '../src/app';
-import userService, { Token } from '../src/services/user-service';
+import userService from '../src/services/user-service';
 
 axios.defaults.baseURL = 'http://localhost:3003/api/v2';
 

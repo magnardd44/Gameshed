@@ -1,28 +1,19 @@
 import * as React from 'react';
-import { Component, sharedComponentData } from 'react-simplified';
+import { Component } from 'react-simplified';
 import {
   Alert,
-  Card,
   Row,
   Column,
-  Form,
   Button,
-  ThumbNail,
   Container,
   ColumnCentre,
   Linebreak,
-  FormContainer,
-  FormGroup,
-  CategoryCard,
   ReviewCard,
 } from './widgets';
-import { NavLink } from 'react-router-dom';
-import { Genre } from './services/genre-service';
+
 import { createHashHistory } from 'history';
-import axios from 'axios';
-import { genreService } from './services/genre-service';
+
 import { Review, reviewService } from './services/review-service';
-import { RelatedReviews } from './related-reviews';
 
 export const history = createHashHistory();
 

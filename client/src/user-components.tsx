@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { FormContainer, FormGroup, Form, Card, Alert, Button, Container, Column } from './widgets';
+import { FormGroup, Form, Card, Alert, Button, Container } from './widgets';
 import userService from './services/user-service';
 import { createHashHistory } from 'history';
 
@@ -10,17 +10,6 @@ export class UserNav extends Component {
   render() {
     return (
       <>
-        {
-          // <Button.Success
-          //   small
-          //   onClick={() => {
-          //     userService.login('admin', 'admin').then(() => Alert.success(<>Logged inn as admin</>));
-          //     //this.password = '';
-          //   }}
-          // >
-          //   DebugAdmin
-          // </Button.Success>
-        }
         <Form.Label>Brukernavn:</Form.Label>
         <Form.Input
           id="emailInput"
@@ -40,43 +29,20 @@ export class UserNav extends Component {
             onClick={() => {
               userService.logout();
               userService.email = '';
-              //this.password = '';
             }}
           >
             Logout
           </Button.Success>
         ) : (
-          // else user not logged
-          //          <>
-          //		  {
-          //            //<Form.Input
-          //            //  type="password"
-          //            //  value={this.password}
-          //            //  placeholder="Passord"
-          //            //  onChange={(event) => {
-          //            //    this.password = event.currentTarget.value;
-          //            //  }}
-          //            ///>
-          //			}
           <Button.Success
             small
             onClick={() => {
               userService.loginOrRegister = userService.login;
               userService.passwordPrompt = true;
-              //let password = prompt('Skriv inn passord');
-              //if (userService.email.length && password?.length) {
-              //  userService
-              //    .login(userService.email, password)
-              //    .catch((err) => Alert.warning(<>Feil brukarnavn eller passord</>));
-              //} else {
-              //  Alert.info(<>Skriv inn brukarnavn og passord</>);
-              //}
-              ////                this.password = '';
             }}
           >
             Login
           </Button.Success>
-          //</>
         )}
         <Button.Success
           small
@@ -92,7 +58,6 @@ export class UserNav extends Component {
   }
   mounted() {
     userService.get_user().catch((err) => {});
-    //<PasswordPrompt/>
   }
 }
 
@@ -165,8 +130,6 @@ export class UserPersonal extends Component {
               .delete()
               .then(() => Alert.success(<>Bruker slettet</>))
               .catch((err) => Alert.warning(<>Bruker ble ikke oppdatert</>));
-            // this.input = '';
-            // this.password = '';
           }}
         >
           Slett meg
@@ -196,15 +159,6 @@ export class UserRegister extends Component {
             } else {
               userService.loginOrRegister = userService.register;
               userService.passwordPrompt = true;
-              //  let newPassword = prompt('Skriv inn passord');
-              //  if (newPassword?.length) {
-              //    userService
-              //      .register(userService.email, newPassword)
-              //      .then(() => Alert.success(<>Ny bruker registrert</>))
-              //      .catch(() => Alert.danger(<>Bruker eksisterer allerede.</>));
-              //  } else {
-              //    Alert.warning(<>Skriv inn passord</>);
-              //  }
             }
           }}
         >

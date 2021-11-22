@@ -1,20 +1,10 @@
 import * as React from 'react';
-//import ReactDOM from 'react-dom';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 
 import { shallow } from 'enzyme';
 import { history, TopTenStars, LastTen, ReviewList } from '../src/recommend-components';
-import {
-  ReviewCard,
-  ColumnCentre,
-  Form,
-  Card,
-  Alert,
-  Button,
-  Container,
-  Column,
-} from '../src/widgets';
+import { ReviewCard, Alert, Button } from '../src/widgets';
 
 jest.setTimeout(1000);
 

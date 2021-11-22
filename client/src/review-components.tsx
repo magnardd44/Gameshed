@@ -7,7 +7,6 @@ import {
   Column,
   Form,
   Button,
-  ThumbNail,
   Container,
   FormContainer,
   FormGroup,
@@ -15,12 +14,10 @@ import {
   ReviewCard,
   FullReviewCard,
 } from './widgets';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { reviewService } from './services/review-service';
-
 import { createHashHistory } from 'history';
 import { gameService } from './services/game-service';
-import axios from 'axios';
 import { genreService } from './services/genre-service';
 import { platformService } from './services/platform-service';
 

@@ -10,14 +10,6 @@ export type Oauth_token = {
   token_type: string;
 };
 
-class SearchService {
-  token: Oauth_token = {
-    access_token: '',
-    expire_time: 0,
-    token_type: '',
-  };
-}
-
 export type Review = {
   review_id: number;
   game_id: number;
