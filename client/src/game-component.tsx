@@ -28,7 +28,7 @@ import { reviewService, Review } from './services/review-service';
 import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton } from 'react-share';
 // import Select from 'react-select';
 
-const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
+export const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
 export class GameCard extends Component<{ match: { params: { igdb_id: number; db_id: number } } }> {
   counter = 0;
