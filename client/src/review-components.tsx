@@ -27,7 +27,7 @@ import { platformService } from './services/platform-service';
 import { FacebookShareButton, FacebookIcon, EmailShareButton, EmailIcon } from 'react-share';
 import userService from './services/user-service';
 
-const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
+export const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
 //Renders an overvew of all published reviews
 export class PublishedReviews extends Component {
@@ -62,13 +62,13 @@ export class PublishedReviews extends Component {
   }
 
   mounted() {
-    console.log(reviewService);
+    //console.log(reviewService);
     reviewService.getAll().then(() => {
       reviewService
         .getPublishedReviews()
         .then((reviews) => {
           reviewService.reviews = reviews;
-          console.log(reviews);
+          //console.log(reviews);
         })
         .catch((error) => Alert.danger('Error getting reviews: ' + error.message));
     });
@@ -229,10 +229,10 @@ export class AddReview extends Component<{
       .set(db_id, igdb_id)
       .then((result) => {
         //gameService2.game = result;
-        console.log(gameService.current);
+        //console.log(gameService.current);
       })
       .catch((err) => {
-        console.log('Err: ' + err);
+        //console.log('Err: ' + err);
       });
   }
 }
@@ -362,7 +362,7 @@ export class PublishReview extends Component<{ match: { params: { id: number } }
           //gameService2.get(review.game_id).then((game) => {
           gameService.set(review.game_id, 0).then(() => {
             //gameService2.game = game;
-            console.log(gameService.current);
+            //console.log(gameService.current);
           });
         }
       })
@@ -738,14 +738,14 @@ export class MyReviews extends Component<{ match: { params: { id: number } } }> 
     }
   }
   mounted() {
-    console.log(userService.token?.id);
+    //console.log(userService.token?.id);
     if (userService.token) {
       reviewService
         .getAllById(userService.token.id)
         .then((res) => {
           reviewService.reviews = res;
           reviewService.reviews.sort((a, b) => (a.published > b.published ? 1 : -1));
-          console.log(reviewService.reviews);
+          //console.log(reviewService.reviews);
         })
         .then(() => {
           reviewService.reviews.map((review, i) => {

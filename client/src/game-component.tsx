@@ -23,7 +23,7 @@ import { createHashHistory } from 'history';
 import { platform } from 'os';
 import { Platform, platformService } from './services/platform-service';
 import axios from 'axios';
-import { RelatedReviews } from './related-reviews';
+//import { RelatedReviews } from './related-reviews';
 import { reviewService, Review } from './services/review-service';
 import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton } from 'react-share';
 // import Select from 'react-select';
@@ -349,7 +349,6 @@ export class AddGame extends Component {
           </Row>
         </Card>
         <Card title={''}>
-          <Alert />
           <Row>
             <Column>
               <Button.Danger
