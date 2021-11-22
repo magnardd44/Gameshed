@@ -7,35 +7,15 @@ import userService from '../services/user-service';
  */
 const genreRouter = express.Router();
 
-//Update mapping_genre
-genreRouter.post('/map', (request, response) => {
-  const data = request.body;
-  if (data)
-    userService
-      .verify(request.headers.authorization)
-      .catch((err) => {
-        response.status(401).send(err);
-        throw err;
-      })
-      .then((userId) => genreService.updateGenreMap(data.game_id, data.genre_id))
-      .then((id) => response.send({ id: id }))
-      .catch((error) => response.status(500).send(error));
-  else response.status(400).send('Missing genre');
-});
-
-genreRouter.post('/map/string', (request, response) => {
-  const data = request.body;
-  if (typeof data.genre == 'string' && typeof data.game_id == 'number')
-    userService
-      .verify(request.headers.authorization)
-      .catch((err) => {
-        response.status(401).send(err);
-        throw err;
-      })
-      .then((userId) => genreService.updateGenreMapString(data.game_id, data.genre))
-      .then((id) => response.send({ id: id }))
-      .catch((error) => response.status(500).send(error));
-  else response.status(400).send('Missing genre');
+genreRouter.get('/', (request, response) => {
+  genreService
+    .getAll()
+    .then((rows) => {
+      response.send(rows);
+    })
+    .catch((error) => {
+      response.status(500).send(error);
+    });
 });
 
 genreRouter.get('/:id', (request, response) => {
@@ -54,17 +34,6 @@ genreRouter.get('/get/:name', (request, response) => {
     .catch((error) => response.status(500).send(error));
 });
 
-genreRouter.get('/', (_request, response) => {
-  genreService
-    .getAll()
-    .then((rows) => {
-      response.send(rows);
-    })
-    .catch((error) => {
-      response.status(500).send(error);
-    });
-});
-
 genreRouter.delete('/:id', (request, response) => {
   const id = Number(request.params.id);
   userService
@@ -73,25 +42,65 @@ genreRouter.delete('/:id', (request, response) => {
       response.status(401).send(err);
       throw err;
     })
-    .then((userId) => genreService.get(id))
-    .then((_result) => response.send())
+    .then(() => genreService.delete(id))
+    .then(() => response.status(200).send())
     .catch((error) => response.status(500).send(error));
 });
 
-genreRouter.post('/', (_request, response) => {
+genreRouter.post('/', (request, response) => {
   const data = request.body;
-  if (data && data.review_title.length != 0)
+  if (data && data.genre_name.length != 0)
     userService
       .verify(request.headers.authorization)
       .catch((err) => {
         response.status(401).send(err);
         throw err;
       })
-      .then((userId) => genreService.create(data.genre_name))
+      .then(() => genreService.create(data.genre_name))
 
-      .then((id) => response.send({ id: id }))
+      .then((id) => {
+        response.status(201);
+        response.send({ id: id });
+      })
       .catch((error) => response.status(500).send(error));
   else response.status(400).send('Missing genre name');
+});
+
+//Update mapping_genre
+genreRouter.post('/map', (request, response) => {
+  const data = request.body;
+  if (data && typeof data.game_id == 'number')
+    userService
+      .verify(request.headers.authorization)
+      .catch((err) => {
+        response.status(401).send(err);
+        throw err;
+      })
+      .then((userId) => genreService.updateGenreMap(data.game_id, data.genre_id))
+      .then((id) => {
+        response.status(201);
+        response.send({ id: id });
+      })
+      .catch((error) => response.status(500).send(error));
+  else response.status(400).send('Missing genre');
+});
+
+genreRouter.post('/map/string', (request, response) => {
+  const data = request.body;
+  if (typeof data.game_id == 'number' && typeof data.genre == 'string')
+    userService
+      .verify(request.headers.authorization)
+      .catch((err) => {
+        response.status(401).send(err);
+        throw err;
+      })
+      .then((userId) => genreService.updateGenreMapString(data.game_id, data.genre))
+      .then((id) => {
+        response.status(201);
+        response.send({ id: id });
+      })
+      .catch((error) => response.status(500).send(error));
+  else response.status(400).send('Missing genre');
 });
 
 export default genreRouter;

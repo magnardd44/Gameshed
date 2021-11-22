@@ -87,13 +87,12 @@ beforeEach((done) => {
 });
 
 // Stop web server and close connection to MySQL server
-afterAll(async () => {
+afterAll(() => {
   pool.end();
   webServer.close();
 });
 
 //Tests calls on platform
-
 describe('Fetch platforms (GET)', () => {
   test('Fetch all platforms (200 OK)', async () => {
     const response = await axios.get('/platforms');
@@ -165,6 +164,9 @@ describe('Create new platform (POST)', () => {
     }
   });
 });
+
+//Tests calls on mappin_platform
+
 describe('Create new platform_map (POST)', () => {
   test('Create new platform_map (200 OK)', async () => {
     await axios

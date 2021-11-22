@@ -7,12 +7,11 @@ import userService from '../services/user-service';
  */
 const gameRouter = express.Router();
 
-gameRouter.get('/search/:searchString', (request, response) => {
-  const searchString = request.params.searchString;
-
+gameRouter.get('/', (_request, response) => {
   gameService
-    .search(searchString)
+    .getAll()
     .then((rows) => {
+      response.status(201);
       response.send(rows);
     })
     .catch((error) => {
@@ -20,9 +19,11 @@ gameRouter.get('/search/:searchString', (request, response) => {
     });
 });
 
-gameRouter.get('/', (_request, response) => {
+gameRouter.get('/search/:searchString', (request, response) => {
+  const searchString = request.params.searchString;
+
   gameService
-    .getAll()
+    .search(searchString)
     .then((rows) => {
       response.send(rows);
     })
@@ -51,7 +52,10 @@ gameRouter.post('/', (request, response) => {
         throw err;
       })
       .then((userId) => gameService.create(data.igdb_id, data.game_title, data.game_description))
-      .then((id) => response.send({ id: id }))
+      .then((id) => {
+        response.status(201);
+        response.send({ id: id });
+      })
       .catch((error) => response.status(500).send(error));
   else response.status(400).send('Missing review title');
 });

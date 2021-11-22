@@ -3,7 +3,7 @@ import pool from '../mysql-pool';
 export type Genre = {
   genre_id: number;
   genre_name: string;
-  genre_img: string;
+  genre_img?: string | null;
 };
 
 class GenreService {
@@ -85,28 +85,28 @@ class GenreService {
   }
 
   updateGenreMap(game_id: number, genre_id: number) {
-    return new Promise<void>((resolve, reject) => {
+    return new Promise<number>((resolve, reject) => {
       pool.query(
         'INSERT INTO mapping_genre SET g_mapping_id=NULL, game_id=?, genre_id=?',
         [game_id, genre_id],
         (error, results) => {
           if (error) return reject(error);
 
-          resolve();
+          resolve(Number(results.insertId));
         }
       );
     });
   }
 
   updateGenreMapString(game_id: number, genre: string) {
-    return new Promise<void>((resolve, reject) => {
+    return new Promise<number>((resolve, reject) => {
       pool.query(
-        'INSERT INTO mapping_genre(game_id, genre_id) SELECT ?, genre_id FROM genres WHERE genre_name=?',
+        'INSERT INTO mapping_genre(game_id, genre_id) SELECT ?, genre_id FROM genres WHERE genre_name = ?',
         [game_id, genre],
         (error, results) => {
           if (error) return reject(error);
 
-          resolve();
+          resolve(Number(results.insertId));
         }
       );
     });

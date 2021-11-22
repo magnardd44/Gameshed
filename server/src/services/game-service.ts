@@ -2,10 +2,10 @@ import pool from '../mysql-pool';
 
 export type Game = {
   game_id: number;
-  igdb_id: number;
+  igdb_id: number | null;
   game_title: string;
   genre: string[];
-  genre_id: number;
+  genre_id?: number;
   platform: string[];
   game_description: string;
 };
@@ -146,19 +146,6 @@ class GameService {
         this.games = results;
 
         resolve(results);
-      });
-    });
-  }
-
-  /**
-   * Delete game with given id.
-   */
-  delete(id: number) {
-    return new Promise<void>((resolve, reject) => {
-      pool.query('DELETE FROM games WHERE game_id = ?', [id], (error, results) => {
-        if (error) return reject(error);
-
-        resolve();
       });
     });
   }
