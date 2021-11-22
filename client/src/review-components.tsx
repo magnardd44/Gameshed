@@ -59,13 +59,11 @@ export class PublishedReviews extends Component {
   }
 
   mounted() {
-    //console.log(reviewService);
     reviewService.getAll().then(() => {
       reviewService
         .getPublishedReviews()
         .then((reviews) => {
           reviewService.reviews = reviews;
-          //console.log(reviews);
         })
         .catch((error) => Alert.danger('Error getting reviews: ' + error.message));
     });
@@ -152,6 +150,7 @@ export class AddReview extends Component<{
         </Column>
         <Column right>
           <Button.Success
+            //Checks that the review contains title, test and rating
             onClick={async () => {
               if (
                 reviewService.review.review_title == '' ||
@@ -163,14 +162,14 @@ export class AddReview extends Component<{
                 if (this.props.match.params.db_id == 0) {
                   gameService
                     .create(gameService.current)
-
+                    //updates genre mapping table in database if the game the review is based on is not currently in the database
                     .then((res) => {
                       gameService.current.genre.map((genre) => {
                         genreService.updateGenreMapString(res, genre).catch((err) => {
                           Alert.danger('Det oppsto en feil ved oppdateringen av genre_map: ' + err);
                         });
                       });
-
+                      //updates platform mapping table in database if the game the review is based on is not currently in the database
                       gameService.current.platform.map((platform) => {
                         platformService.updatePlatformMapString(platform, res).catch((err) => {
                           Alert.danger(
@@ -178,7 +177,7 @@ export class AddReview extends Component<{
                           );
                         });
                       });
-
+                      //Adds review to database if the game the review is based on is not currently in the database
                       reviewService
                         .create(
                           res,
@@ -192,6 +191,7 @@ export class AddReview extends Component<{
                         });
                     });
                 } else {
+                  //adds review to database if the game that it's based upon is already in the database
                   reviewService
                     .create(
                       this.props.match.params.db_id,
@@ -466,21 +466,14 @@ export class EditReview extends Component<{ match: { params: { id: number } } }>
       .then((review) => {
         reviewService.review = review;
         if (review.game_id) {
-          //gameService.get(review.game_id).then((game) => {
-          gameService.set(review.game_id, 0).then(() => {
-            //gameService.game = game;
-            //console.log(gameService.current);
-          });
-          //          gameService2.get(review.game_id).then((game) => {
-          //            gameService2.game = game;
-          //          });
+          gameService.set(review.game_id, 0).then(() => {});
         }
       })
       .catch((error) => Alert.danger('Error getting review: ' + error.message));
   }
 }
 
-//Renders Single complete review with option to "like"
+//Renders Single complete review with option to "like" and share
 export class CompleteReview extends Component<{ match: { params: { id: number } } }> {
   counter: number = 0;
 
@@ -521,6 +514,8 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
             <Column width={1}>
               <Button.Success
                 onClick={() => {
+                  //Checks if the review is already liked by this user ans sets counter to 1 it isn't and vice versa
+                  //Updates amount of likes in component and in database
                   reviewService
                     .like(reviewService.review.review_id, this.counter == 0 ? 1 : 0)
                     .then(() => {
@@ -531,7 +526,6 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
                         reviewService.review.likes -= 1;
                         this.counter = 0;
                       }
-                      //this.setState(() => {});
                     });
                 }}
               >
@@ -580,7 +574,7 @@ export class CompleteReview extends Component<{ match: { params: { id: number } 
   }
 }
 
-//Renders a draft review with option to edit, delete or publish
+//Renders a list of reviews belonging to you, both drafts and published. Includes options to publish, edit or delete
 export class MyReviews extends Component<{ match: { params: { id: number } } }> {
   render() {
     if (userService.token) {
@@ -736,14 +730,12 @@ export class MyReviews extends Component<{ match: { params: { id: number } } }> 
     }
   }
   mounted() {
-    //console.log(userService.token?.id);
     if (userService.token) {
       reviewService
         .getAllById(userService.token.id)
         .then((res) => {
           reviewService.reviews = res;
           reviewService.reviews.sort((a, b) => (a.published > b.published ? 1 : -1));
-          //console.log(reviewService.reviews);
         })
         .then(() => {
           reviewService.reviews.map((review, i) => {
