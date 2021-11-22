@@ -279,7 +279,6 @@ class ReviewService {
     });
   }
 
-
   //Get the 10 reviews with the most likes
   getTopTen() {
     return new Promise<void>((resolve, reject) => {
