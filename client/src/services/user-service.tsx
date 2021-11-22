@@ -101,7 +101,7 @@ class UserService {
           this.email = response.data.email;
         })
         .catch((err) => {
-          console.log(err);
+          //console.log(err);
         });
     } else {
       return Promise.reject('No token');

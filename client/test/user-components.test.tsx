@@ -8,6 +8,7 @@ import {
   UserPersonal,
   UserRegister,
   UserPage,
+  PasswordPrompt,
 } from '../src/user-components';
 import { Form, Card, Alert, Button, Container, Column } from '../src/widgets';
 import { shallow } from 'enzyme';
@@ -30,15 +31,18 @@ window.prompt = jest.fn(() => {
 });
 
 Alert.info = jest.fn(() => {});
-//Alert.warning = jest.fn(() => {});
 Alert.success = jest.fn(() => {});
-Alert.danger = jest.fn(() => {});
 
 const validToken = { id: 1, token: 'abc' };
+const validUser = { nick: 'a', email: 'b', about: 'c' };
 
 const emptyUser = {};
 
 describe('UserNav component', () => {
+  beforeEach(() => {
+    userService.token = null;
+  });
+
   test('UserNav default', (done) => {
     const wrapper = shallow(<UserNav />);
 
@@ -61,15 +65,9 @@ describe('UserNav component', () => {
   });
 
   test('UserNav on logged in', (done) => {
+    userService.token = validToken;
     const wrapper = shallow(<UserNav />);
 
-    mockAdapter.onPost('user/login').reply(200, { id: 1, token: 'abc' });
-
-    wrapper.find('#emailInput').simulate('change', { currentTarget: { value: 'email' } });
-    wrapper.find({ children: 'Login' }).simulate('click');
-
-    // Wait for events to complete
-    //
     setTimeout(() => {
       expect(
         wrapper.containsMatchingElement(
@@ -102,13 +100,11 @@ describe('UserNav component', () => {
   });
 
   test('UserNav on logged out', (done) => {
+    userService.token = validToken;
+
     const wrapper = shallow(<UserNav />);
 
-    mockAdapter.onPost('user/login').reply(200, { id: 1, token: 'abc' });
     mockAdapter.onPost('user/logout').reply(200);
-
-    wrapper.find('#emailInput').simulate('change', { currentTarget: { value: 'email' } });
-    wrapper.find({ children: 'Login' }).simulate('click');
 
     setTimeout(() => {
       expect(
@@ -136,29 +132,16 @@ describe('UserNav component', () => {
     });
   });
 
-  test('No email', (done) => {
+  test('Prompt password on login', (done) => {
     const wrapper = shallow(<UserNav />);
 
-    wrapper.find({ children: 'Login' }).simulate('click');
-
-    setTimeout(() => {
-      expect(Alert.info).toBeCalled();
-      done();
-    });
-  });
-
-  test('Wrong user or password', (done) => {
-    const wrapper = shallow(<UserNav />);
-
-    const spy = jest.spyOn(Alert, 'warning');
-
+    userService.passwordPrompt = false;
     wrapper.find('#emailInput').simulate('change', { currentTarget: { value: 'email' } });
-    mockAdapter.onPost('user/login').reply(400);
     wrapper.find({ children: 'Login' }).simulate('click');
 
     setTimeout(() => {
-      expect(Alert.warning).toBeCalled();
-      spy.mockRestore();
+      expect(userService.email).toEqual('email');
+      expect(userService.passwordPrompt).toBe(true);
       done();
     });
   });
@@ -219,8 +202,7 @@ describe('UserData component', () => {
   test('Error getting user', (done) => {
     const wrapper = shallow(<UserData />);
 
-    const spy = jest.spyOn(console, 'log');
-    spy.mockImplementationOnce(() => {});
+    const spy = jest.spyOn(userService.axios, 'get');
 
     userService.token = validToken;
     mockAdapter.onGet('user').reply(401);
@@ -228,8 +210,7 @@ describe('UserData component', () => {
     userService.get_user();
 
     setTimeout(() => {
-      expect(spy).toBeCalled();
-      spy.mockRestore();
+      expect(spy).rejects;
       done();
     });
   });
@@ -240,21 +221,19 @@ describe('UserData component', () => {
 });
 
 describe('UserRegister component', () => {
-  test('Register new ', (done) => {
-    const spy = jest.spyOn(Alert, 'success');
+  test('PasswordPrompt on register new ', (done) => {
+    const wrapper = shallow(<UserRegister />);
+
+    userService.passwordPrompt = false;
+    userService.token = null;
+
     userService.name = 'abc';
     userService.email = 'ghi';
     userService.about = 'def';
-    mockAdapter.onPost('user/add').reply(201, { id: 0, token: 'token' });
-    mockAdapter.onPut('user').reply(200);
-    mockAdapter.onGet('user').reply(200, { nick: 'abc', about: 'def', email: 'ghi' });
-
-    const wrapper = shallow(<UserRegister />);
 
     wrapper.find({ children: 'Registrer ny bruker' }).simulate('click');
     setTimeout(() => {
-      expect(userService.name).toEqual('abc');
-      expect(spy).toBeCalled();
+      expect(userService.passwordPrompt).toBe(true);
       done();
     });
   });
@@ -263,47 +242,6 @@ describe('UserRegister component', () => {
     const wrapper = shallow(<UserRegister />);
 
     const spy = jest.spyOn(Alert, 'warning');
-
-    wrapper.find({ children: 'Registrer ny bruker' }).simulate('click');
-    setTimeout(() => {
-      expect(spy).toBeCalled();
-      done();
-    });
-  });
-
-  test('Empty password', (done) => {
-    const wrapper = shallow(<UserRegister />);
-
-    const spy = jest.spyOn(Alert, 'warning');
-
-    userService.name = 'name';
-    userService.email = 'email';
-    userService.about = 'text';
-
-    window.prompt = jest.fn(() => {
-      return '';
-    });
-
-    wrapper.find({ children: 'Registrer ny bruker' }).simulate('click');
-    setTimeout(() => {
-      expect(spy).toBeCalled();
-      done();
-    });
-  });
-
-  test('User already exists', (done) => {
-    const wrapper = shallow(<UserRegister />);
-
-    const spy = jest.spyOn(Alert, 'danger');
-
-    userService.name = 'name';
-    userService.email = 'email';
-    userService.about = 'text';
-    window.prompt = jest.fn(() => {
-      return 'password';
-    });
-
-    mockAdapter.onPost('user/add').reply(400, { id: 0, token: 'token' });
 
     wrapper.find({ children: 'Registrer ny bruker' }).simulate('click');
     setTimeout(() => {
@@ -441,6 +379,134 @@ describe('UserPage component', () => {
           <UserPersonal />
         )
       ).toEqual(true);
+      done();
+    });
+  });
+});
+
+describe('PasswordPrompt component', () => {
+  test('No email', (done) => {
+    const wrapper = shallow(<PasswordPrompt />);
+
+    wrapper.find({ children: 'Send inn' }).simulate('click');
+
+    setTimeout(() => {
+      expect(Alert.info).toBeCalled();
+      done();
+    });
+  });
+
+  test('Input onChange', (done) => {
+    const wrapper = shallow(<PasswordPrompt />);
+
+    wrapper.find(Form.Input).simulate('change', { currentTarget: { value: 'email' } });
+
+    setTimeout(() => {
+      //@ts-ignore
+      expect(wrapper.instance().password).toEqual('email');
+      done();
+    });
+  });
+
+  test('Register new', (done) => {
+    const wrapper = shallow(<PasswordPrompt />);
+
+    userService.loginOrRegister = userService.register;
+    userService.token = null;
+
+    mockAdapter.onPost('user/add').reply(201, validToken);
+    mockAdapter.onPut('user').reply(200, validUser);
+    mockAdapter.onGet('user').reply(200, validUser);
+
+    userService.email = 'email';
+    wrapper.find(Form.Input).simulate('change', { currentTarget: { value: 'password' } });
+
+    wrapper.find(Button.Success).simulate('click');
+
+    setTimeout(() => {
+      //@ts-ignore
+      expect(userService.token).toEqual(validToken);
+      expect(userService.name).toEqual('a');
+      done();
+    });
+  });
+
+  test('Login fails', (done) => {
+    const wrapper = shallow(<PasswordPrompt />);
+
+    userService.loginOrRegister = userService.login;
+
+    userService.token = null;
+    mockAdapter.onPost('user/login').reply(401, validToken);
+
+    wrapper.find(Form.Input).simulate('change', { currentTarget: { value: 'password' } });
+    userService.email = 'email';
+
+    wrapper.find(Form.Input).simulate('keyup', { key: 'Enter' });
+
+    setTimeout(() => {
+      //@ts-ignore
+      expect(userService.token).toEqual(null);
+
+      done();
+    });
+  });
+
+  test('Login with Enter key', (done) => {
+    const wrapper = shallow(<PasswordPrompt />);
+
+    userService.loginOrRegister = userService.login;
+
+    userService.token = null;
+    mockAdapter.onPost('user/login').reply(200, validToken);
+    mockAdapter.onGet('user/').reply(200, validUser);
+
+    wrapper.find(Form.Input).simulate('change', { currentTarget: { value: 'password' } });
+    userService.email = 'email';
+
+    wrapper.find(Form.Input).simulate('keyup', { key: 'Enter' });
+
+    setTimeout(() => {
+      //@ts-ignore
+      expect(userService.token).toEqual(validToken);
+
+      done();
+    });
+  });
+
+  test('Error registering', (done) => {
+    const wrapper = shallow(<PasswordPrompt />);
+
+    const spy = jest.spyOn(Alert, 'warning');
+
+    userService.loginOrRegister = userService.register;
+
+    mockAdapter.onPost('user/add').reply(500);
+
+    wrapper.find(Form.Input).simulate('change', { currentTarget: { value: 'password' } });
+    userService.email = 'email';
+
+    wrapper.find(Button.Success).simulate('click');
+
+    setTimeout(() => {
+      //@ts-ignore
+      expect(spy).toBeCalledWith(<>Feil brukarnavn eller passord</>);
+
+      done();
+    });
+  });
+
+  test('Cancel password', (done) => {
+    userService.passwordPrompt = true;
+
+    const wrapper = shallow(<PasswordPrompt />);
+
+    wrapper.find(Button.Light).simulate('click');
+
+    setTimeout(() => {
+      //@ts-ignore
+      expect(userService.passwordPrompt).toBe(false);
+
       done();
     });
   });

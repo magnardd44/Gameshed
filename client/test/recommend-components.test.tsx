@@ -55,6 +55,8 @@ const completeReviews = [
 
 describe('TopTenStars component', () => {
   test('TopTenStars default', () => {
+    mockAdapter.onGet('/reviews/topTen/').reply(200, []);
+
     //@ts-ignore
     const wrapper = shallow(<TopTenStars />);
     expect(wrapper).toMatchSnapshot();
@@ -90,6 +92,8 @@ describe('TopTenStars component', () => {
 
 describe('LastTen component', () => {
   test('LastTen default', () => {
+    mockAdapter.onGet('/reviews/topTen/').reply(200, []);
+
     //@ts-ignore
     const wrapper = shallow(<LastTen />);
     expect(wrapper).toMatchSnapshot();

@@ -19,7 +19,6 @@ import { NavLink } from 'react-router-dom';
 import { Genre } from './services/genre-service';
 import { createHashHistory } from 'history';
 import axios from 'axios';
-import { genreService } from './services/genre-service';
 import userService from './services/user-service';
 
 export const history = createHashHistory();
