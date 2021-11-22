@@ -16,14 +16,6 @@ class PlatformService {
   };
   platforms: Platform[] = [];
 
-  axios!: AxiosInstance;
-
-  async test() {
-    this.axios.get('/test').then(function (response) {
-      console.log(response.data);
-    });
-  }
-
   /**
    * Get platform id with given name.
    */
