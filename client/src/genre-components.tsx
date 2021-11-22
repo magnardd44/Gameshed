@@ -156,8 +156,10 @@ export class Category extends Component {
           });
         });
       })
-
-      .catch((error) => Alert.danger('Error retrieving reviews: ' + error.message));
+      .catch((error) => {
+        console.log(error);
+        Alert.danger('Error retrieving reviews: ' + error.message);
+      });
     this.setState({ isHidden: false });
   }
 }

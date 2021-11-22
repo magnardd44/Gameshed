@@ -151,14 +151,16 @@ export class Platform extends Component {
     reviewService
       .getPlatform(id)
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         reviewService.reviews = res;
         reviewService.reviews.map((review, i) => {
-          console.log(review);
-
-          reviewService.get(review.review_id).then((res) => {
-            reviewService.reviews[i] = res;
-          });
+          reviewService
+            .get(review.review_id)
+            .then((res) => {
+              console.log(res);
+              reviewService.reviews[i] = res;
+            })
+            .catch((err) => console.log(err));
         });
       })
 
