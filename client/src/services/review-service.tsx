@@ -186,6 +186,8 @@ class ReviewService {
       })
       .then((response) => response.data);
   }
+
+  //Check if a user has previously liked a review he is visiting
   isLiked(review_id: number) {
     return userService.axios
       .get<{ id: number; relevant: boolean }>('/reviews/' + review_id + '/relevant')
@@ -206,9 +208,12 @@ class ReviewService {
       .then((response) => response.data.review_id);
   }
 
+  //Fetch the ten most popular reviws based on likes
   getTopTen() {
     return axios.get<Review[]>('/reviews/topTen/').then((response) => response.data);
   }
+
+  //Fetch the ten last published reviews
 
   getLastTen() {
     return axios.get<Review[]>('/reviews/lastTen/').then((response) => response.data);

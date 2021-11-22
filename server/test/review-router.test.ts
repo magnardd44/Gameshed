@@ -345,19 +345,15 @@ describe('Update review (PATCH)', () => {
       })
       .then((response) => {
         expect(response.status).toEqual(200);
-        done();
+        axios.get('/reviews/review/' + testReviews[0].review_id).then((response) => {
+          console.log(response.data);
+          expect(response.data.likes).toEqual(1);
+
+          done();
+        });
       })
       .catch((err) => {
         console.log(err);
       });
   });
 });
-
-//Add like to review
-// reviewRouter.patch('/:id/relevant', (request, response) => {
-//   const data = request.body;
-//   reviewService
-//     .relevant(Number(request.params.id), data.user_id, data.relevant)
-//     .then((id) => response.send({ id: id }))
-//     .catch((error) => response.status(500).send(error));
-// });

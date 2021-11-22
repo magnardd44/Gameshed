@@ -24,15 +24,6 @@ reviewRouter.post('/', (request, response) => {
       .then((id) => response.send({ id: id }))
       .catch((error) => response.status(500).send(error));
   else response.status(400).send('Missing review title');
-
-  //const data = request.body;
-  //if (data && data.review_title.length != 0 && data.game_id != 0)
-  //  reviewService
-  //    .create(data.game_id, data.review_title, data.text, data.rating)
-
-  //    .then((id) => response.send({ id: id }))
-  //    .catch((error) => response.status(500).send(error));
-  //else response.status(400).send('Missing review title');
 });
 
 //Show published reviews

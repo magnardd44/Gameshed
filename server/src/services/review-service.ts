@@ -228,7 +228,7 @@ class ReviewService {
         `SELECT ge.genre_id, ge.genre_name, g.game_title, r.review_id, r.review_title, r.rating, r.text, COUNT(mr.relevant_id) AS likes
         FROM reviews r
         INNER JOIN games g ON g.game_id = r.game_id
-        INNER JOIN mapping_relevant mr on r.review_id = mr.review_id
+        LEFT OUTER JOIN mapping_relevant mr on r.review_id = mr.review_id
         INNER JOIN mapping_genre mg ON mg.game_id = g.game_id
         INNER JOIN genres ge ON mg.genre_id = ge.genre_id
         WHERE ge.genre_id = ? AND PUBLISHED = 1
