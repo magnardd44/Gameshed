@@ -26,7 +26,7 @@ reviewRouter.post('/', (request, response) => {
   else response.status(400).send('Missing review title');
 });
 
-//Show published reviews
+//Show all reviews
 reviewRouter.get('/', (request, response) => {
   reviewService
     .getAll()
@@ -96,7 +96,7 @@ reviewRouter.get('/genre/:genre_id', (request, response) => {
     .catch((error) => response.status(500).send(error));
 });
 
-//Fetch all reviews for a specific genre
+//Fetch all reviews for a specific platform
 reviewRouter.get('/platform/:platform_id', (request, response) => {
   const id = Number(request.params.platform_id);
 
@@ -108,7 +108,7 @@ reviewRouter.get('/platform/:platform_id', (request, response) => {
     .catch((error) => response.status(500).send(error));
 });
 
-//Fetch review
+//Fetch single review
 reviewRouter.get('/review/:review_id', (request, response) => {
   const id = Number(request.params.review_id);
   reviewService
@@ -191,7 +191,7 @@ reviewRouter.delete('/:id', (request, response) => {
     .catch((error) => response.status(500).send(error));
 });
 
-//Get most popular reviews
+//Get top 10 most popular reviews
 
 reviewRouter.get('/topTen', (request, response) => {
   reviewService
@@ -200,7 +200,7 @@ reviewRouter.get('/topTen', (request, response) => {
     .catch((error) => response.status(500).send(error));
 });
 
-//Get latest reviews
+//Get 10 latest reviews
 
 reviewRouter.get('/lastTen', (request, response) => {
   reviewService

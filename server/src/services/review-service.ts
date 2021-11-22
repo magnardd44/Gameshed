@@ -127,7 +127,7 @@ class ReviewService {
   }
 
   /**
-   * Get all reviews based on genre id
+   * Get all reviews based on platform id
    */
   getAllByPlatformId(platform_id: number) {
     return new Promise<Review[]>((resolve, reject) => {
@@ -188,6 +188,7 @@ class ReviewService {
     });
   }
 
+  //Check if a review has an existing like
   isRelevant(review_id: number, user_id: number) {
     return new Promise<boolean>((resolve, reject) => {
       pool.query(
@@ -279,6 +280,8 @@ class ReviewService {
     });
   }
 
+
+  //Get the 10 reviews with the most likes
   getTopTen() {
     return new Promise<void>((resolve, reject) => {
       pool.query(
@@ -295,6 +298,8 @@ class ReviewService {
       );
     });
   }
+
+  //Get the 10 last published reviews
 
   getLastTen() {
     return new Promise<void>((resolve, reject) => {

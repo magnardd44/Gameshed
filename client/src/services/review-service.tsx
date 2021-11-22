@@ -91,21 +91,21 @@ class ReviewService {
   drafts: Review[] = [];
 
   /**
-   * Get review with given id.
+   * Get single review with given id.
    */
   get(id: number) {
     return userService.axios.get<Review>('/reviews/review/' + id).then((response) => response.data);
   }
 
   /**
-   * Get review with given game id.
+   * Get all reviews with given game id.
    */
   getAllByGameId(id: number) {
     return userService.axios.get<Review[]>('/reviews/game/' + id).then((response) => response.data);
   }
 
   /**
-   * Get review with given genre id.
+   * Get all reviews with given genre id.
    */
   getAllByGenreId(id: number) {
     return userService.axios
@@ -114,7 +114,7 @@ class ReviewService {
   }
 
   /**
-   * Get review with given platform id.
+   * Get all reviews with given platform id.
    */
   getAllByPlatformId(id: number) {
     return userService.axios
@@ -137,20 +137,20 @@ class ReviewService {
   }
 
   /**
-   * Get published reviews
+   * Get all published reviews
    */
   getPublishedReviews() {
     return axios.get<Review[]>('/reviews/published').then((response) => response.data);
   }
 
   /**
-   * Get reviews based on genre
+   * Get published reviews based on genre
    */
   getGenre(genre_id: number) {
     return axios.get<Review[]>('/reviews/genre/' + genre_id).then((response) => response.data);
   }
 
-  //Get reviews based on platform
+  //Get published reviews based on platform
   getPlatform(platform_id: number) {
     return axios
       .get<Review[]>('/reviews/platform/' + platform_id)
