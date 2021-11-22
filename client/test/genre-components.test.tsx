@@ -4,8 +4,10 @@ import MockAdapter from 'axios-mock-adapter';
 
 import { shallow } from 'enzyme';
 import { history, Category } from '../src/genre-components';
+import userService from '../src/services/user-service';
 
 import {
+  CategoryCard,
   ReviewCard,
   ColumnCentre,
   Form,
@@ -18,6 +20,8 @@ import {
 import { reviewService } from '../src/services/review-service';
 
 const mockAdapter = new MockAdapter(axios);
+const mockUserAdapter = new MockAdapter(userService.axios);
+
 const genres = [
   {
     genre_id: 1,
@@ -64,8 +68,11 @@ const completeReviews = [
 ];
 
 describe('Category component', () => {
+  beforeEach(() => {
+    mockAdapter.reset();
+  });
   test('Category component default', () => {
-    mockAdapter.onGet('/genres/').reply(200, []);
+    //mockAdapter.onGet('/genres/').reply(200, []);
 
     const wrapper = shallow(<Category />);
 
@@ -88,6 +95,57 @@ describe('Category component', () => {
 
     setTimeout(() => {
       expect(wrapper.find(ReviewCard)).toHaveLength(2);
+    });
+  });
+
+  test('Get genres', (done) => {
+    mockAdapter.onGet('/genres').reply(200, ['genre1', 'genre2']);
+
+    const wrapper = shallow(<Category />);
+
+    setTimeout(() => {
+      expect(wrapper.find(CategoryCard)).toHaveLength(2);
+      done();
+    });
+  });
+
+  test('Set genre', (done) => {
+    mockAdapter.onGet('/genres').reply(200, [
+      { genre_id: 1, genre_name: 'genre1' },
+      { genre_id: 2, genre_name: 'genre2' },
+    ]);
+    mockUserAdapter.onGet('/reviews/genre/1').reply(200, completeReviews);
+    mockUserAdapter.onGet('/reviews/review/1').reply(200, completeReviews[0]);
+    mockUserAdapter.onGet('/reviews/review/2').reply(200, completeReviews[1]);
+
+    const wrapper = shallow(<Category />);
+
+    setTimeout(() => {
+      wrapper.find({ children: 'genre1' }).simulate('click');
+      done();
+      //expect(wrapper.find(ReviewCard)).toHaveLength(2);
+    });
+  });
+
+  test('Read more button', (done) => {
+    mockAdapter.onGet('/genres').reply(200, [
+      { genre_id: 1, genre_name: 'genre1' },
+      { genre_id: 2, genre_name: 'genre2' },
+    ]);
+    mockUserAdapter.onGet('/reviews/genre/1').reply(200, completeReviews);
+    mockUserAdapter.onGet('/reviews/review/1').reply(200, completeReviews[0]);
+    mockUserAdapter.onGet('/reviews/review/2').reply(200, completeReviews[1]);
+
+    const wrapper = shallow(<Category />);
+
+    const spy = jest.spyOn(history, 'push');
+    spy.mockClear();
+
+    setTimeout(() => {
+      wrapper.find({ children: 'Les mer' }).first().simulate('click');
+      expect(spy).toBeCalledWith('/publishedReviews/' + completeReviews[0].review_id);
+      done();
+      //expect(wrapper.find(ReviewCard)).toHaveLength(2);
     });
   });
 

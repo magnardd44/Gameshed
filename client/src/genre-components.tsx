@@ -67,9 +67,9 @@ export class Category extends Component {
 
           <Row>
             <ColumnCentre width={6} smwidth={4} mdwidth={2}>
-              {this.genres.map((genre) => (
+              {this.genres.map((genre, index) => (
                 <CategoryCard
-                  key={genre.genre_id}
+                  key={index}
                   img={
                     genre.genre_img
                       ? 'https://helenaagustsson.github.io/INFT2002-images/images/' +
@@ -139,18 +139,19 @@ export class Category extends Component {
         this.genres = genres;
       })
       .then(() => {})
-      .catch((error) => Alert.danger('Error getting genres: ' + error.message));
+      .catch((error) => {
+        Alert.danger('Error getting genres: ' + error.message);
+      });
   }
   genreCall(id: number) {
     reviewService.reviews = [];
     reviewService
       .getAllByGenreId(id)
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         reviewService.reviews = res;
         reviewService.reviews.map((review, i) => {
-          console.log(review);
-
+          //console.log(review);
           reviewService.get(review.review_id).then((res) => {
             reviewService.reviews[i] = res;
           });
