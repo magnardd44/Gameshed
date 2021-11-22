@@ -6,6 +6,7 @@ import userService, { Token } from '../src/services/user-service';
 axios.defaults.baseURL = 'http://localhost:3003/api/v2';
 
 let webServer: any;
+
 beforeAll((done) => {
   // Use separate port for testing
   webServer = app.listen(3003, () => done());
@@ -34,9 +35,15 @@ afterAll((done) => {
 
 describe('get', () => {
   test('all', (done) => {
-    userService.get_all().then((results) => {
-      expect(results.length).toEqual(1);
-      done();
+    userService.add('test1', 'pass');
+    userService.add('test2', 'pass');
+
+    setTimeout(() => {
+      userService.get_all().then((results) => {
+        expect(results.find((u) => u.email == 'test1')).not.toBeNull;
+        expect(results.find((u) => u.email == 'test2')).not.toBeNull;
+        done();
+      });
     });
   });
 
@@ -100,7 +107,7 @@ describe('put', () => {
     });
   });
 
-  test('feil', (done) => {
+  test('No token supplied', (done) => {
     axios.put('/user/', {}).catch((error) => {
       expect(error.message).toEqual('Request failed with status code 400');
       done();
