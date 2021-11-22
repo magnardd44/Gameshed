@@ -234,19 +234,6 @@ export class AddReview extends Component<{
       .catch((err) => {
         console.log('Err: ' + err);
       });
-
-    //    gameService.game.igdb_id = this.props.match.params.igdb_id;
-    //    if (gameService.game.igdb_id > 0) {
-    //      gameService2
-    //        .get_igdb(gameService.game.igdb_id)
-    //        .then((result) => {
-    //          gameService2.game = result;
-    //          console.log(gameService2.game);
-    //        })
-    //        .catch((err) => {
-    //          console.log('Err: ' + err);
-    //        });
-    //    }
   }
 }
 
