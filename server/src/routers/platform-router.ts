@@ -11,7 +11,7 @@ const platformRouter = express.Router();
 //Update mapping_platform
 platformRouter.post('/map', (request, response) => {
   const data = request.body;
-  if (typeof data.platform_name == 'number' && typeof data.game_id == 'number')
+  if (typeof data.platform_name == 'string' && typeof data.game_id == 'number')
     userService
       .verify(request.headers.authorization)
       .catch((err) => {
@@ -33,7 +33,7 @@ platformRouter.post('/map/string', (request, response) => {
         response.status(401).send(err);
         throw err;
       })
-      .then((userId) => platformService.updatePlatformMapString(data.platform, data.game_id))
+      .then(() => platformService.updatePlatformMapString(data.platform, data.game_id))
       .then((id) => response.send({ id: id }))
       .catch((error) => response.status(500).send(error));
   else response.status(400).send('Missing platform');
@@ -83,7 +83,7 @@ platformRouter.post('/', (request, response) => {
         response.status(401).send(err);
         throw err;
       })
-      .then((userId) => platformService.create(data.platform_name))
+      .then(() => platformService.create(data.platform_name))
       .then((id) => {
         response.status(201);
         response.send({ id: id });
