@@ -20,7 +20,10 @@ You can also acces the app through our gitlab repository "Gruppe 4 Webutvikling"
 
 ## 2 Setup database connections and IGDB api key
 
-You need to create two configuration files that will contain the database connection details and IGDB client id and client secret. These files are not in the git repository and if you wish to use your own database or client feel free to substitute the values. The connection details for our current database and IGDB client are as follows:
+You need to create two configuration files that will contain the database connection details and
+IGDB client id and client secret. These files are not in the git repository and if you wish to use
+your own database or client feel free to substitute the values. The connection details for our
+current database and IGDB client are as follows:
 
 `server/config.ts`:
 
@@ -46,7 +49,8 @@ process.env.IGDB_CLIENT_ID = 'jggwkki694bcpccn7nwz0d5uoi1dn4';
 process.env.IGDB_CLIENT_SECRET = 'pysekvcpf8zhkqdzjyrzygy7a3wpv5';
 ```
 
-These environment variables will be used in the `server/src/mysql-pool.ts` and `server/src/services/search-service.ts` server files.
+These environment variables will be used in the `server/src/mysql-pool.ts` and
+`server/src/services/search-service.ts` server files.
 
 ## 3 Start server
 
@@ -72,7 +76,8 @@ npm start
 
 Access the app by opening the path http://localhost:3000/#/ To be able to create reviews you have to
 be logged in, so creating a new user is a good way to start. For more information about how to use
-the app, please see our instruction video.
+the app, please see our instruction video:
+https://web.microsoftstream.com/video/933a25ba-dd1b-46e7-b43b-922470c03945?list=studio
 
 ## 6 Testing
 
