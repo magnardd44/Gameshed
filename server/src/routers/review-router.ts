@@ -66,9 +66,7 @@ reviewRouter.get('/users/:user_id', (request, response) => {
 
   reviewService
     .getAllById(user_id)
-    .then((reviews) =>
-      reviews ? response.send(reviews) : response.status(404).send('Reviews not found')
-    )
+    .then((reviews) => response.send(reviews))
     .catch((error) => response.status(500).send(error));
 });
 
@@ -78,32 +76,27 @@ reviewRouter.get('/game/:game_id', (request, response) => {
 
   reviewService
     .getAllByGameId(id)
-    .then((reviews) =>
-      reviews ? response.send(reviews) : response.status(404).send('Reviews not found')
-    )
+    .then((reviews) => response.send(reviews))
     .catch((error) => response.status(500).send(error));
 });
 
 //Fetch all reviews for a specific genre
 reviewRouter.get('/genre/:genre_id', (request, response) => {
   const id = Number(request.params.genre_id);
-
   reviewService
     .getAllByGenreId(id)
-    .then((reviews) =>
-      reviews ? response.send(reviews) : response.status(404).send('Reviews not found')
-    )
+    .then((reviews) => response.send(reviews))
     .catch((error) => response.status(500).send(error));
 });
 
-//Fetch all reviews for a specific genre
+//Fetch all reviews for a specific platform
 reviewRouter.get('/platform/:platform_id', (request, response) => {
   const id = Number(request.params.platform_id);
 
   reviewService
     .getAllByPlatformId(id)
     .then((reviews) =>
-      reviews ? response.send(reviews) : response.status(404).send('Reviews not found')
+      reviews.length == 0 ? response.send(reviews) : response.status(404).send('Reviews not found')
     )
     .catch((error) => response.status(500).send(error));
 });

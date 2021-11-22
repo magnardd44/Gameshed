@@ -477,3 +477,241 @@ exports[`AddGame component Inputs updates correctly 1`] = `
   </Card>
 </Container>
 `;
+
+exports[`GameCard component GameCard default 1`] = `
+<Fragment>
+  <Container>
+    <Card
+      key="0"
+      title=""
+    >
+      <h6
+        className="card-subtitle mb-2 text-muted"
+      >
+        <ColumnCentre>
+          Terningkast:
+           
+           Ikke tilgjengelig
+        </ColumnCentre>
+      </h6>
+      <Row>
+        <ColumnCentre
+          key="1"
+          mdwidth={2}
+          width={12}
+        >
+          <ThumbNail
+            img="https://cdn-icons-png.flaticon.com/512/686/686589.png"
+          />
+        </ColumnCentre>
+        <ColumnCentre
+          mdwidth={10}
+          width={12}
+        >
+          <Linebreak />
+        </ColumnCentre>
+      </Row>
+      <Linebreak />
+      <Row>
+        <ColumnCentre>
+          Sjanger:
+           
+        </ColumnCentre>
+      </Row>
+      <Row>
+        <ColumnCentre>
+          Plattformer:
+           
+        </ColumnCentre>
+      </Row>
+      <Row />
+      <Row />
+      <Row />
+    </Card>
+    <Linebreak />
+    <Row>
+      <Column>
+        <ButtonDanger
+          onClick={[Function]}
+        >
+          Tilbake til søk
+        </ButtonDanger>
+      </Column>
+      <Column
+        right={true}
+      >
+        <ButtonSuccess
+          onClick={[Function]}
+        >
+          Anmeld dette spillet
+        </ButtonSuccess>
+      </Column>
+    </Row>
+  </Container>
+  <Container>
+    <Card
+      title="Anmeldelser for dette spillet:"
+    >
+      Det finnes for øyeblikket ingen anmeldelser for dette spillet. 
+    </Card>
+  </Container>
+</Fragment>
+`;
+
+exports[`GameCard component GameCard on DB game 1`] = `
+<Fragment>
+  <Container>
+    <Card
+      key="0"
+      title=""
+    >
+      <h6
+        className="card-subtitle mb-2 text-muted"
+      >
+        <ColumnCentre>
+          Terningkast:
+           
+           Ikke tilgjengelig
+        </ColumnCentre>
+      </h6>
+      <Row>
+        <ColumnCentre
+          key="1"
+          mdwidth={2}
+          width={12}
+        >
+          <ThumbNail
+            img="https://cdn-icons-png.flaticon.com/512/686/686589.png"
+          />
+        </ColumnCentre>
+        <ColumnCentre
+          mdwidth={10}
+          width={12}
+        >
+          <Linebreak />
+        </ColumnCentre>
+      </Row>
+      <Linebreak />
+      <Row>
+        <ColumnCentre>
+          Sjanger:
+           
+        </ColumnCentre>
+      </Row>
+      <Row>
+        <ColumnCentre>
+          Plattformer:
+           
+        </ColumnCentre>
+      </Row>
+      <Row />
+      <Row />
+      <Row />
+    </Card>
+    <Linebreak />
+    <Row>
+      <Column>
+        <ButtonDanger
+          onClick={[Function]}
+        >
+          Tilbake til søk
+        </ButtonDanger>
+      </Column>
+      <Column
+        right={true}
+      >
+        <ButtonSuccess
+          onClick={[Function]}
+        >
+          Anmeld dette spillet
+        </ButtonSuccess>
+      </Column>
+    </Row>
+  </Container>
+  <Container>
+    <Card
+      title="Anmeldelser for dette spillet:"
+    />
+  </Container>
+</Fragment>
+`;
+
+exports[`GameCard component GameCard on IGDB game 1`] = `
+<Fragment>
+  <Container>
+    <Card
+      key="0"
+      title=""
+    >
+      <h6
+        className="card-subtitle mb-2 text-muted"
+      >
+        <ColumnCentre>
+          Terningkast:
+           
+           Ikke tilgjengelig
+        </ColumnCentre>
+      </h6>
+      <Row>
+        <ColumnCentre
+          key="1"
+          mdwidth={2}
+          width={12}
+        >
+          <ThumbNail
+            img="https://cdn-icons-png.flaticon.com/512/686/686589.png"
+          />
+        </ColumnCentre>
+        <ColumnCentre
+          mdwidth={10}
+          width={12}
+        >
+          <Linebreak />
+        </ColumnCentre>
+      </Row>
+      <Linebreak />
+      <Row>
+        <ColumnCentre>
+          Sjanger:
+           
+        </ColumnCentre>
+      </Row>
+      <Row>
+        <ColumnCentre>
+          Plattformer:
+           
+        </ColumnCentre>
+      </Row>
+      <Row />
+      <Row />
+      <Row />
+    </Card>
+    <Linebreak />
+    <Row>
+      <Column>
+        <ButtonDanger
+          onClick={[Function]}
+        >
+          Tilbake til søk
+        </ButtonDanger>
+      </Column>
+      <Column
+        right={true}
+      >
+        <ButtonSuccess
+          onClick={[Function]}
+        >
+          Anmeld dette spillet
+        </ButtonSuccess>
+      </Column>
+    </Row>
+  </Container>
+  <Container>
+    <Card
+      title="Anmeldelser for dette spillet:"
+    >
+      Det finnes for øyeblikket ingen anmeldelser for dette spillet. 
+    </Card>
+  </Container>
+</Fragment>
+`;

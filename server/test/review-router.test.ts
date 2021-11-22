@@ -108,86 +108,74 @@ beforeEach((done) => {
         testReviews.forEach((element) => {
           element.game_id = results.insertId;
         });
+
         pool.query(
-          'INSERT INTO mapping_platform (game_id, platform_id ) VALUES (?, ?)',
-          [testReviews[0].game_id, testReviews[0].platform_id],
+          'INSERT INTO mapping_genre (game_id, genre_id ) VALUES (?, ?)',
+          [testReviews[0].game_id, testReviews[0].genre_id],
           (error, results) => {
             if (error) throw error;
-            pool.query(
-              'INSERT INTO mapping_genre (game_id, genre_id ) VALUES (?, ?)',
-              [testReviews[0].game_id, testReviews[0].genre_id],
-              (error, results) => {
-                if (error) throw error;
-                pool.query(
-                  "INSERT INTO users (email) VALUES ('zool@zool.no')",
-                  (error, results) => {
-                    if (error) throw error;
-                    testReviews.forEach((element) => {
-                      element.user_id = results.insertId;
-                    });
+            pool.query("INSERT INTO users (email) VALUES ('zool@zool.no')", (error, results) => {
+              if (error) throw error;
+              testReviews.forEach((element) => {
+                element.user_id = results.insertId;
+              });
 
-                    pool.query('DELETE FROM reviews', (error) => {
-                      if (error) return done.fail(error);
-                      // Create testTasks sequentially in order to set correct id, and call done() when finished
-                      reviewService
-                        .create(
-                          testReviews[0].game_id,
-                          testReviews[0].review_title,
-                          testReviews[0].text,
-                          testReviews[0].rating,
-                          testReviews[0].user_id,
-                          testReviews[0].published
-                        ) // Create testReview[1] after testReview[0] has been created
-                        .then((review_id: number) => {
-                          testReviews[0].review_id = review_id;
-                          return reviewService.create(
-                            testReviews[1].game_id,
-                            testReviews[1].review_title,
-                            testReviews[1].text,
-                            testReviews[1].rating,
-                            testReviews[1].user_id,
-                            testReviews[1].published
-                          );
-                        }) // Create testReview[2] after testReview[1] has been created
-                        .then((review_id: number) => {
-                          testReviews[1].review_id = review_id;
+              pool.query('DELETE FROM reviews', (error) => {
+                if (error) return done.fail(error);
+                // Create testTasks sequentially in order to set correct id, and call done() when finished
+                reviewService
+                  .create(
+                    testReviews[0].game_id,
+                    testReviews[0].review_title,
+                    testReviews[0].text,
+                    testReviews[0].rating,
+                    testReviews[0].user_id,
+                    testReviews[0].published
+                  ) // Create testReview[1] after testReview[0] has been created
+                  .then((review_id: number) => {
+                    testReviews[0].review_id = review_id;
+                    return reviewService.create(
+                      testReviews[1].game_id,
+                      testReviews[1].review_title,
+                      testReviews[1].text,
+                      testReviews[1].rating,
+                      testReviews[1].user_id,
+                      testReviews[1].published
+                    );
+                  }) // Create testReview[2] after testReview[1] has been created
+                  .then((review_id: number) => {
+                    testReviews[1].review_id = review_id;
 
-                          return reviewService.create(
-                            testReviews[2].game_id,
-                            testReviews[2].review_title,
-                            testReviews[2].text,
-                            testReviews[2].rating,
-                            testReviews[2].user_id,
-                            testReviews[2].published
-                          );
-                        }) // Create testREview[3] after testReview[2] has been created
-                        .then((review_id: number) => {
-                          testReviews[2].review_id = review_id;
-                          return reviewService.create(
-                            testReviews[3].game_id,
-                            testReviews[3].review_title,
-                            testReviews[3].text,
-                            testReviews[3].rating,
-                            testReviews[3].user_id,
-                            testReviews[3].published
-                          );
-                        })
-                        .then((review_id: number) => {
-                          testReviews[3].review_id = review_id;
-                        })
-
-                        .then(() => done());
-                    });
-                  }
-                );
-              }
-            );
+                    return reviewService.create(
+                      testReviews[2].game_id,
+                      testReviews[2].review_title,
+                      testReviews[2].text,
+                      testReviews[2].rating,
+                      testReviews[2].user_id,
+                      testReviews[2].published
+                    );
+                  }) // Create testREview[3] after testReview[2] has been created
+                  .then((review_id: number) => {
+                    testReviews[2].review_id = review_id;
+                    return reviewService.create(
+                      testReviews[3].game_id,
+                      testReviews[3].review_title,
+                      testReviews[3].text,
+                      testReviews[3].rating,
+                      testReviews[3].user_id,
+                      testReviews[3].published
+                    );
+                  })
+                  .then(() => done());
+              });
+            });
           }
         );
       });
     });
   });
 });
+
 //Delet user and game
 afterEach((done) => {
   pool.query('DELETE FROM mapping_relevant', () => {
@@ -245,8 +233,38 @@ describe('Fetch  reviews (GET)', () => {
     });
   });
 
+  test('Fetch reviews by genre (500 Internal Server Error)', async () => {
+    try {
+      reviewService.getGenre = () => Promise.reject();
+      const response = await axios.get('/reviews/genre/' + testReviews[0].genre_id);
+    } catch (error: any) {
+      expect(error.response.status).toEqual(500);
+    }
+  });
+
   test('Fetch reviews by platform (200 OK)', (done) => {
     axios.get('/reviews/platform/' + testReviews[0].platform_id).then((response) => {
+      expect(response.status).toEqual(200);
+
+      expect(
+        response.data.filter((t: any) => t.review_title == testReviews[0].review_title).length
+      ).toEqual(0);
+
+      done();
+    });
+  });
+
+  test('Fetch reviews by platform (500 Internal Server Error)', async () => {
+    try {
+      reviewService.getPlatform = () => Promise.reject();
+      const response = await axios.get('/reviews/platform/' + testReviews[0].platform_id);
+    } catch (error: any) {
+      expect(error.response.status).toEqual(500);
+    }
+  });
+
+  test('Fetch reviews by user (200 OK)', (done) => {
+    axios.get('/reviews/users/' + testReviews[0].user_id).then((response) => {
       expect(response.status).toEqual(200);
 
       expect(
@@ -255,6 +273,36 @@ describe('Fetch  reviews (GET)', () => {
 
       done();
     });
+  });
+
+  test('Fetch reviews by user (500 Internal Server Error)', async () => {
+    try {
+      reviewService.getAllById = () => Promise.reject();
+      const response = await axios.get('/reviews/users/' + testReviews[0].user_id);
+    } catch (error: any) {
+      expect(error.response.status).toEqual(500);
+    }
+  });
+
+  test('Fetch reviews by game (200 OK)', (done) => {
+    axios.get('/reviews/game/' + testReviews[0].game_id).then((response) => {
+      expect(response.status).toEqual(200);
+
+      expect(
+        response.data.filter((t: any) => t.review_title == testReviews[0].review_title).length
+      ).toEqual(1);
+
+      done();
+    });
+  });
+
+  test('Fetch reviews by game (500 Internal Server Error)', async () => {
+    try {
+      reviewService.getAllByGameId = () => Promise.reject();
+      const response = await axios.get('/reviews/game/' + testReviews[0].game_id);
+    } catch (error: any) {
+      expect(error.response.status).toEqual(500);
+    }
   });
 
   //Test getting a single complete review
@@ -269,7 +317,7 @@ describe('Fetch  reviews (GET)', () => {
 
   test('Fetch task (404 Not Found)', (done) => {
     axios
-      .get('/reviews/4')
+      .get('/reviews/5')
       .then((response) => done.fail(new Error()))
       .catch((error) => {
         expect(error.message).toEqual('Request failed with status code 404');

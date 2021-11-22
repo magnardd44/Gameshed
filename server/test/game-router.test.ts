@@ -106,7 +106,7 @@ describe('Fetch games (GET)', () => {
     }
   });
 
-  test('Fetch games by name (200 OK)', async () => {
+  test('Fetch game by name (200 OK)', async () => {
     const response = await axios.get('/games/search/Spill1');
     expect(response.status).toEqual(200);
     expect(response.data[0]).toEqual(testGame[0]);

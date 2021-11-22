@@ -101,8 +101,6 @@ class GameService {
 
         this.game = results[0];
 
-        //resolve(results[0]);
-
         if (this.game) {
           let platformPromise = new Promise<void>((resolve, reject) => {
             pool.query(
