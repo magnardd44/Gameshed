@@ -124,7 +124,7 @@ beforeEach((done) => {
                 pool.query(
                   "INSERT INTO users (email) VALUES ('zool@zool.no')",
                   (error, results) => {
-                    //if (error) throw error;
+                    if (error) throw error;
                     testReviews.forEach((element) => {
                       element.user_id = results.insertId;
                     });
