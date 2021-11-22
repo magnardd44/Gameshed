@@ -199,22 +199,6 @@ describe('UserData component', () => {
     });
   });
 
-  test('Error getting user', (done) => {
-    const wrapper = shallow(<UserData />);
-
-    const spy = jest.spyOn(userService.axios, 'get');
-
-    userService.token = validToken;
-    mockAdapter.onGet('user').reply(401);
-
-    userService.get_user();
-
-    setTimeout(() => {
-      expect(spy).rejects;
-      done();
-    });
-  });
-
   test('Set user with no token', () => {
     expect(userService.set_user()).rejects.toEqual('No token');
   });

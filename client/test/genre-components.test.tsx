@@ -110,7 +110,10 @@ describe('Category component', () => {
 
     setTimeout(() => {
       wrapper.find({ children: 'genre1' }).simulate('click');
-      done();
+      setTimeout(() => {
+        expect(wrapper.find(ReviewCard)).toHaveLength(2);
+        done();
+      });
     });
   });
 

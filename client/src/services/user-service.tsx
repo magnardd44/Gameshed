@@ -64,7 +64,6 @@ class UserService {
         localStorage.setItem('userToken', JSON.stringify(this.token));
       })
       .catch((err) => {
-        console.log(err);
         throw err;
       });
   }
