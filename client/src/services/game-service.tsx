@@ -17,7 +17,7 @@ export type Game = {
 };
 
 export type extraIGDB = {
-  cover_url: '';
+  cover_url: string;
   aggregated_rating: number;
   screenshots_url: string[];
   similar_games: id_name_link[];

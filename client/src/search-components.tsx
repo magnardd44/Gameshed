@@ -252,7 +252,7 @@ export class SearchListings extends Component {
                   )
                 }
               </Form.Select>
-              )<Form.Label>År: </Form.Label>
+              <Form.Label>År: </Form.Label>
               <Form.Select
                 value={this.year}
                 onChange={(event) => {
@@ -323,19 +323,18 @@ export class SearchResult extends Component<{ game: Game }> {
     return (
       <Card title={this.props.game.game_title}>
         <h6 className="card-subtitle mb-2 text-muted">
-          Terningkast:
-          {gameService.current.igdb?.aggregated_rating != undefined ? (
+          Terningkast:{' '}
+          {this.props.game.igdb?.aggregated_rating != undefined ? (
             <ThumbNail
               small
               img={
                 'https://helenaagustsson.github.io/INFT2002-images/images/dice-' +
-                gameService.current.igdb
-                  ? Math.ceil((gameService.current.igdb?.aggregated_rating * 6) / 100).toString()
-                  : '' + '.png'
+                this.rating() +
+                '.png'
               }
             ></ThumbNail>
           ) : (
-            'Ikke tilgjengelig'
+            ' Ikke tilgjengelig'
           )}
         </h6>
         <Row>
@@ -372,5 +371,12 @@ export class SearchResult extends Component<{ game: Game }> {
         <Linebreak></Linebreak>
       </Card>
     );
+  }
+
+  rating() {
+    let terningkast = this.props.game.igdb
+      ? Math.ceil((this.props.game.igdb?.aggregated_rating * 6) / 100)
+      : '';
+    return terningkast;
   }
 }
