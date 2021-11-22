@@ -111,7 +111,6 @@ beforeEach((done) => {
         testReviews.forEach((element) => {
           element.game_id = results.insertId;
         });
-
         pool.query(
           'INSERT INTO mapping_platform (game_id, platform_id ) VALUES (?, ?)',
           [testReviews[0].game_id, testReviews[0].platform_id],
@@ -122,11 +121,10 @@ beforeEach((done) => {
               [testReviews[0].game_id, testReviews[0].genre_id],
               (error, results) => {
                 if (error) throw error;
-
                 pool.query(
                   "INSERT INTO users (email) VALUES ('zool@zool.no')",
                   (error, results) => {
-                    if (error) throw error;
+                    //if (error) throw error;
                     testReviews.forEach((element) => {
                       element.user_id = results.insertId;
                     });
@@ -346,7 +344,7 @@ describe('Update review (PATCH)', () => {
       .then((response) => {
         expect(response.status).toEqual(200);
         axios.get('/reviews/review/' + testReviews[0].review_id).then((response) => {
-          console.log(response.data);
+          //console.log(response.data);
           expect(response.data.likes).toEqual(1);
 
           done();
@@ -355,5 +353,83 @@ describe('Update review (PATCH)', () => {
       .catch((err) => {
         console.log(err);
       });
+  });
+});
+
+describe('Get top ten', () => {
+  axios
+    .get('/reviews/topTen')
+    .then((response) => {
+      expect(response.status).toEqual(200);
+      //expect(response.data).toHaveLength(1);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
+describe('Get last ten', () => {
+  axios
+    .get('/reviews/lastTen')
+    .then((response) => {
+      expect(response.status).toEqual(200);
+      //expect(response.data).toHaveLength(1);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
+describe('User is not verified', () => {
+  test('post /', (done) => {
+    const spy = jest.spyOn(userService, 'verify');
+    spy.mockImplementationOnce(() => Promise.reject());
+
+    axios
+      .post('/reviews', {
+        review_title: 'Ny testanmeldelse',
+        text: 'Dette er en ny testanmeldelse fra Solveig',
+        rating: 6,
+      })
+      .catch((error) => {
+        expect(error.message).toEqual('Request failed with status code 401');
+        done();
+      });
+  });
+
+  test('patch /:id', (done) => {
+    const spy = jest.spyOn(userService, 'verify');
+    spy.mockImplementationOnce(() => Promise.reject());
+
+    axios
+      .patch('/reviews/1', {
+        title: 'Ny testanmeldelse',
+        text: 'Dette er en ny testanmeldelse fra Solveig',
+        rating: 6,
+      })
+      .catch((error) => {
+        expect(error.message).toEqual('Request failed with status code 401');
+        done();
+      });
+  });
+
+  test('patch /:id/publish', (done) => {
+    const spy = jest.spyOn(userService, 'verify');
+    spy.mockImplementationOnce(() => Promise.reject());
+
+    axios.patch('/reviews/1/publish').catch((error) => {
+      expect(error.message).toEqual('Request failed with status code 401');
+      done();
+    });
+  });
+
+  test('patch /:id/relevant', (done) => {
+    const spy = jest.spyOn(userService, 'verify');
+    spy.mockImplementationOnce(() => Promise.reject());
+
+    axios.patch('/reviews/1/relevant').catch((error) => {
+      expect(error.message).toEqual('Request failed with status code 401');
+      done();
+    });
   });
 });
