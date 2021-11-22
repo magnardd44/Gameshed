@@ -6,7 +6,7 @@ import { Form, Card, Alert, Button, Container, Column } from '../src/widgets';
 import { shallow } from 'enzyme';
 import userService, { Token } from '../src/services/user-service';
 import { gameService } from '../src/services/game-service';
-import { AddGame } from '../src/game-component';
+import { AddGame, history } from '../src/game-component';
 import { genreService } from '../src/services/genre-service';
 import { platformService } from '../src/services/platform-service';
 
@@ -120,57 +120,97 @@ describe('AddGame component', () => {
     });
   });
 
+  test('Inputs updates correctly', (done) => {
+    const wrapper = shallow(<AddGame />);
+
+    setTimeout(() => {
+      wrapper.find('#titleInput').simulate('change', { currentTarget: { value: 'test' } });
+      wrapper.find('#descriptionInput').simulate('change', { currentTarget: { value: 'test' } });
+      wrapper
+        .find(Form.Select)
+        .at(0)
+        .simulate('change', { currentTarget: { value: 'Puzzle' } });
+      wrapper
+        .find(Form.Select)
+        .at(1)
+        .simulate('change', { currentTarget: { value: 'Mac' } });
+
+      // Wait for events to complete
+      //
+      setTimeout(() => {
+        expect(gameService.game.game_title).toBe('test');
+        expect(gameService.game.game_description).toBe('test');
+        expect(gameService.game.genre).toBe('Puzzle');
+        expect(gameService.game.platform).toBe('Mac');
+        done();
+      });
+    });
+  });
+
   test('AddGame saves correctly', (done) => {
     const wrapper = shallow(<AddGame />);
 
-    wrapper.find('#titleInput').simulate('change', { currentTarget: { value: 'test' } });
-    wrapper.find('#descriptionInput').simulate('change', { currentTarget: { value: 'test' } });
-    wrapper.find('#genreSel').simulate('change', { currentTarget: { value: 'Puzzle' } });
-    wrapper.find('#platformSel').simulate('change', { currentTarget: { value: 'Mac' } });
+    let spy = jest.spyOn(history, 'push');
 
-    // @ts-ignore
-    wrapper.find(<Button.Success>Lagre</Button.Success>).simulate('click');
-
-    // Wait for events to complete
-    //
+    //Waiting for the component to fully be drawn
     setTimeout(() => {
-      expect(Alert.success).toBeCalled();
-      done();
+      wrapper.find('#titleInput').simulate('change', { currentTarget: { value: 'test' } });
+      wrapper.find('#descriptionInput').simulate('change', { currentTarget: { value: 'test' } });
+      wrapper
+        .find(Form.Select)
+        .at(0)
+        .simulate('change', { currentTarget: { value: 'Puzzle' } });
+      wrapper
+        .find(Form.Select)
+        .at(1)
+        .simulate('change', { currentTarget: { value: 'Mac' } });
+
+      // @ts-ignore
+      wrapper.find({ children: 'Lagre' }).simulate('click');
+
+      // Wait for events to complete
+      //
+      setTimeout(() => {
+        expect(history.push).toBeCalled();
+        spy.mockRestore();
+        done();
+      });
+    });
+  });
+
+  test('AddGame gives error correctly', (done) => {
+    const wrapper = shallow(<AddGame />);
+
+    const spy = jest.spyOn(Alert, 'danger');
+
+    //Waiting for the component to fully be drawn
+    setTimeout(() => {
+      wrapper.find('#titleInput').simulate('change', { currentTarget: { value: 'test' } });
+      //wrapper.find('#descriptionInput').simulate('change', { currentTarget: { value: 'test' } });
+
+      // @ts-ignore
+      wrapper.find({ children: 'Lagre' }).simulate('click');
+
+      // Wait for events to complete
+      //
+      setTimeout(() => {
+        expect(spy).toBeCalled();
+        done();
+      });
     });
   });
 
   test.skip('UserNav on logged out', (done) => {
-    const wrapper = shallow(<UserNav />);
+    const wrapper = shallow(<AddGame />);
 
-    mockAdapter.onPost('user/login').reply(200, { id: 1, token: 'abc' });
-    mockAdapter.onPost('user/logout').reply(200);
+    let spy = jest.spyOn(history, 'push');
 
-    wrapper.find('#emailInput').simulate('change', { currentTarget: { value: 'email' } });
-    wrapper.find({ children: 'Login' }).simulate('click');
+    wrapper.find(Button.Danger).simulate('click');
 
     setTimeout(() => {
-      expect(
-        wrapper.containsMatchingElement(
-          // @ts-ignore
-          <Button.Success>Logout</Button.Success>
-        )
-      ).toEqual(true);
-      wrapper.find({ children: 'Logout' }).simulate('click');
-      setTimeout(() => {
-        expect(
-          wrapper.containsMatchingElement(
-            // @ts-ignore
-            <Button.Success>MinSide</Button.Success>
-          )
-        ).toEqual(false);
-        expect(
-          wrapper.containsMatchingElement(
-            // @ts-ignore
-            <Button.Success>Registrer</Button.Success>
-          )
-        ).toEqual(true);
-        done();
-      });
+      expect(history.push).toBeCalled();
+      spy.mockRestore();
+      done();
     });
   });
 

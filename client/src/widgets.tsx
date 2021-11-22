@@ -619,6 +619,7 @@ export class Alert extends Component {
         style={{
           position: 'fixed',
           top: '0px',
+          left: '0px',
           zIndex: 100,
           width: document.documentElement.clientWidth,
         }}

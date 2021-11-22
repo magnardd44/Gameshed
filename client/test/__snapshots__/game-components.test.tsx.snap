@@ -159,3 +159,321 @@ exports[`AddGame component AddGame default 1`] = `
   </Card>
 </Container>
 `;
+
+exports[`AddGame component AddGame saves correctly 1`] = `
+<Container>
+  <Card
+    title="Legg til ett spill"
+  >
+    <FormContainer>
+      <FormGroup>
+        <FormLabel>
+          Tittel:
+        </FormLabel>
+        <FormInput
+          id="titleInput"
+          onChange={[Function]}
+          placeholder="Skriv inn tittel"
+          type="text"
+          value="test"
+        />
+      </FormGroup>
+      <FormGroup>
+        <FormLabel>
+          Beskrivelse:
+        </FormLabel>
+        <FormTextarea
+          cols={10}
+          id="descriptionInput"
+          onChange={[Function]}
+          placeholder="Skriv inn en beskrivelse av spillet"
+          rows={10}
+          value="test"
+        />
+      </FormGroup>
+    </FormContainer>
+    <Linebreak />
+    <Row>
+      <Column
+        width={2}
+      >
+        <FormLabel>
+          Sjanger:
+        </FormLabel>
+      </Column>
+      <Column>
+        <Row
+          key="0"
+        >
+          <Column>
+            <FormSelect
+              id="genreSel"
+              key="0"
+              onChange={[Function]}
+            >
+              <option
+                hidden={true}
+              >
+                Velg sjanger her:
+              </option>
+              <option
+                key="0"
+                value={1}
+              >
+                test
+              </option>
+              <option
+                key="1"
+                value={2}
+              >
+                test2
+              </option>
+            </FormSelect>
+          </Column>
+        </Row>
+        <Linebreak />
+      </Column>
+    </Row>
+    <Row>
+      <Column>
+        <ButtonSuccess
+          onClick={[Function]}
+        >
+          Legg til flere sjangere (
+          2
+          )
+        </ButtonSuccess>
+      </Column>
+      <Column />
+    </Row>
+    <Linebreak />
+    <Row>
+      <Column
+        width={2}
+      >
+        <FormLabel>
+          Platform:
+        </FormLabel>
+      </Column>
+      <Column>
+        <Row
+          key="0"
+        >
+          <Column>
+            <FormSelect
+              id="platformSel"
+              key="0"
+              onChange={[Function]}
+            >
+              <option
+                hidden={true}
+              >
+                Velg platform her:
+              </option>
+              <option
+                key="0"
+              />
+              <option
+                key="1"
+              />
+            </FormSelect>
+          </Column>
+        </Row>
+        <Linebreak />
+      </Column>
+    </Row>
+    <Row>
+      <Column>
+        <ButtonSuccess
+          onClick={[Function]}
+        >
+          Legg til flere platformer (
+          3
+          )
+        </ButtonSuccess>
+      </Column>
+      <Column />
+    </Row>
+  </Card>
+  <Card
+    title=""
+  >
+    <Alert />
+    <Row>
+      <Column>
+        <ButtonDanger
+          onClick={[Function]}
+        >
+          Avbryt
+        </ButtonDanger>
+      </Column>
+      <Column>
+        <ButtonSuccess
+          onClick={[Function]}
+        >
+          Lagre
+        </ButtonSuccess>
+      </Column>
+    </Row>
+  </Card>
+</Container>
+`;
+
+exports[`AddGame component Inputs updates correctly 1`] = `
+<Container>
+  <Card
+    title="Legg til ett spill"
+  >
+    <FormContainer>
+      <FormGroup>
+        <FormLabel>
+          Tittel:
+        </FormLabel>
+        <FormInput
+          id="titleInput"
+          onChange={[Function]}
+          placeholder="Skriv inn tittel"
+          type="text"
+          value=""
+        />
+      </FormGroup>
+      <FormGroup>
+        <FormLabel>
+          Beskrivelse:
+        </FormLabel>
+        <FormTextarea
+          cols={10}
+          id="descriptionInput"
+          onChange={[Function]}
+          placeholder="Skriv inn en beskrivelse av spillet"
+          rows={10}
+          value=""
+        />
+      </FormGroup>
+    </FormContainer>
+    <Linebreak />
+    <Row>
+      <Column
+        width={2}
+      >
+        <FormLabel>
+          Sjanger:
+        </FormLabel>
+      </Column>
+      <Column>
+        <Row
+          key="0"
+        >
+          <Column>
+            <FormSelect
+              id="genreSel"
+              key="0"
+              onChange={[Function]}
+            >
+              <option
+                hidden={true}
+              >
+                Velg sjanger her:
+              </option>
+              <option
+                key="0"
+                value={1}
+              >
+                test
+              </option>
+              <option
+                key="1"
+                value={2}
+              >
+                test2
+              </option>
+            </FormSelect>
+          </Column>
+        </Row>
+        <Linebreak />
+      </Column>
+    </Row>
+    <Row>
+      <Column>
+        <ButtonSuccess
+          onClick={[Function]}
+        >
+          Legg til flere sjangere (
+          2
+          )
+        </ButtonSuccess>
+      </Column>
+      <Column />
+    </Row>
+    <Linebreak />
+    <Row>
+      <Column
+        width={2}
+      >
+        <FormLabel>
+          Platform:
+        </FormLabel>
+      </Column>
+      <Column>
+        <Row
+          key="0"
+        >
+          <Column>
+            <FormSelect
+              id="platformSel"
+              key="0"
+              onChange={[Function]}
+            >
+              <option
+                hidden={true}
+              >
+                Velg platform her:
+              </option>
+              <option
+                key="0"
+              />
+              <option
+                key="1"
+              />
+            </FormSelect>
+          </Column>
+        </Row>
+        <Linebreak />
+      </Column>
+    </Row>
+    <Row>
+      <Column>
+        <ButtonSuccess
+          onClick={[Function]}
+        >
+          Legg til flere platformer (
+          3
+          )
+        </ButtonSuccess>
+      </Column>
+      <Column />
+    </Row>
+  </Card>
+  <Card
+    title=""
+  >
+    <Alert />
+    <Row>
+      <Column>
+        <ButtonDanger
+          onClick={[Function]}
+        >
+          Avbryt
+        </ButtonDanger>
+      </Column>
+      <Column>
+        <ButtonSuccess
+          onClick={[Function]}
+        >
+          Lagre
+        </ButtonSuccess>
+      </Column>
+    </Row>
+  </Card>
+</Container>
+`;
