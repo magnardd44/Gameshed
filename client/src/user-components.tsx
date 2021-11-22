@@ -23,7 +23,7 @@ export class UserNav extends Component {
         />
 
         {userService.token ? (
-          // If user logged in
+          // If user is logged in
           <Button.Success
             small
             onClick={() => {
@@ -34,6 +34,7 @@ export class UserNav extends Component {
             Logout
           </Button.Success>
         ) : (
+          // If user is not logged in
           <Button.Success
             small
             onClick={() => {

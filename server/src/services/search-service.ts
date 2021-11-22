@@ -17,7 +17,7 @@ class SearchService {
     token_type: '',
   };
 
-  // Skaffar ny "Access Token" ved behov. Skal vare i 60 dager ifylgje dokumentasjon.
+  // Acquires new "Access Token" as needed. It should be valid for 60 days according to documentation
   async get_token() {
     if (Date.now() < this.token.expire_time) {
       return this.token;
@@ -43,6 +43,7 @@ class SearchService {
     }
   }
 
+  //Search for game on string value. Returns array of games
   async search(game: string) {
     await this.get_token();
     return await axios({
@@ -82,6 +83,7 @@ class SearchService {
       });
   }
 
+  //Gets all interesting data about game with igdb id
   async get(external_id: string) {
     await this.get_token();
     return await axios({
@@ -110,6 +112,7 @@ class SearchService {
       });
   }
 
+  //Get extra data from IGDB for games stored in our database
   async get_extra(external_id: string) {
     await this.get_token();
     return await axios({

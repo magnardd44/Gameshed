@@ -5,8 +5,21 @@ import MockAdapter from 'axios-mock-adapter';
 import { shallow } from 'enzyme';
 import { history, Platform } from '../src/platform-components';
 import { Review, reviewService } from '../src/services/review-service';
+import userService from '../src/services/user-service';
+
+import {
+  ReviewCard,
+  ColumnCentre,
+  Form,
+  Card,
+  Alert,
+  Button,
+  Container,
+  Column,
+} from '../src/widgets';
 
 const mockAdapter = new MockAdapter(axios);
+const mockUserAdapter = new MockAdapter(userService.axios);
 
 const completeReview = {
   review_id: 3,
@@ -101,11 +114,39 @@ describe('Platform component', () => {
     });
   });
 
-  test('Test reviews are shown', (done) => {
+  test('Set platform', (done) => {
+    mockAdapter.onGet('/reviews/platform/145').reply(200, completeReviews);
+    mockUserAdapter.onGet('/reviews/review/1').reply(200, completeReviews[0]);
+    mockUserAdapter.onGet('/reviews/review/2').reply(200, completeReviews[1]);
+
     const wrapper = shallow(<Platform />);
 
     setTimeout(() => {
-      done();
+      wrapper.find({ children: 'Vis' }).first().simulate('click');
+      setTimeout(() => {
+        expect(wrapper.find(ReviewCard)).toHaveLength(2);
+        done();
+      });
+    });
+  });
+
+  test('Read more button', (done) => {
+    mockAdapter.onGet('/reviews/platform/145').reply(200, completeReviews);
+    mockUserAdapter.onGet('/reviews/review/1').reply(200, completeReviews[0]);
+    mockUserAdapter.onGet('/reviews/review/2').reply(200, completeReviews[1]);
+
+    const wrapper = shallow(<Platform />);
+
+    const spy = jest.spyOn(history, 'push');
+    spy.mockClear();
+
+    setTimeout(() => {
+      wrapper.find({ children: 'Vis' }).first().simulate('click');
+      setTimeout(() => {
+        wrapper.find({ children: 'Les mer' }).first().simulate('click');
+        expect(spy).toBeCalledWith('/publishedReviews/' + completeReviews[0].review_id);
+        done();
+      });
     });
   });
 });

@@ -3,6 +3,7 @@ import searchService from '../services/search-service';
 
 const searchRouter = express.Router();
 
+//Standard path for simple search
 searchRouter.post('/', (request, response) => {
   const data = request.body;
 

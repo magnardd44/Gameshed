@@ -15,8 +15,8 @@ class UserService {
   token: Token | null = null;
   storage: any;
 
+  //Variables to control the password prompt
   passwordPrompt: boolean = false;
-
   loginOrRegister = this.login;
 
   axios;
@@ -64,7 +64,6 @@ class UserService {
         localStorage.setItem('userToken', JSON.stringify(this.token));
       })
       .catch((err) => {
-        console.log(err);
         throw err;
       });
   }

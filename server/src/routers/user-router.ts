@@ -19,6 +19,7 @@ userRouter.get('/', (request, response) => {
     .catch((err) => response.status(500).send(err));
 });
 
+//Create new user
 userRouter.post('/add', (request, response) => {
   const data = request.body;
 
@@ -30,6 +31,7 @@ userRouter.post('/add', (request, response) => {
   } else response.status(400).send('Manglar epost eller passord');
 });
 
+//Update user data
 userRouter.put('/', (request, response) => {
   const data = request.body;
 

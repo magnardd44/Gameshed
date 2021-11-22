@@ -34,6 +34,7 @@ class UserService {
     );
   }
 
+  //Token is created with bcrypt hash
   create_token(id: number) {
     return new Promise<Token>((resolve, reject) =>
       this.bcrypt.hash('token' + id, this.saltRounds, function (err: any, hash: string) {
@@ -123,6 +124,7 @@ class UserService {
     this.users_logged_in = this.users_logged_in.filter((token) => token.id != user_id);
   }
 
+  // Verify if the token is valid and the user is logged in.
   verify(authorization: string | undefined) {
     let token = JSON.parse(authorization || '{"id":0, "token":""}');
 

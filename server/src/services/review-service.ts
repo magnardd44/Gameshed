@@ -111,7 +111,7 @@ class ReviewService {
   }
 
   /**
-   * Get all reviews based on genre id
+   * Get all reviews based on platform id
    */
   getAllByPlatformId(platform_id: number) {
     return new Promise<Review[]>((resolve, reject) => {
@@ -140,6 +140,56 @@ class ReviewService {
     });
   }
 
+<<<<<<< HEAD
+=======
+  //add review to published list
+  publish(id: number, published: boolean) {
+    return new Promise<number>((resolve, reject) => {
+      pool.query(
+        'UPDATE reviews SET PUBLISHED=? WHERE review_id=?',
+        [published, id],
+        (error, results) => {
+          if (error) return reject(error);
+
+          resolve(id);
+        }
+      );
+    });
+  }
+
+  //add like to a review
+  relevant(review_id: number, user_id: number, relevant: number) {
+    return new Promise<number>((resolve, reject) => {
+      pool.query(
+        relevant == 0
+          ? `DELETE FROM mapping_relevant WHERE review_id = ? AND user_id=?`
+          : `INSERT INTO mapping_relevant (review_id, user_id) VALUES (?, ?)`,
+        [review_id, user_id],
+        (error, results) => {
+          if (error) return reject(error);
+
+          resolve(Number(results.insertId));
+        }
+      );
+    });
+  }
+
+  //Check if a review has an existing like
+  isRelevant(review_id: number, user_id: number) {
+    return new Promise<boolean>((resolve, reject) => {
+      pool.query(
+        `SELECT COUNT(1) AS relevant_count FROM mapping_relevant WHERE review_id=? AND user_id=? `,
+        [review_id, user_id],
+        (error, results) => {
+          if (error) return reject(error);
+          console.log(results[0]);
+          resolve(results && results.length > 0 && results[0].relevant_count > 0);
+        }
+      );
+    });
+  }
+
+>>>>>>> 87d18d4aa7ec2fbc9f3d60f7e44545c8f7d109fb
   /**
    * Get published reviews
    */
@@ -204,6 +254,23 @@ class ReviewService {
     });
   }
 
+<<<<<<< HEAD
+=======
+  /**
+   * Delete review with given id.
+   */
+  delete(id: number) {
+    return new Promise<void>((resolve, reject) => {
+      pool.query('DELETE FROM reviews WHERE review_id = ?', [id], (error, results) => {
+        if (error) return reject(error);
+
+        resolve();
+      });
+    });
+  }
+
+  //Get the 10 reviews with the most likes
+>>>>>>> 87d18d4aa7ec2fbc9f3d60f7e44545c8f7d109fb
   getTopTen() {
     return new Promise<void>((resolve, reject) => {
       pool.query(
@@ -220,6 +287,8 @@ class ReviewService {
       );
     });
   }
+
+  //Get the 10 last published reviews
 
   getLastTen() {
     return new Promise<void>((resolve, reject) => {
