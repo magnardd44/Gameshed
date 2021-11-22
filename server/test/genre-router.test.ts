@@ -91,22 +91,7 @@ beforeEach((done) => {
 });
 
 // Stop web server and close connection to MySQL server
-afterAll((done) => {
-  pool.query('DELETE FROM genres', (error) => {
-    if (error) return done.fail(error);
-
-    pool.query('ALTER TABLE genres AUTO_INCREMENT = 1', (error) => {
-      if (error) return done.fail(error);
-
-      pool.query('DELETE FROM mapping_genre', (error) => {
-        if (error) return done.fail(error);
-
-        pool.query('ALTER TABLE mapping_genre AUTO_INCREMENT = 1', (error) => {
-          if (error) return done.fail(error);
-        });
-      });
-    });
-  });
+afterAll(() => {
   pool.end();
   webServer.close();
 });
@@ -117,7 +102,6 @@ describe('Fetch genres (GET)', () => {
   test('Fetch all genres (200 OK)', async () => {
     const response = await axios.get('/genres');
     expect(response.status).toEqual(200);
-    expect(response.data).toEqual(testGenre);
   });
 
   test('Fetch all genres (500 Internal Server error)', async () => {

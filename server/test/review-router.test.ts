@@ -52,7 +52,7 @@ const testReviews: Review[] = [
     text: 'Dette er den andre testanmeldelsen',
     user_id: 890,
     rating: 4,
-    published: true,
+    published: false,
     genre_id: 3,
     platform_id: 126,
     relevant: 1,
@@ -66,7 +66,7 @@ const testReviews: Review[] = [
     text: 'Dette er den tredje testanmeldelsen',
     user_id: 890,
     rating: 2,
-    published: true,
+    published: false,
     genre_id: 5,
     platform_id: 127,
     relevant: 1,
@@ -216,22 +216,24 @@ afterAll((done) => {
 //Tests view of published reviews
 
 describe('Fetch  reviews (GET)', () => {
-  test('Fetch published reviews (200 OK)', (done) => {
-    axios.get('/reviews/published').then((response) => {
-      expect(response.status).toEqual(200);
-      expect(response.data.length).toEqual(testReviews.length - 1);
-      expect(
-        response.data.filter((t: any) => t.review_title == testReviews[0].review_title).length
-      ).toEqual(1);
-      expect(
-        response.data.filter((t: any) => t.review_title == testReviews[1].review_title).length
-      ).toEqual(1);
-      expect(
-        response.data.filter((t: any) => t.review_title == testReviews[2].review_title).length
-      ).toEqual(1);
+  test('Fetch published reviews (200 OK)', async () => {
+    const response = await axios.get('/published');
+    expect(response.status).toEqual(200);
+    expect(response.data[0]).toEqual(testReviews[0]);
+  });
 
-      done();
-    });
+  test('Fetch all reviews (200 OK)', async () => {
+    const response = await axios.get('/reviews');
+    expect(response.status).toEqual(200);
+  });
+
+  test('Fetch all reviews (500 Internal Server Error)', async () => {
+    try {
+      reviewService.getAll = () => Promise.reject();
+      const response = await axios.get('/reviews');
+    } catch (error: any) {
+      expect(error.response.status).toEqual(500);
+    }
   });
 
   test('Fetch reviews by genre (200 OK)', (done) => {
@@ -240,7 +242,7 @@ describe('Fetch  reviews (GET)', () => {
 
       expect(
         response.data.filter((t: any) => t.review_title == testReviews[0].review_title).length
-      ).toEqual(1);
+      ).toEqual(0);
 
       done();
     });
@@ -281,12 +283,13 @@ describe('Fetch  reviews (GET)', () => {
 
 describe('Create new review (POST)', () => {
   test('Create new review (200 OK)', (done) => {
+    const newReview = {
+      review_title: 'Ny testanmeldelse',
+      text: 'Dette er en ny testanmeldelse fra Solveig',
+      rating: 6,
+    };
     axios
-      .post('/reviews', {
-        review_title: 'Ny testanmeldelse',
-        text: 'Dette er en ny testanmeldelse fra Solveig',
-        rating: 6,
-      })
+      .post('/reviews', newReview)
       .then((response: any) => {
         expect(response.status).toEqual(200);
         // expect(response.data).toEqual({ id: 4 });
@@ -295,6 +298,19 @@ describe('Create new review (POST)', () => {
       .catch((err) => {
         console.log(err);
       });
+  });
+
+  test('Create new review (400)', async () => {
+    const newReview0Rating = {
+      review_title: 'Ny testanmeldelse',
+      text: 'Dette er en ny testanmeldelse fra Solveig',
+      rating: 0,
+    };
+    try {
+      const response = await axios.post('/reviews', newReview0Rating);
+    } catch (error: any) {
+      expect(error.response.status).toEqual(400);
+    }
   });
 });
 

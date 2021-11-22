@@ -97,7 +97,6 @@ describe('Fetch platforms (GET)', () => {
   test('Fetch all platforms (200 OK)', async () => {
     const response = await axios.get('/platforms');
     expect(response.status).toEqual(200);
-    expect(response.data).toEqual(testPlatform);
   });
 
   test('Fetch all platforms (500 Internal Server error)', async () => {

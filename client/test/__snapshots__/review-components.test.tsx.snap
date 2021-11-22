@@ -445,3 +445,280 @@ exports[`Snapshot component tests 5 Snapshot - MyReviews draws correctly 1`] = `
   Du er ikke logget inn. Logg inn for å se dine anmeldelser.
 </Container>
 `;
+
+exports[`Snapshot component tests 6 Snapshot - PublishedReviews draws correctly 1`] = `
+<Container>
+  <Card
+    title=" Alle publiserte anmeldelser"
+  />
+</Container>
+`;
+
+exports[`Snapshot component tests 7 Snapshot - MyReviews draws correctly 1`] = `
+<Container>
+  <Card
+    key="1"
+    title="Anmeldelse nr: 1"
+  >
+    <Linebreak />
+    <Row>
+      <Column>
+        Spillet anmeldelsen hører til:
+      </Column>
+      <Column>
+        <b />
+      </Column>
+    </Row>
+    <Linebreak />
+    <Row
+      key="test1"
+    >
+      <Column>
+        Tittel:
+      </Column>
+      <Column>
+        <b>
+          test1
+        </b>
+      </Column>
+    </Row>
+    <Linebreak />
+    <Row
+      key="1"
+    >
+      <Column>
+        Innhold:
+      </Column>
+      <Column>
+        <b>
+          <i>
+            dette er en test1
+          </i>
+        </b>
+      </Column>
+    </Row>
+    <Linebreak />
+    <Row>
+      <Column>
+        Terningkast:
+      </Column>
+      <Column>
+        <b>
+          4
+        </b>
+      </Column>
+    </Row>
+    <Linebreak />
+    <Row>
+      <Column>
+        Status:
+      </Column>
+      <Column>
+        <b>
+          Ikke publisert
+        </b>
+      </Column>
+    </Row>
+    <Linebreak />
+    <Row>
+      <Column>
+        <ButtonSuccess
+          onClick={[Function]}
+        >
+          Publiser
+        </ButtonSuccess>
+      </Column>
+      <Column>
+        <ButtonLight
+          onClick={[Function]}
+        >
+          Rediger
+        </ButtonLight>
+      </Column>
+      <Column>
+        <ButtonDanger
+          onClick={[Function]}
+        >
+          Slett
+        </ButtonDanger>
+      </Column>
+    </Row>
+  </Card>
+  <Card
+    key="2"
+    title="Anmeldelse nr: 2"
+  >
+    <Linebreak />
+    <Row>
+      <Column>
+        Spillet anmeldelsen hører til:
+      </Column>
+      <Column>
+        <b />
+      </Column>
+    </Row>
+    <Linebreak />
+    <Row
+      key="test2"
+    >
+      <Column>
+        Tittel:
+      </Column>
+      <Column>
+        <b>
+          test2
+        </b>
+      </Column>
+    </Row>
+    <Linebreak />
+    <Row
+      key="1"
+    >
+      <Column>
+        Innhold:
+      </Column>
+      <Column>
+        <b>
+          <i>
+            dette er en test2
+          </i>
+        </b>
+      </Column>
+    </Row>
+    <Linebreak />
+    <Row>
+      <Column>
+        Terningkast:
+      </Column>
+      <Column>
+        <b>
+          2
+        </b>
+      </Column>
+    </Row>
+    <Linebreak />
+    <Row>
+      <Column>
+        Status:
+      </Column>
+      <Column>
+        <b>
+          Ikke publisert
+        </b>
+      </Column>
+    </Row>
+    <Linebreak />
+    <Row>
+      <Column>
+        <ButtonSuccess
+          onClick={[Function]}
+        >
+          Publiser
+        </ButtonSuccess>
+      </Column>
+      <Column>
+        <ButtonLight
+          onClick={[Function]}
+        >
+          Rediger
+        </ButtonLight>
+      </Column>
+      <Column>
+        <ButtonDanger
+          onClick={[Function]}
+        >
+          Slett
+        </ButtonDanger>
+      </Column>
+    </Row>
+  </Card>
+  <Card
+    key="3"
+    title="Anmeldelse nr: 3"
+  >
+    <Linebreak />
+    <Row>
+      <Column>
+        Spillet anmeldelsen hører til:
+      </Column>
+      <Column>
+        <b />
+      </Column>
+    </Row>
+    <Linebreak />
+    <Row
+      key="test3"
+    >
+      <Column>
+        Tittel:
+      </Column>
+      <Column>
+        <b>
+          test3
+        </b>
+      </Column>
+    </Row>
+    <Linebreak />
+    <Row
+      key="1"
+    >
+      <Column>
+        Innhold:
+      </Column>
+      <Column>
+        <b>
+          <i>
+            dette er en test2
+          </i>
+        </b>
+      </Column>
+    </Row>
+    <Linebreak />
+    <Row>
+      <Column>
+        Terningkast:
+      </Column>
+      <Column>
+        <b>
+          3
+        </b>
+      </Column>
+    </Row>
+    <Linebreak />
+    <Row>
+      <Column>
+        Status:
+      </Column>
+      <Column>
+        <b>
+          Ikke publisert
+        </b>
+      </Column>
+    </Row>
+    <Linebreak />
+    <Row>
+      <Column>
+        <ButtonSuccess
+          onClick={[Function]}
+        >
+          Publiser
+        </ButtonSuccess>
+      </Column>
+      <Column>
+        <ButtonLight
+          onClick={[Function]}
+        >
+          Rediger
+        </ButtonLight>
+      </Column>
+      <Column>
+        <ButtonDanger
+          onClick={[Function]}
+        >
+          Slett
+        </ButtonDanger>
+      </Column>
+    </Row>
+  </Card>
+</Container>
+`;

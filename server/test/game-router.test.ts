@@ -106,7 +106,6 @@ describe('Fetch games (GET)', () => {
   test('Fetch all games (201 Created)', async () => {
     const response = await axios.get('/games');
     expect(response.status).toEqual(201);
-    expect(response.data).toEqual(testGame);
   });
 
   test('Fetch all games (500 Internal Server error)', async () => {
