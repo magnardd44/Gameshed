@@ -80,7 +80,6 @@ exports[`SearchListings component SearchListings default 1`] = `
             alle
           </option>
         </FormSelect>
-        )
         <FormLabel>
           År: 
         </FormLabel>
@@ -118,7 +117,11 @@ exports[`SearchResult component SearchResult default 1`] = `
     className="card-subtitle mb-2 text-muted"
   >
     Terningkast:
-    Ikke tilgjengelig
+     
+    <ThumbNail
+      img="https://helenaagustsson.github.io/INFT2002-images/images/dice-3.png"
+      small={true}
+    />
   </h6>
   <Row>
     <Column
@@ -171,7 +174,8 @@ exports[`SearchResult component SearchResult with empty game 1`] = `
     className="card-subtitle mb-2 text-muted"
   >
     Terningkast:
-    Ikke tilgjengelig
+     
+     Ikke tilgjengelig
   </h6>
   <Row>
     <Column

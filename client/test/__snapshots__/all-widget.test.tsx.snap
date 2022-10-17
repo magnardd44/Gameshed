@@ -88,9 +88,7 @@ exports[`Full Review Card Full review card renders correctly 1`] = `
           "
           review-title 
           " - 
-          <i>
-            undefined 
-          </i>
+          <i />
           <ThumbNail
             img="https://helenaagustsson.github.io/INFT2002-images/images/dice-5.png"
             small={true}

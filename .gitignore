@@ -1,6 +1,11 @@
 node_modules
+config
 config.ts
 bundle.js
 bundle.js.map
 coverage
 server/config copy.ts
+client/test/__snapshots__
+*.swp
+.gitignore
+tempData.tsx
